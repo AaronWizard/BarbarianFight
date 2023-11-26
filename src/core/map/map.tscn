@@ -1,0 +1,8 @@
+[gd_scene load_steps=2 format=3 uid="uid://q2bmei0cija"]
+
+[ext_resource type="Script" path="res://src/core/map/map.gd" id="1_wmjs2"]
+
+[node name="Map" type="Node2D"]
+y_sort_enabled = true
+script = ExtResource("1_wmjs2")
+metadata/_edit_lock_ = true
