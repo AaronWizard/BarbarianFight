@@ -1,0 +1,18 @@
+[gd_scene load_steps=3 format=3 uid="uid://c5r8su0ki15l8"]
+
+[ext_resource type="Script" path="res://src/core/actor/actor_sprite.gd" id="1_yow33"]
+[ext_resource type="Texture2D" uid="uid://cmfwm1033edy1" path="res://assets/graphics/actors/villain.png" id="2_m070q"]
+
+[node name="ActorSprite" type="Node2D"]
+position = Vector2(0, 16)
+script = ExtResource("1_yow33")
+
+[node name="SpriteOrigin" type="Node2D" parent="."]
+position = Vector2(8, -8)
+metadata/_edit_lock_ = true
+
+[node name="Sprite" type="Sprite2D" parent="SpriteOrigin"]
+texture = ExtResource("2_m070q")
+
+[connection signal="cell_size_changed" from="." to="." method="_on_cell_size_changed"]
+[connection signal="tile_size_changed" from="." to="." method="_on_tile_size_changed"]
