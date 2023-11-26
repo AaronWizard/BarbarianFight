@@ -1,11 +1,15 @@
 extends Node
 
-@export var initial_scene: PackedScene
+@export var initial_map: PackedScene
+@export var game_scene: PackedScene
 
 
 func _ready() -> void:
-	var scene: Scene = initial_scene.instantiate()
-	_switch_scene(scene)
+	var game: Game = game_scene.instantiate()
+	_switch_scene(game)
+
+	var map: Map = initial_map.instantiate()
+	game.load_map(map)
 
 
 func _switch_scene(new_scene: Scene) -> void:
