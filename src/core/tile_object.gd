@@ -9,14 +9,28 @@ extends Node2D
 ## tile objects. Tile objects also have a width and height in cells, allowing
 ## a tile object to cover multiple cells in a rectangle.
 
+## The tile object's tile_size was changed.
+signal tile_size_changed(old_size: Vector2i)
+
+## The tile object's origin_cell was chanmged.
+signal origin_cell_changed(old_cell: Vector2i)
+
+## The tile object's cell_size was changed.
+signal cell_size_changed(old_size: Vector2i)
+
 
 ## The size in pixels of the grid cells the tile object aligns itself with.
 @export var tile_size := Vector2i(16, 16):
 	set(value):
+		var old_size := tile_size
+
 		# Preserve origin_cell, whose pixel position will change
 		var oc := origin_cell
 		tile_size = value
 		origin_cell = oc
+
+		if old_size != tile_size:
+			tile_size_changed.emit(old_size)
 
 
 ## The tile object's origin cell. Sets the node's pixel position to its lower
@@ -25,35 +39,44 @@ extends Node2D
 	get:
 		return (Vector2i(position) / tile_size) + Vector2i.UP
 	set(value):
+		var old_cell := origin_cell
+
 		position = (value - Vector2i.UP) * tile_size
 		queue_redraw()
+
+		if old_cell != origin_cell:
+			origin_cell_changed.emit(old_cell)
 
 
 ## The width and height in cells of the tile object.
 @export var cell_size := Vector2i.ONE:
 	set(value):
+		var old_size := cell_size
+
 		cell_size = value
 		queue_redraw()
 
+		if old_size != cell_size:
+			cell_size_changed.emit(old_size)
+
 
 ## The cells currently covered by the tile object.
-@export var covered_cells: Array[Vector2i]:
+var covered_cells: Array[Vector2i]:
 	get:
 		return covered_cells_at_cell(origin_cell)
 
 
 func _draw() -> void:
 	if Engine.is_editor_hint():
-		var object_rect := Rect2i(
-			Vector2i.UP * cell_size * tile_size,
-			cell_size * tile_size
-		)
-		draw_rect(object_rect, Color.MAROON, false, 1.25)
-		var origin_rect := Rect2i(
-			Vector2i.UP * tile_size,
-			tile_size
-		)
-		draw_rect(origin_rect, Color.DARK_TURQUOISE, false, 1.25)
+		for c in covered_cells:
+			var rect_pos := (c - origin_cell + Vector2i.UP) * tile_size
+			var rect := Rect2i(rect_pos, tile_size)
+			var colour: Color
+			if c == origin_cell:
+				colour = Color.DARK_TURQUOISE
+			else:
+				colour = Color.MAROON
+			draw_rect(rect, colour, false, 0.5)
 
 
 ## Returns true if the tile object covers [param cell], false otherwise.
