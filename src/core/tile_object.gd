@@ -25,7 +25,8 @@ extends Node2D
 	get:
 		return (Vector2i(position) / tile_size) + Vector2i.UP
 	set(value):
-		_set_origin_cell(value)
+		position = (value - Vector2i.UP) * tile_size
+		queue_redraw()
 
 
 ## The width and height in cells of the tile object.
@@ -65,18 +66,13 @@ func covers_cell(cell: Vector2i) -> bool:
 func covered_cells_at_cell(cell: Vector2i) -> Array[Vector2i]:
 	var result: Array[Vector2i] = []
 
-	var top_left := cell + (Vector2i.UP * (cell_size.y - 1))
+	var top_left := _top_left_cell(cell)
 	for x in range(cell_size.x):
 		for y in range(cell_size.y):
 			var covered_cell := Vector2i(x, y) + top_left
 			result.append(covered_cell)
 
 	return result
-
-
-func _set_origin_cell(cell: Vector2i) -> void:
-	position = (cell - Vector2i.UP) * tile_size
-	queue_redraw()
 
 
 func _top_left_cell(cell: Vector2i) -> Vector2i:
