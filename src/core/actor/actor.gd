@@ -4,7 +4,7 @@ extends TileObject
 
 @export var definition: ActorDefinition
 
-@onready var _sprite: ActorSprite = $ActorSprite
+@onready var _sprite := $ActorSprite as ActorSprite
 
 
 func _on_tile_size_changed(_old_size: Vector2i) -> void:

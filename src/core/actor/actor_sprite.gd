@@ -2,7 +2,7 @@
 class_name ActorSprite
 extends TileObject
 
-@onready var _sprite_origin: Node2D = $SpriteOrigin
+@onready var _sprite_origin := $SpriteOrigin as Node2D
 
 
 func _on_tile_size_changed(_old_size: Vector2i) -> void:
