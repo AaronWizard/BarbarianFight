@@ -7,4 +7,5 @@
 [node name="Main" type="Node"]
 script = ExtResource("1_cwuap")
 initial_map = ExtResource("2_26yn7")
+player_start_marker = "player_start"
 game_scene = ExtResource("2_liux8")
