@@ -9,6 +9,7 @@ var actors: Array[Actor]:
 		result.assign(get_children())
 		return result
 
+
 func _get_configuration_warnings() -> PackedStringArray:
 	var result := []
 	for c in get_children():
