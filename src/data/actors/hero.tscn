@@ -1,0 +1,18 @@
+[gd_scene load_steps=5 format=3 uid="uid://doaykluv6j0vh"]
+
+[ext_resource type="PackedScene" uid="uid://dg6ygq33001cu" path="res://src/core/actor/actor.tscn" id="1_23n8s"]
+[ext_resource type="Texture2D" uid="uid://bxl8chpxykku5" path="res://assets/graphics/actors/hero.png" id="2_gsry7"]
+[ext_resource type="Script" path="res://src/core/actor/actor_definition.gd" id="3_aik13"]
+
+[sub_resource type="Resource" id="Resource_l2s4l"]
+script = ExtResource("3_aik13")
+name = "Hero"
+stats_file = "res://assets/data/actor_stats.csv"
+stats_name = "hero"
+
+[node name="Hero" instance=ExtResource("1_23n8s")]
+sprite = ExtResource("2_gsry7")
+definition = SubResource("Resource_l2s4l")
+
+[node name="ActorSprite" parent="." index="0"]
+texture = ExtResource("2_gsry7")

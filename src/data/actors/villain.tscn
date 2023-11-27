@@ -1,0 +1,15 @@
+[gd_scene load_steps=5 format=3 uid="uid://detdx2xagdgeb"]
+
+[ext_resource type="PackedScene" uid="uid://dg6ygq33001cu" path="res://src/core/actor/actor.tscn" id="1_3db44"]
+[ext_resource type="Texture2D" uid="uid://cmfwm1033edy1" path="res://assets/graphics/actors/villain.png" id="2_f63m0"]
+[ext_resource type="Script" path="res://src/core/actor/actor_definition.gd" id="3_66sex"]
+
+[sub_resource type="Resource" id="Resource_3b2c0"]
+script = ExtResource("3_66sex")
+name = "Villain"
+stats_file = "res://assets/data/actor_stats.csv"
+stats_name = "villain"
+
+[node name="Villain" instance=ExtResource("1_3db44")]
+sprite = ExtResource("2_f63m0")
+definition = SubResource("Resource_3b2c0")
