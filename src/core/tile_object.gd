@@ -51,6 +51,20 @@ extends Node2D
 			_cell_size_changed(old_size)
 
 
+@export_group("Editor Settings")
+
+@export_color_no_alpha var grid_colour := Color.MAROON:
+	set(value):
+		grid_colour = value
+		queue_redraw()
+
+
+@export_color_no_alpha var origin_colour := Color.DARK_TURQUOISE:
+	set(value):
+		origin_colour = value
+		queue_redraw()
+
+
 ## The cells currently covered by the tile object.
 var covered_cells: Array[Vector2i]:
 	get:
@@ -59,15 +73,19 @@ var covered_cells: Array[Vector2i]:
 
 func _draw() -> void:
 	if Engine.is_editor_hint():
-		for c in covered_cells:
-			var rect_pos := (c - origin_cell + Vector2i.UP) * tile_size
-			var rect := Rect2i(rect_pos, tile_size)
-			var colour: Color
-			if c == origin_cell:
-				colour = Color.DARK_TURQUOISE
-			else:
-				colour = Color.MAROON
-			draw_rect(rect, colour, false, 0.5)
+		for x in range(cell_size.x + 1):
+			var line_x := x * tile_size.x
+			var line_y_end := -cell_size.y * tile_size.y
+			draw_line(Vector2(line_x, 0), Vector2(line_x, line_y_end),
+					grid_colour, 0.25)
+		for y in range(cell_size.y + 1):
+			var line_x_end := cell_size.x * tile_size.x
+			var line_y := (y - cell_size.y) * tile_size.y
+			draw_line(Vector2(0, line_y), Vector2(line_x_end, line_y),
+					grid_colour, 0.25)
+
+		var origin_rect := Rect2(Vector2i.UP * tile_size.y, tile_size)
+		draw_rect(origin_rect, origin_colour, false, 0.5)
 
 
 ## Returns true if the tile object covers [param cell], false otherwise.
