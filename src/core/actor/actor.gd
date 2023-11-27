@@ -8,8 +8,10 @@ extends TileObject
 
 
 func _tile_size_changed(_old_size: Vector2i) -> void:
-	_sprite.tile_size = tile_size
+	if _sprite:
+		_sprite.tile_size = tile_size
 
 
 func _cell_size_changed(_old_size: Vector2i) -> void:
-	_sprite.cell_size = cell_size
+	if _sprite:
+		_sprite.cell_size = cell_size
