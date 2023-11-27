@@ -9,15 +9,6 @@ extends Node2D
 ## tile objects. Tile objects also have a width and height in cells, allowing
 ## a tile object to cover multiple cells in a rectangle.
 
-## The tile object's tile_size was changed.
-signal tile_size_changed(old_size: Vector2i)
-
-## The tile object's origin_cell was chanmged.
-signal origin_cell_changed(old_cell: Vector2i)
-
-## The tile object's cell_size was changed.
-signal cell_size_changed(old_size: Vector2i)
-
 
 ## The size in pixels of the grid cells the tile object aligns itself with.
 @export var tile_size := Vector2i(16, 16):
@@ -30,7 +21,7 @@ signal cell_size_changed(old_size: Vector2i)
 		origin_cell = oc
 
 		if old_size != tile_size:
-			tile_size_changed.emit(old_size)
+			_tile_size_changed(old_size)
 
 
 ## The tile object's origin cell. Sets the node's pixel position to its lower
@@ -45,7 +36,7 @@ signal cell_size_changed(old_size: Vector2i)
 		queue_redraw()
 
 		if old_cell != origin_cell:
-			origin_cell_changed.emit(old_cell)
+			_origin_cell_changed(old_cell)
 
 
 ## The width and height in cells of the tile object.
@@ -57,7 +48,7 @@ signal cell_size_changed(old_size: Vector2i)
 		queue_redraw()
 
 		if old_size != cell_size:
-			cell_size_changed.emit(old_size)
+			_cell_size_changed(old_size)
 
 
 ## The cells currently covered by the tile object.
@@ -96,6 +87,21 @@ func covered_cells_at_cell(cell: Vector2i) -> Array[Vector2i]:
 			result.append(covered_cell)
 
 	return result
+
+
+## Called after tile_size is changed. Can be overriden.
+func _tile_size_changed(_old_size: Vector2i) -> void:
+	pass
+
+
+## Called after origin_cell is changed. Can be overriden.
+func _origin_cell_changed(_old_cell: Vector2i) -> void:
+	pass
+
+
+## Called after cell_size is changed. Can be overriden.
+func _cell_size_changed(_old_size: Vector2i) -> void:
+	pass
 
 
 func _top_left_cell(cell: Vector2i) -> Vector2i:

@@ -5,11 +5,11 @@ extends TileObject
 @onready var _sprite_origin := $SpriteOrigin as Node2D
 
 
-func _on_tile_size_changed(_old_size: Vector2i) -> void:
+func _tile_size_changed(_old_size: Vector2i) -> void:
 	_update_sprite_origin()
 
 
-func _on_cell_size_changed(_old_size: Vector2i) -> void:
+func _cell_size_changed(_old_size: Vector2i) -> void:
 	_update_sprite_origin()
 
 
