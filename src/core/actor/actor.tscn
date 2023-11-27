@@ -15,3 +15,5 @@ metadata/_edit_lock_ = true
 [connection signal="cell_size_changed" from="." to="." method="_on_cell_size_changed"]
 [connection signal="origin_cell_changed" from="." to="." method="_on_origin_cell_changed"]
 [connection signal="tile_size_changed" from="." to="." method="_on_tile_size_changed"]
+
+[editable path="ActorSprite"]

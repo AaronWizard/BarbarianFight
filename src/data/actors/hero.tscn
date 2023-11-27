@@ -11,8 +11,9 @@ stats_file = "res://assets/data/actor_stats.csv"
 stats_name = "hero"
 
 [node name="Hero" instance=ExtResource("1_23n8s")]
-sprite = ExtResource("2_gsry7")
 definition = SubResource("Resource_l2s4l")
 
-[node name="ActorSprite" parent="." index="0"]
+[node name="Sprite" parent="ActorSprite/SpriteOrigin" index="0"]
 texture = ExtResource("2_gsry7")
+
+[editable path="ActorSprite"]

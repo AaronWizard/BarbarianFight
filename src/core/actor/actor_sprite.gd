@@ -2,18 +2,6 @@
 class_name ActorSprite
 extends TileObject
 
-
-@export var texture: Texture2D:
-	get:
-		var result: Texture2D = null
-		if _sprite:
-			result = _sprite.texture
-		return result
-	set(value):
-		if _sprite:
-			_sprite.texture = value
-
-
 @onready var _sprite_origin: Node2D = $SpriteOrigin
 @onready var _sprite: Sprite2D = $SpriteOrigin/Sprite
 
