@@ -3,6 +3,9 @@ class_name ActorMap
 extends Node2D
 
 ## A grid map of actors.
+##
+## A grid map of actors. For querying what actors are at what cells, and
+## for checking where an actor would overlap with other actors.
 
 
 ## The actors in the actor map.
