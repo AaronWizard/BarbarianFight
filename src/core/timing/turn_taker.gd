@@ -24,8 +24,9 @@ signal turn_finished
 
 
 ## A value representing how long until a turn taker can start a turn.[br]
-## When this value is greater than or equal to INITIATIVE_THRESHOLD, the turn
-## taker may start a turn.
+## When this value is greater than or equal to
+## [constant TurnConstants.INITIATIVE_THRESHOLD], the turn taker may start a
+## turn.
 var initiative: int:
 	get:
 		return _initiative
