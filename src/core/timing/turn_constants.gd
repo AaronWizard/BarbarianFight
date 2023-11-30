@@ -7,7 +7,7 @@ class_name TurnConstants
 
 ## The minimum amount of initiative a turn taker must have before starting a
 ## turn.
-const INITIATIVE_THRESHOLD = 12
+const INITIATIVE_THRESHOLD = 60
 
 ## The possible base speeds for actors.
 enum ActorSpeed {
@@ -25,19 +25,18 @@ enum ActionSpeed {
 	FAST
 }
 
-
 const _actor_speed_values := {
 	ActorSpeed.SLUGGISH: 1,
 	ActorSpeed.SLOW: 2,
-	ActorSpeed.MEDIUM: 4,
-	ActorSpeed.FAST: 6,
-	ActorSpeed.RAPID: 8,
+	ActorSpeed.MEDIUM: 3,
+	ActorSpeed.FAST: 4,
+	ActorSpeed.RAPID: 5,
 }
 
 const _action_speed_delays := {
-	ActionSpeed.SLOW: 12,
-	ActionSpeed.MEDIUM: 8,
-	ActionSpeed.FAST: 4
+	ActionSpeed.SLOW: 4,
+	ActionSpeed.MEDIUM: 3,
+	ActionSpeed.FAST: 2
 }
 
 
