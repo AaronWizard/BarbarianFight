@@ -11,10 +11,12 @@ const INITIATIVE_THRESHOLD = 60
 
 ## The possible base speeds for actors.
 enum ActorSpeed {
+	## Only possible with status effects.
 	SLUGGISH,
 	SLOW,
 	MEDIUM,
 	FAST,
+	## Only possible with status effects.
 	RAPID
 }
 
