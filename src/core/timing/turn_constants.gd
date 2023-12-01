@@ -41,6 +41,9 @@ const _action_speed_delays := {
 	ActionSpeed.FAST: 20
 }
 
+## Speed of the wait action.
+const ACTION_WAIT_SPEED := ActionSpeed.FAST
+
 
 ## How fast a speed type increases a turn taker's initiative.
 static func actor_speed_charge(speed: ActorSpeed) -> int:
