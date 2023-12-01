@@ -84,7 +84,8 @@ func _run_turns() -> void:
 			continue
 
 		next_turn.start_turn()
-		await next_turn.turn_finished
+		if next_turn.turn_running:
+			await next_turn.turn_finished
 
 		_add_and_remove_turn_takers()
 

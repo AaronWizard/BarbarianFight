@@ -38,6 +38,11 @@ var can_start_turn: bool:
 		return _initiative >= TurnConstants.INITIATIVE_THRESHOLD
 
 
+var turn_running: bool:
+	get:
+		return _turn_running
+
+
 ## How fast the turn taker is. Affects how fast its initiative increases as time
 ## passes.
 var speed := TurnConstants.ActorSpeed.MEDIUM
@@ -47,6 +52,8 @@ var speed := TurnConstants.ActorSpeed.MEDIUM
 var rank := 1
 
 var _initiative := 0
+
+var _turn_running := false
 
 
 ## Compares two turn takers to determine in what order they may start a turn if
@@ -75,14 +82,22 @@ func advance_time() -> void:
 
 ## Starts the turn taker's turn.
 func start_turn() -> void:
-	turn_started.emit()
+	if _turn_running:
+		push_error("Turn already running.")
+	else:
+		_turn_running = true
+		turn_started.emit()
 
 
 ## Ends the turn taker's turn, reducing its initiative by a value depending on
 ## [param action_speed].
 func end_turn(action_speed: TurnConstants.ActionSpeed) -> void:
-	_initiative -= TurnConstants.action_delay(action_speed)
-	turn_finished.emit()
+	if not _turn_running:
+		push_error("Turn not running")
+	else:
+		_initiative -= TurnConstants.action_delay(action_speed)
+		_turn_running = false
+		turn_finished.emit()
 
 
 func _to_string() -> String:
