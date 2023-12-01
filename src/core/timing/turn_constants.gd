@@ -34,9 +34,9 @@ const _actor_speed_values := {
 }
 
 const _action_speed_delays := {
-	ActionSpeed.SLOW: 4,
-	ActionSpeed.MEDIUM: 3,
-	ActionSpeed.FAST: 2
+	ActionSpeed.SLOW: 60,
+	ActionSpeed.MEDIUM: 30,
+	ActionSpeed.FAST: 20
 }
 
 
