@@ -12,6 +12,6 @@ stats_name = "villain"
 
 [node name="Villain" instance=ExtResource("1_3db44")]
 definition = SubResource("Resource_3b2c0")
-brain_scene = ExtResource("3_yjkef")
+ai_scene = ExtResource("3_yjkef")
 
 [editable path="ActorSprite"]

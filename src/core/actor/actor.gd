@@ -7,29 +7,29 @@ extends TileObject
 ## An actor. An actor has stats and can take turns.
 
 @export var definition: ActorDefinition
-## The scene for the actor's [Brain].
-@export var brain_scene: PackedScene
+## The scene for the actor's [AI].
+@export var ai_scene: PackedScene
 
 @onready var _sprite := $ActorSprite as ActorSprite
 @onready var _turn_taker := $TurnTaker as TurnTaker
 
-var _brain: Brain
+var _ai: AI
 
 var _turn_clock: TurnClock
 
 
 func _ready() -> void:
 	if not Engine.is_editor_hint():
-		if brain_scene:
-			var brain := brain_scene.instantiate() as Brain
-			set_brain(brain)
+		if ai_scene:
+			var ai := ai_scene.instantiate() as AI
+			set_ai(ai)
 
 
-## Sets the actor's brain. The brain is added to the actor as a child node.
-func set_brain(brain: Brain) -> void:
-	_brain = brain
-	add_child(_brain)
-	_brain.set_actor(self)
+## Sets the actor's AI. The AI is added to the actor as a child node.
+func set_ai(ai: AI) -> void:
+	_ai = ai
+	add_child(_ai)
+	_ai.set_actor(self)
 
 
 ## Sets the actor's turn clock.
@@ -55,9 +55,9 @@ func _on_turn_taker_turn_started() -> void:
 	var action_speed := TurnConstants.ACTION_WAIT_SPEED # Null action is wait
 
 	print("Actor: %s starting turn" % name,)
-	if _brain:
+	if _ai:
 		@warning_ignore("redundant_await")
-		var action := await _brain.get_action()
+		var action := await _ai.get_action()
 		if action:
 			action_speed = action.get_action_speed()
 			@warning_ignore("redundant_await")
