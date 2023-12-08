@@ -16,5 +16,5 @@ func set_actor(actor: Actor) -> void:
 ## Gets the AI's next turn action. A return value of null is a wait action.
 func get_action() -> TurnAction:
 	print("Running AI")
-	await get_tree().create_timer(0.5).timeout
+	await get_tree().create_timer(0.1).timeout
 	return null
