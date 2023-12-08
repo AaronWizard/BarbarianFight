@@ -12,6 +12,8 @@ stats_name = "hero"
 
 [node name="Hero" instance=ExtResource("1_23n8s")]
 definition = SubResource("Resource_l2s4l")
+player_controlled = true
+faction = 1
 
 [node name="Sprite" parent="ActorSprite/SpriteOrigin" index="0"]
 texture = ExtResource("2_gsry7")
