@@ -6,13 +6,16 @@ extends Scene
 
 @export var player_actor_scene: PackedScene
 
-var _player: Actor
+var _player_actor: Actor
 var _current_map: Map
 
 @onready var _turn_clock := $TurnClock as TurnClock
+@onready var _player_input := $PlayerInput as PlayerInput
 
 
 func _ready() -> void:
+	_player_input.enabled = false
+
 	_init_player()
 	_load_initial_map()
 
@@ -20,9 +23,11 @@ func _ready() -> void:
 
 
 func _init_player() -> void:
-	_player = player_actor_scene.instantiate() as Actor
+	_player_actor = player_actor_scene.instantiate() as Actor
 	@warning_ignore("return_value_discarded")
-	_player.player_turn_started.connect(_on_player_turn_started)
+	_player_actor.player_turn_started.connect(_on_player_actor_turn_started)
+
+	_player_input.set_player_actor(_player_actor)
 
 
 func _load_initial_map() -> void:
@@ -37,8 +42,13 @@ func _load_map(map: Map, start_cell: Vector2i) -> void:
 	_current_map = map
 
 	_current_map.set_turn_clock(_turn_clock)
-	_current_map.add_actor(_player, start_cell)
+	_current_map.add_actor(_player_actor, start_cell)
 
 
-func _on_player_turn_started() -> void:
-	print("player turn started")
+func _on_player_actor_turn_started() -> void:
+	_player_input.enabled = true
+
+
+func _on_player_input_action_chosen(turn_action: TurnAction) -> void:
+	_player_input.enabled = false
+	_player_actor.do_turn_action(turn_action)
