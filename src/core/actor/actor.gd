@@ -19,9 +19,16 @@ signal player_turn_started
 ## The actor's faction ID. Different factions are hostile to each other.
 @export var faction := 0
 
+
+var map: Map:
+	get:
+		return _map
+
+
 @onready var _sprite := $ActorSprite as ActorSprite
 @onready var _turn_taker := $TurnTaker as TurnTaker
 
+var _map: Map
 var _ai: AI
 
 var _turn_clock: TurnClock
@@ -41,13 +48,27 @@ func set_ai(ai: AI) -> void:
 	_ai.set_actor(self)
 
 
+## Set's the actor's map. Not meant to be used directly. Use Map.add_actor and
+## Map.remove_actor.
+func set_map(new_map: Map) -> void:
+	if _map and (self in _map.actor_map.actors):
+		push_error("Actor '%s' not removed from map '%s' using " \
+				+ "Map.remove_actor" % [self, _map])
+	elif new_map and (self not in new_map.actor_map.actors):
+		push_error("Actor '%s' not added to map '%s' using Map.add_actor" \
+				% [self, new_map])
+	else:
+		_map = new_map
+
+
 ## Sets the actor's turn clock.
 func set_turn_clock(clock: TurnClock) -> void:
 	if _turn_clock and (_turn_clock != clock):
 		_turn_clock.remove_turn_taker(_turn_taker)
 
 	_turn_clock = clock
-	_turn_clock.add_turn_taker(_turn_taker)
+	if _turn_clock:
+		_turn_clock.add_turn_taker(_turn_taker)
 
 
 ## Runs [param action] and ends the actor's turn.
