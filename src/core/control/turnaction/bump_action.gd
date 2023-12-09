@@ -1,6 +1,12 @@
 class_name BumpAction
 extends TurnAction
 
+## A turn action where an actor moves or attacks.
+##
+## A turn action where an actor moves or attacks. If the target cell is empty,
+## the actor enters it. If the target cell has an enemy actor, the actor
+## attacks.
+
 
 var _target_actor: Actor
 var _target_cell: Vector2i
