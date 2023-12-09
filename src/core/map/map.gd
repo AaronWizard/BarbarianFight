@@ -5,6 +5,8 @@ extends Node2D
 ##
 ## A game map. Has actors, terrain, and map markers.
 
+@onready var _terrain := $Terrain as Terrain
+
 
 ## The ActorMap containing the map's actors
 var actors: ActorMap:
@@ -38,3 +40,10 @@ func add_actor(actor: Actor, cell: Vector2i) -> void:
 
 	if _turn_clock:
 		actor.set_turn_clock(_turn_clock)
+
+
+## True if [param actor] can have its origin_cell property set to [param cell],
+## false otherwise.
+func actor_can_enter_cell(actor: Actor, cell: Vector2i) -> bool:
+	return _terrain.tile_object_can_enter_cell(actor, cell) \
+			and actors.actor_can_enter_cell(actor, cell)
