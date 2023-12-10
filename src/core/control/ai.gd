@@ -15,6 +15,18 @@ func set_actor(actor: Actor) -> void:
 
 ## Gets the AI's next turn action. A return value of null is a wait action.
 func get_action() -> TurnAction:
-	print("Running AI")
-	await get_tree().create_timer(0.1).timeout
-	return null
+	var result: TurnAction = null
+
+	var actions: Array[TurnAction] = []
+
+	for dir: Vector2i in [Vector2i.UP, Vector2i.RIGHT, Vector2i.DOWN,
+			Vector2i.LEFT]:
+		var target_cell := _actor.origin_cell + dir
+		if BumpAction.is_possible(_actor, target_cell):
+			actions.append(BumpAction.new(_actor, target_cell))
+
+	if not actions.is_empty():
+		actions.shuffle()
+		result = actions.front()
+
+	return result

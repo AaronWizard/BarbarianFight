@@ -100,7 +100,7 @@ func _on_turn_taker_turn_started() -> void:
 	if player_controlled:
 		player_turn_started.emit()
 	elif _ai:
-		var action := await _ai.get_action()
+		var action := _ai.get_action()
 		do_turn_action(action)
 	else:
 		_turn_taker.end_turn(TurnConstants.ACTION_WAIT_SPEED)
