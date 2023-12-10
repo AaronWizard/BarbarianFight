@@ -19,7 +19,7 @@ func _init(target_actor: Actor, target_cell: Vector2i) -> void:
 
 
 func run() -> void:
-	_target_actor.origin_cell = _target_cell
+	_target_actor.move_step(_target_cell)
 
 
 static func is_possible(target_actor: Actor, target_cell: Vector2i) -> bool:
