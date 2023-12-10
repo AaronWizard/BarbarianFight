@@ -1,11 +1,49 @@
-[gd_scene load_steps=3 format=3 uid="uid://c5r8su0ki15l8"]
+[gd_scene load_steps=6 format=3 uid="uid://c5r8su0ki15l8"]
 
 [ext_resource type="Script" path="res://src/core/actor/actor_sprite.gd" id="1_yow33"]
 [ext_resource type="Texture2D" uid="uid://cmfwm1033edy1" path="res://assets/graphics/actors/villain.png" id="2_m070q"]
 
+[sub_resource type="Animation" id="Animation_1mkc1"]
+resource_name = "move_step"
+length = 0.2
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:sprite_offset_distance")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.2),
+"transitions": PackedFloat32Array(0.4, 1),
+"update": 0,
+"values": [-1.0, 0.0]
+}
+
+[sub_resource type="Animation" id="Animation_8tqa5"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:sprite_offset_distance")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_ayeli"]
+_data = {
+"RESET": SubResource("Animation_8tqa5"),
+"move_step": SubResource("Animation_1mkc1")
+}
+
 [node name="ActorSprite" type="Node2D"]
 position = Vector2(0, 16)
 script = ExtResource("1_yow33")
+sprite_offset_dir = null
 
 [node name="SpriteOrigin" type="Node2D" parent="."]
 position = Vector2(8, -8)
@@ -15,3 +53,6 @@ metadata/_edit_lock_ = true
 texture = ExtResource("2_m070q")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_ayeli")
+}

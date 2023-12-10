@@ -2,15 +2,19 @@
 class_name ActorSprite
 extends TileObject
 
+const _ANIM_MOVE_STEP := "move_step"
 
-## The offset direction of the sprite. Measured in tiles.
-@export var sprite_offset_vector := Vector2.ZERO:
+
+## The offset direction of the sprite from the center. Measured in tiles. Always
+## normalized.
+@export var sprite_offset_dir := Vector2.ZERO:
 	set(value):
-		sprite_offset_vector = value
+		sprite_offset_dir = value.normalized()
 		if _sprite:
 			_set_sprite_offset()
 
 
+## The offset distance of the sprite from the center. Measured in tiles.
 @export var sprite_offset_distance := 0.0:
 	set(value):
 		sprite_offset_distance = value
@@ -20,6 +24,7 @@ extends TileObject
 
 @onready var _sprite_origin := $SpriteOrigin as Node2D
 @onready var _sprite := $SpriteOrigin/Sprite as Sprite2D
+@onready var _animation_player: AnimationPlayer = $AnimationPlayer
 
 
 func _tile_size_changed(_old_size: Vector2i) -> void:
@@ -38,4 +43,15 @@ func _update_sprite_origin() -> void:
 
 
 func _set_sprite_offset() -> void:
-	_sprite.position = sprite_offset_vector * sprite_offset_distance * Vector2(tile_size)
+	_sprite.position \
+			= sprite_offset_dir * sprite_offset_distance * Vector2(tile_size)
+
+
+func _animate_with_offset(anim_name: String, offset_dir: Vector2,
+		offset_distance: float) -> void:
+	sprite_offset_dir = offset_dir
+	sprite_offset_distance = offset_distance
+
+	_animation_player.play(anim_name)
+	if _animation_player.is_playing():
+		await _animation_player.animation_finished
