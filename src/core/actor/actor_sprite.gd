@@ -6,9 +6,14 @@ extends TileObject
 ##
 ## An actor's sprite. Contains the actor's animations.
 
+## The sprite has finished animating.
 signal animation_finished
 
+## The sprite's attack animation has reached its hit frame.
+signal attack_anim_hit
+
 const _ANIM_MOVE_STEP := "move_step"
+const _ANIM_ATTACK := "attack"
 
 
 ## The offset direction of the sprite from the center. Measured in tiles. Always
@@ -42,10 +47,20 @@ var _animation_playing := false
 @onready var _animation_player := $AnimationPlayer as AnimationPlayer
 
 
-## Animates an actor moving to an adjacent cell.
+## Animates an actor moving to an adjacent cell.[br]
+## [param direction] is normalized. Emits [signal ActorSprite.attack_anim_hit].
 func move_step(direction: Vector2i) -> void:
 	_animation_playing = true
-	await _animate_with_start_offset(_ANIM_MOVE_STEP, direction, -1)
+	await _animate_with_start_offset(_ANIM_MOVE_STEP, direction, 0)
+	_animation_playing = false
+	animation_finished.emit()
+
+
+## Animates an actor attacking in the given direction.[br]
+## [param direction] is normalized.
+func attack(direction: Vector2i) -> void:
+	_animation_playing = true
+	await _animate_with_start_offset(_ANIM_ATTACK, direction, 0)
 	_animation_playing = false
 	animation_finished.emit()
 
@@ -78,3 +93,8 @@ func _animate_with_start_offset(anim_name: String, offset_dir: Vector2,
 	_animation_player.play(anim_name)
 	if _animation_player.is_playing():
 		await _animation_player.animation_finished
+
+
+func _emit_attack_hit() -> void:
+	if not Engine.is_editor_hint():
+		attack_anim_hit.emit()

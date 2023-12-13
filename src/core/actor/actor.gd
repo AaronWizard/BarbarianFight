@@ -10,9 +10,6 @@ extends TileObject
 ## controlled.
 signal player_turn_started
 
-## Emitted when the actor has finished playing an animation.
-signal animation_finished
-
 @export var definition: ActorDefinition
 ## The scene for the actor's [AI].
 @export var ai_scene: PackedScene
@@ -23,17 +20,16 @@ signal animation_finished
 @export var faction := 0
 
 
+## The actor's current map.
 var map: Map:
 	get:
 		return _map
 
 
-var animation_playing: bool:
+## The actor's [ActorSprite].
+var sprite: ActorSprite:
 	get:
-		var result := false
-		if _sprite:
-			result = _sprite.animation_playing
-		return result
+		return _sprite
 
 
 @onready var _sprite := $ActorSprite as ActorSprite
@@ -97,12 +93,12 @@ func do_turn_action(action: TurnAction) -> void:
 	_turn_taker.end_turn(action_speed)
 
 
-## Move to [param target_cell] with an animation.
+## Move to [param target_cell] with an animation.[br]
+## Assumes [param target_cell] is adjacent to the actor's origin_cell.
 func move_step(target_cell: Vector2i) -> void:
 	var direction := target_cell - origin_cell
 	origin_cell = target_cell
 	await _sprite.move_step(direction)
-	animation_finished.emit()
 
 
 func _tile_size_changed(_old_size: Vector2i) -> void:
@@ -116,8 +112,8 @@ func _cell_size_changed(_old_size: Vector2i) -> void:
 
 
 func _on_turn_taker_turn_started() -> void:
-	if animation_playing:
-		await animation_finished
+	if sprite.animation_playing:
+		await sprite.animation_finished
 
 	if player_controlled:
 		player_turn_started.emit()
