@@ -82,15 +82,16 @@ func set_turn_clock(clock: TurnClock) -> void:
 func do_turn_action(action: TurnAction) -> void:
 	if not _turn_taker.turn_running:
 		push_error("Actor turn not running")
+	else:
+		# Null action is wait
+		var action_speed := TurnConstants.ACTION_WAIT_SPEED
 
-	var action_speed := TurnConstants.ACTION_WAIT_SPEED # Null action is wait
+		if action:
+			action_speed = action.get_action_speed()
+			@warning_ignore("redundant_await")
+			await action.run()
 
-	if action:
-		action_speed = action.get_action_speed()
-		@warning_ignore("redundant_await")
-		await action.run()
-
-	_turn_taker.end_turn(action_speed)
+		_turn_taker.end_turn(action_speed)
 
 
 ## Move to [param target_cell] with an animation.[br]

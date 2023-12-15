@@ -31,18 +31,20 @@ var _turn_takers_to_remove := {}
 func add_turn_taker(turn_taker: TurnTaker) -> void:
 	if _turn_takers.has(turn_taker):
 		push_error("TurnTaker '%s' already in TurnClock" % turn_taker)
-	@warning_ignore("return_value_discarded")
-	_turn_takers_to_remove.erase(turn_taker)
-	_turn_takers_to_add[turn_taker] = true
+	else:
+		@warning_ignore("return_value_discarded")
+		_turn_takers_to_remove.erase(turn_taker)
+		_turn_takers_to_add[turn_taker] = true
 
 
 ## Removes a turn taker.
 func remove_turn_taker(turn_taker: TurnTaker) -> void:
 	if not _turn_takers.has(turn_taker):
 		push_error("TurnTaker '%s' not in TurnClock" % turn_taker)
-	@warning_ignore("return_value_discarded")
-	_turn_takers_to_add.erase(turn_taker)
-	_turn_takers_to_remove[turn_taker] = true
+	else:
+		@warning_ignore("return_value_discarded")
+		_turn_takers_to_add.erase(turn_taker)
+		_turn_takers_to_remove[turn_taker] = true
 
 
 func run() -> void:

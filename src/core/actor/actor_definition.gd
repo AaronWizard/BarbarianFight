@@ -46,21 +46,20 @@ func _load_stats() -> void:
 
 	if stats_file.is_empty():
 		push_error("'%s': stats_file required")
-
-	if stats_name.is_empty():
+	elif stats_name.is_empty():
 		push_error("'%s': stats_name required" % self.resource_path)
+	else:
+		var file := FileAccess.open(stats_file, FileAccess.READ)
+		var found_stats := false
+		while file.get_position() < file.get_length():
+			var row := file.get_csv_line()
+			if row[_Columns.NAME] == stats_name:
+				_stamina = int(row[_Columns.STAMINA])
+				_attack = int(row[_Columns.ATTACK])
+				found_stats = true
+				break
+		if not found_stats:
+			push_error("'%s': Could not find row with name '%s' in '%s'."
+					% [self.resource_path, stats_name, stats_file])
 
-	var file := FileAccess.open(stats_file, FileAccess.READ)
-	var found_stats := false
-	while file.get_position() < file.get_length():
-		var row := file.get_csv_line()
-		if row[_Columns.NAME] == stats_name:
-			_stamina = int(row[_Columns.STAMINA])
-			_attack = int(row[_Columns.ATTACK])
-			found_stats = true
-			break
-	if not found_stats:
-		push_error("'%s': Could not find row with name '%s' in '%s'."
-				% [self.resource_path, stats_name, stats_file])
-
-	_have_stats = true
+		_have_stats = true
