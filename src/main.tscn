@@ -1,11 +1,8 @@
-[gd_scene load_steps=4 format=3 uid="uid://bata1uhgqs2j0"]
+[gd_scene load_steps=3 format=3 uid="uid://bata1uhgqs2j0"]
 
 [ext_resource type="Script" path="res://src/main.gd" id="1_cwuap"]
-[ext_resource type="PackedScene" uid="uid://c0c5o4j30lwif" path="res://src/data/maps/arena.tscn" id="2_26yn7"]
 [ext_resource type="PackedScene" uid="uid://cvi0bb84c7308" path="res://src/core/game/game.tscn" id="2_liux8"]
 
 [node name="Main" type="Node"]
 script = ExtResource("1_cwuap")
-initial_map = ExtResource("2_26yn7")
-player_start_marker = "player_start"
 game_scene = ExtResource("2_liux8")
