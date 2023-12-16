@@ -88,6 +88,10 @@ func do_turn_action(action: TurnAction) -> void:
 
 		if action:
 			action_speed = action.get_action_speed()
+
+			if action.wait_for_map_anims() and map.animations_playing:
+				await map.animations_finished
+
 			@warning_ignore("redundant_await")
 			await action.run()
 

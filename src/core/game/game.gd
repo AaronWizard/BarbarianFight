@@ -46,6 +46,8 @@ func _load_map(map: Map, start_cell: Vector2i) -> void:
 
 
 func _on_player_actor_turn_started() -> void:
+	if _current_map.animations_playing:
+		await _current_map.animations_finished
 	_player_input.enabled = true
 
 

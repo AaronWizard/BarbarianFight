@@ -5,8 +5,8 @@ extends Node2D
 ##
 ## A game map. Has actors, terrain, and map markers.
 
-@onready var _terrain := $Terrain as Terrain
-
+## Emitted when all running animations are finished.
+signal animations_finished
 
 ## The ActorMap containing the map's actors
 var actor_map: ActorMap:
@@ -20,10 +20,23 @@ var markers: MapMarkers:
 		return $MapMarkers as MapMarkers
 
 
+## True if any animations are playing on the map, false otherwise.
+var animations_playing: bool:
+	get:
+		return _anim_tracker.animations_playing
+
+
 var _turn_clock: TurnClock
+var _anim_tracker: MapAnimTracker
+
+@onready var _terrain := $Terrain as Terrain
 
 
 func _ready() -> void:
+	_anim_tracker = MapAnimTracker.new()
+	@warning_ignore("return_value_discarded")
+	_anim_tracker.animations_finished.connect(_on_animations_finished)
+
 	for a in actor_map.actors:
 		_init_actor(a)
 
@@ -64,11 +77,17 @@ func actor_can_enter_cell(actor: Actor, cell: Vector2i) -> bool:
 			and actor_map.actor_can_enter_cell(actor, cell)
 
 
+func _on_animations_finished() -> void:
+	animations_finished.emit()
+
+
 func _init_actor(actor: Actor) -> void:
 	actor.set_map(self)
 	actor.set_turn_clock(_turn_clock)
+	_anim_tracker.observe_actor(actor)
 
 
 func _uninit_actor(actor: Actor) -> void:
 	actor.set_map(null)
 	actor.set_turn_clock(null)
+	_anim_tracker.unobserve_actor(actor)

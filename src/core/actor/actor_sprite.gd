@@ -6,6 +6,9 @@ extends TileObject
 ##
 ## An actor's sprite. Contains the actor's animations.
 
+## The sprite has started animating.
+signal animation_started
+
 ## The sprite has finished animating.
 signal animation_finished
 
@@ -50,19 +53,13 @@ var _animation_playing := false
 ## Animates an actor moving to an adjacent cell.[br]
 ## [param direction] is normalized. Emits [signal ActorSprite.attack_anim_hit].
 func move_step(direction: Vector2i) -> void:
-	_animation_playing = true
-	await _animate_with_start_offset(_ANIM_MOVE_STEP, direction, 0)
-	_animation_playing = false
-	animation_finished.emit()
+	await _animate_with_start_offset(_ANIM_MOVE_STEP, direction)
 
 
 ## Animates an actor attacking in the given direction.[br]
 ## [param direction] is normalized.
 func attack(direction: Vector2i) -> void:
-	_animation_playing = true
-	await _animate_with_start_offset(_ANIM_ATTACK, direction, 0)
-	_animation_playing = false
-	animation_finished.emit()
+	await _animate_with_start_offset(_ANIM_ATTACK, direction)
 
 
 func _tile_size_changed(_old_size: Vector2i) -> void:
@@ -85,14 +82,19 @@ func _set_sprite_offset() -> void:
 			= sprite_offset_dir * sprite_offset_distance * Vector2(tile_size)
 
 
-func _animate_with_start_offset(anim_name: String, offset_dir: Vector2,
-		offset_distance: float) -> void:
+func _animate_with_start_offset(anim_name: String, offset_dir: Vector2) -> void:
+	_animation_playing = true
+	animation_started.emit()
+
 	sprite_offset_dir = offset_dir
-	sprite_offset_distance = offset_distance
+	sprite_offset_distance = 0
 
 	_animation_player.play(anim_name)
 	if _animation_player.is_playing():
 		await _animation_player.animation_finished
+
+	_animation_playing = false
+	animation_finished.emit()
 
 
 func _emit_attack_hit() -> void:
