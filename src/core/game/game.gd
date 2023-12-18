@@ -10,7 +10,9 @@ var _player_actor: Actor
 var _current_map: Map
 
 @onready var _turn_clock := $TurnClock as TurnClock
+
 @onready var _player_camera := $PlayerCamera as PlayerCamera
+@onready var _game_gui := $GameGUI as GameGUI
 @onready var _player_input := $PlayerInput as PlayerInput
 
 
