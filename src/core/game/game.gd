@@ -10,6 +10,7 @@ var _player_actor: Actor
 var _current_map: Map
 
 @onready var _turn_clock := $TurnClock as TurnClock
+@onready var _player_camera := $PlayerCamera as PlayerCamera
 @onready var _player_input := $PlayerInput as PlayerInput
 
 
@@ -43,6 +44,10 @@ func _load_map(map: Map, start_cell: Vector2i) -> void:
 
 	_current_map.set_turn_clock(_turn_clock)
 	_current_map.add_actor(_player_actor, start_cell)
+
+	_player_camera.set_bounds(_current_map.pixel_rect)
+	_player_actor.sprite.remote_transform.remote_path \
+			= _player_camera.get_path()
 
 
 func _on_player_actor_turn_started() -> void:

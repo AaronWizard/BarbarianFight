@@ -1,8 +1,9 @@
-[gd_scene load_steps=6 format=3 uid="uid://cvi0bb84c7308"]
+[gd_scene load_steps=7 format=3 uid="uid://cvi0bb84c7308"]
 
 [ext_resource type="Script" path="res://src/core/game/game.gd" id="1_soc31"]
 [ext_resource type="PackedScene" uid="uid://c0c5o4j30lwif" path="res://src/data/maps/arena.tscn" id="2_4vijj"]
 [ext_resource type="PackedScene" uid="uid://doaykluv6j0vh" path="res://src/data/actors/hero.tscn" id="3_mn6pd"]
+[ext_resource type="Script" path="res://src/core/ui/player_camera.gd" id="4_0bcur"]
 [ext_resource type="Script" path="res://src/core/timing/turn_clock.gd" id="4_17ngi"]
 [ext_resource type="Script" path="res://src/core/ui/player_input.gd" id="5_uekvx"]
 
@@ -11,6 +12,9 @@ script = ExtResource("1_soc31")
 initial_map_scene = ExtResource("2_4vijj")
 player_start_marker = "player_start"
 player_actor_scene = ExtResource("3_mn6pd")
+
+[node name="PlayerCamera" type="Camera2D" parent="."]
+script = ExtResource("4_0bcur")
 
 [node name="TurnClock" type="Node" parent="."]
 script = ExtResource("4_17ngi")

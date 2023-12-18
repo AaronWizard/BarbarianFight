@@ -42,6 +42,12 @@ var animation_playing: bool:
 		return _animation_playing
 
 
+## A [RemoteTransform2D] attached to the sprite.
+var remote_transform: RemoteTransform2D:
+	get:
+		return $SpriteOrigin/Sprite/RemoteTransform2D as RemoteTransform2D
+
+
 var _animation_playing := false
 
 

@@ -26,6 +26,16 @@ var animations_playing: bool:
 		return _anim_tracker.animations_playing
 
 
+## The bounds of the map in pixels.
+var pixel_rect: Rect2i:
+	get:
+		var cell_rect := _terrain.get_used_rect()
+		var tile_size := _terrain.tile_set.tile_size
+		var rectpos := Vector2(cell_rect.position * tile_size)
+		var rectsize := Vector2(cell_rect.size * tile_size)
+		return Rect2i(rectpos, rectsize)
+
+
 var _turn_clock: TurnClock
 var _anim_tracker: MapAnimTracker
 
