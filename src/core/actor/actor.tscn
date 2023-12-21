@@ -1,8 +1,9 @@
-[gd_scene load_steps=4 format=3 uid="uid://dg6ygq33001cu"]
+[gd_scene load_steps=5 format=3 uid="uid://dg6ygq33001cu"]
 
 [ext_resource type="Script" path="res://src/core/actor/actor.gd" id="1_vwlen"]
 [ext_resource type="PackedScene" uid="uid://c5r8su0ki15l8" path="res://src/core/actor/actor_sprite.tscn" id="2_shvgh"]
 [ext_resource type="Script" path="res://src/core/timing/turn_taker.gd" id="3_8plh3"]
+[ext_resource type="Script" path="res://src/core/actor/stats/stamina.gd" id="4_fsdcd"]
 
 [node name="Actor" type="Node2D"]
 position = Vector2(0, 16)
@@ -15,6 +16,9 @@ metadata/_edit_lock_ = true
 
 [node name="TurnTaker" type="Node" parent="."]
 script = ExtResource("3_8plh3")
+
+[node name="Stamina" type="Node" parent="."]
+script = ExtResource("4_fsdcd")
 
 [connection signal="turn_started" from="TurnTaker" to="." method="_on_turn_taker_turn_started"]
 

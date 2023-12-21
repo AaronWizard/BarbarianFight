@@ -29,11 +29,16 @@ var map: Map:
 ## The actor's [ActorSprite].
 var sprite: ActorSprite:
 	get:
-		return _sprite
+		return $ActorSprite as ActorSprite
 
 
-@onready var _sprite := $ActorSprite as ActorSprite
+var stamina: Stamina:
+	get:
+		return $Stamina as Stamina
+
+
 @onready var _turn_taker := $TurnTaker as TurnTaker
+
 
 var _map: Map
 var _ai: AI
@@ -43,6 +48,10 @@ var _turn_clock: TurnClock
 
 func _ready() -> void:
 	if not Engine.is_editor_hint():
+		if definition:
+			stamina.max_stamina = definition.stamina
+			stamina.heal_full()
+
 		if ai_scene:
 			var ai := ai_scene.instantiate() as AI
 			set_ai(ai)
@@ -106,17 +115,15 @@ func do_turn_action(action: TurnAction) -> void:
 func move_step(target_cell: Vector2i) -> void:
 	var direction := target_cell - origin_cell
 	origin_cell = target_cell
-	await _sprite.move_step(direction)
+	await sprite.move_step(direction)
 
 
 func _tile_size_changed(_old_size: Vector2i) -> void:
-	if _sprite:
-		_sprite.tile_size = tile_size
+	sprite.tile_size = tile_size
 
 
 func _cell_size_changed(_old_size: Vector2i) -> void:
-	if _sprite:
-		_sprite.cell_size = cell_size
+	sprite.cell_size = cell_size
 
 
 func _on_turn_taker_turn_started() -> void:
