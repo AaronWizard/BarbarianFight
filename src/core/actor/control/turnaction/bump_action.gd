@@ -29,8 +29,14 @@ func run() -> void:
 	if BumpAction._bump_will_be_move(_target_actor, _target_cell):
 		_target_actor.move_step(_target_cell)
 	elif BumpAction._bump_will_be_attack(_target_actor, _target_cell):
-		await _target_actor.sprite.attack(
-				_target_cell - _target_actor.origin_cell)
+		var hit_actor := _target_actor.map.actor_map.get_actor_on_cell(
+				_target_cell)
+
+		_target_actor.sprite.attack(_target_cell - _target_actor.origin_cell)
+
+		await _target_actor.sprite.attack_anim_hit
+		hit_actor.stamina.current_stamina -= _target_actor.definition.attack
+		await _target_actor.sprite.animation_finished
 
 
 static func is_possible(target_actor: Actor, target_cell: Vector2i) -> bool:

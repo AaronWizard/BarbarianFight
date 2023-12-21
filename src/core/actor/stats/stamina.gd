@@ -31,9 +31,7 @@ var max_stamina: int:
 var current_stamina: int:
 	set(value):
 		var old_current := current_stamina
-
-		current_stamina = maxi(current_stamina, max_stamina)
-
+		current_stamina = mini(value, max_stamina)
 		if current_stamina != old_current:
 			stamina_changed.emit(current_stamina - old_current)
 

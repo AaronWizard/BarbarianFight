@@ -50,6 +50,7 @@ func _load_map(map: Map, start_cell: Vector2i) -> void:
 	_player_camera.set_bounds(_current_map.pixel_rect)
 	_player_actor.sprite.remote_transform.remote_path \
 			= _player_camera.get_path()
+	_game_gui.set_player_actor(_player_actor)
 
 
 func _on_player_actor_turn_started() -> void:
