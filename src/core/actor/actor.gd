@@ -50,6 +50,9 @@ func _ready() -> void:
 
 ## Sets the actor's AI. The AI is added to the actor as a child node.
 func set_ai(ai: AI) -> void:
+	if _ai:
+		remove_child(_ai)
+		_ai.free()
 	_ai = ai
 	add_child(_ai)
 	_ai.set_actor(self)
