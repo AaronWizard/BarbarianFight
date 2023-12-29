@@ -10,6 +10,9 @@ extends TileObject
 ## controlled.
 signal player_turn_started
 
+## The name of the actor that can be displayed to the player.
+@export var actor_name: String
+
 @export var definition: ActorDefinition
 ## The scene for the actor's [AI].
 @export var ai_scene: PackedScene

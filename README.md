@@ -1,3 +1,6 @@
 # BarbarianFight
 
-Made using [Godot 4.2](https://godotengine.org/).
+## Credits
+
+- Made using [Godot 4.2](https://godotengine.org/).
+- ["TinyPixie2" font](https://nimblebeastscollective.itch.io/nb-pixel-font-bundle) by Nimble Beasts Collective

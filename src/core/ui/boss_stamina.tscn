@@ -1,0 +1,21 @@
+[gd_scene load_steps=4 format=3 uid="uid://dp10plw6af2i1"]
+
+[ext_resource type="Script" path="res://src/core/ui/boss_stamina.gd" id="1_dvtoe"]
+[ext_resource type="Texture2D" uid="uid://c27r6vx2nbwgu" path="res://assets/graphics/ui/boss_stamina_border.png" id="2_6qrx5"]
+[ext_resource type="Texture2D" uid="uid://2dj3k4dfse5a" path="res://assets/graphics/ui/boss_stamina_bar.png" id="3_2uagg"]
+
+[node name="BossStamina" type="VBoxContainer"]
+offset_right = 166.0
+offset_bottom = 16.0
+theme_override_constants/separation = 0
+script = ExtResource("1_dvtoe")
+
+[node name="BossName" type="Label" parent="."]
+layout_mode = 2
+size_flags_horizontal = 4
+text = "Boss Name"
+
+[node name="StaminaBar" type="TextureProgressBar" parent="."]
+layout_mode = 2
+texture_under = ExtResource("2_6qrx5")
+texture_progress = ExtResource("3_2uagg")

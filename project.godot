@@ -33,6 +33,10 @@ window/size/window_height_override=720
 window/stretch/mode="viewport"
 window/stretch/aspect="expand"
 
+[gui]
+
+theme/custom="res://src/core/ui/resources/gui_theme.tres"
+
 [input]
 
 mouse_click={
@@ -76,4 +80,3 @@ textures/canvas_textures/default_texture_filter=0
 renderer/rendering_method="gl_compatibility"
 renderer/rendering_method.mobile="gl_compatibility"
 limits/global_shader_variables/buffer_size=16384
-environment/defaults/default_clear_color=Color(0.0823529, 0.0156863, 0.0745098, 1)

@@ -11,6 +11,7 @@ stats_file = "res://assets/data/actor_stats.csv"
 stats_name = "hero"
 
 [node name="Hero" instance=ExtResource("1_23n8s")]
+actor_name = "Cohen"
 definition = SubResource("Resource_l2s4l")
 player_controlled = true
 faction = 1
