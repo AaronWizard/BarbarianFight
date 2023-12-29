@@ -29,14 +29,3 @@ size_flags_vertical = 4
 value = 100.0
 texture_under = ExtResource("2_c1s6o")
 texture_progress = ExtResource("3_rk30c")
-
-[node name="StaminaText" type="Label" parent="."]
-layout_mode = 2
-offset_left = 19.0
-offset_top = -4.0
-offset_right = 29.0
-offset_bottom = 19.0
-theme_override_colors/font_color = Color(0, 0, 0, 1)
-theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
-theme_override_constants/outline_size = 2
-text = "0"
