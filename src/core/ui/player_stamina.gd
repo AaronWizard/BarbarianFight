@@ -1,15 +1,8 @@
 class_name PlayerStamina
 extends Control
 
-
-var max_stamina: int:
-	set(value):
-		_stamina_bar.max_value = value
+@onready var _stamina_bar := $HBoxContainer/StaminaBar as ActorStamina
 
 
-var current_stamina: int:
-	set(value):
-		_stamina_bar.value = value
-
-
-@onready var _stamina_bar := $HBoxContainer/StaminaBar as Range
+func set_player(actor: Actor) -> void:
+	_stamina_bar.set_actor(actor)
