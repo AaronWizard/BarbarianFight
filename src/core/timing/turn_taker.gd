@@ -51,6 +51,11 @@ var speed := TurnConstants.ActorSpeed.MEDIUM
 ## determining their order.
 var rank := 1
 
+## True if the turn taker is for a player controlled entity, false
+## otherwise.[br]
+## All else being equal, player controlled entities go before other entities.
+var is_player_controlled := false
+
 var _initiative := 0
 
 var _turn_running := false
@@ -58,7 +63,8 @@ var _turn_running := false
 
 ## Compares two turn takers to determine in what order they may start a turn if
 ## both are eligible for starting turns.[br]
-## In order, the turn takers are compared by initiative, speed, then rank.
+## In order, the turn takers are compared by initiative, speed, rank, and if
+## either are player controlled.
 static func compare(a: TurnTaker, b: TurnTaker) -> bool:
 	var result := a.initiative > b.initiative
 	if not result and (a.initiative == b.initiative):
@@ -66,6 +72,8 @@ static func compare(a: TurnTaker, b: TurnTaker) -> bool:
 				> TurnConstants.actor_speed_charge(b.speed)
 		if not result and (a.speed == b.speed):
 			result = a.rank < b.rank
+		if not result:
+			result = a.is_player_controlled and not b.is_player_controlled
 	return result
 
 
