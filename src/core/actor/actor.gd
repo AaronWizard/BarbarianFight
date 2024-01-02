@@ -23,6 +23,10 @@ signal player_turn_started
 ## The actor's faction ID. Different factions are hostile to each other.
 @export var faction := 0
 
+## True if the boss bar should be visible when the player can see this actor,
+## false otherwise.
+@export var is_boss := false
+
 
 ## The actor's current map.
 var map: Map:

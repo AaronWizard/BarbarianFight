@@ -10,6 +10,7 @@ var _player_actor: Actor
 var _current_map: Map
 
 @onready var _turn_clock := $TurnClock as TurnClock
+@onready var _boss_tracker := $BossTracker as BossTracker
 
 @onready var _player_camera := $PlayerCamera as PlayerCamera
 @onready var _game_gui := $GameGUI as GameGUI
@@ -27,9 +28,11 @@ func _ready() -> void:
 
 func _init_player() -> void:
 	_player_actor = player_actor_scene.instantiate() as Actor
+
 	@warning_ignore("return_value_discarded")
 	_player_actor.player_turn_started.connect(_on_player_actor_turn_started)
 
+	_boss_tracker.player = _player_actor
 	_player_input.set_player_actor(_player_actor)
 
 
@@ -54,6 +57,8 @@ func _load_map(map: Map, start_cell: Vector2i) -> void:
 
 
 func _on_player_actor_turn_started() -> void:
+	_boss_tracker.check_for_visible_boss()
+
 	if _current_map.animations_playing:
 		await _current_map.animations_finished
 	_player_input.enabled = true
@@ -62,3 +67,11 @@ func _on_player_actor_turn_started() -> void:
 func _on_player_input_action_chosen(turn_action: TurnAction) -> void:
 	_player_input.enabled = false
 	_player_actor.do_turn_action(turn_action)
+
+
+func _on_boss_tracker_boss_tracked(boss: Actor) -> void:
+	_game_gui.show_boss_bar(boss)
+
+
+func _on_boss_tracker_boss_untracked() -> void:
+	_game_gui.hide_boss_bar()

@@ -11,6 +11,7 @@ layer_0/tile_data = PackedInt32Array(0, 0, 0, 65536, 0, 0, 131072, 0, 0, 196608,
 
 [node name="Villain" parent="ActorMap" index="0" instance=ExtResource("2_b8jt8")]
 position = Vector2(80, 64)
+is_boss = true
 origin_cell = Vector2i(5, 3)
 
 [node name="player_start" type="Node2D" parent="MapMarkers" index="0"]
