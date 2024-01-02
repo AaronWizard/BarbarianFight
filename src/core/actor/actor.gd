@@ -13,6 +13,7 @@ signal player_turn_started
 ## The name of the actor that can be displayed to the player.
 @export var actor_name: String
 
+## The actor's [ActorDefinition].
 @export var definition: ActorDefinition
 ## The scene for the actor's [AI].
 @export var ai_scene: PackedScene
@@ -35,6 +36,7 @@ var sprite: ActorSprite:
 		return $ActorSprite as ActorSprite
 
 
+## The actor's [Stamina].
 var stamina: Stamina:
 	get:
 		return $Stamina as Stamina
@@ -95,6 +97,12 @@ func set_turn_clock(clock: TurnClock) -> void:
 		_turn_clock.add_turn_taker(_turn_taker)
 
 
+## Returns true if [param other_actor] is hostile to this actor, false
+## otherwise.
+func is_hostile(other_actor: Actor) -> bool:
+	return (self != other_actor) and (faction != other_actor.faction)
+
+
 ## Runs [param action] and ends the actor's turn.
 func do_turn_action(action: TurnAction) -> void:
 	if not _turn_taker.turn_running:
@@ -115,7 +123,7 @@ func do_turn_action(action: TurnAction) -> void:
 		_turn_taker.end_turn(action_speed)
 
 
-## Move to [param target_cell] with an animation.[br]
+## Move to [param target_cell] with a walk/step animation.[br]
 ## Assumes [param target_cell] is adjacent to the actor's origin_cell.
 func move_step(target_cell: Vector2i) -> void:
 	var direction := target_cell - origin_cell

@@ -53,4 +53,4 @@ static func _bump_will_be_move(target_actor: Actor, target_cell: Vector2i) \
 static func _bump_will_be_attack(target_actor: Actor, target_cell: Vector2i) \
 		-> bool:
 	var other_actor := target_actor.map.actor_map.get_actor_on_cell(target_cell)
-	return other_actor and (other_actor.faction != target_actor.faction)
+	return other_actor and target_actor.is_hostile(other_actor)
