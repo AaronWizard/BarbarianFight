@@ -5,8 +5,15 @@ extends Node2D
 ##
 ## A game map. Has actors, terrain, and map markers.
 
+## Emitted when an actor is added to the map.
+signal actor_added(actor: Actor)
+
+## Emitted when an actor  is removed from the map.
+signal actor_removed(actor: Actor)
+
 ## Emitted when all running animations are finished.
 signal animations_finished
+
 
 ## The ActorMap containing the map's actors
 var actor_map: ActorMap:
@@ -67,6 +74,7 @@ func add_actor(actor: Actor, cell: Vector2i) -> void:
 		actor_map.add_child(actor)
 		actor.origin_cell = cell
 		_init_actor(actor)
+		actor_added.emit(actor)
 	else:
 		push_error("Can not place actor '%s' at cell %s" % [actor, cell])
 
@@ -78,6 +86,7 @@ func remove_actor(actor: Actor) -> void:
 
 	actor_map.remove_child(actor)
 	_uninit_actor(actor)
+	actor_removed.emit(actor)
 
 
 ## True if [param actor] can have its origin_cell property set to [param cell],
