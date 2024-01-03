@@ -82,11 +82,9 @@ func set_ai(ai: AI) -> void:
 ## Map.remove_actor.
 func set_map(new_map: Map) -> void:
 	if _map and (self in _map.actor_map.actors):
-		push_error("Actor '%s' not removed from map '%s' using " \
-				+ "Map.remove_actor" % [self, _map])
+		push_error("Actor not removed from map using Map.remove_actor")
 	elif new_map and (self not in new_map.actor_map.actors):
-		push_error("Actor '%s' not added to map '%s' using Map.add_actor" \
-				% [self, new_map])
+		push_error("Actor not added to map using Map.add_actor")
 	else:
 		_map = new_map
 
