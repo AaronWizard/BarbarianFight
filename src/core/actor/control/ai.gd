@@ -22,7 +22,10 @@ func get_action() -> TurnAction:
 		var delta := enemy.origin_cell - _actor.origin_cell
 		delta = delta.sign()
 		if delta.length_squared() > 1:
-			delta.y = 0
+			if delta.x > delta.y:
+				delta.x = 0
+			else:
+				delta.y = 0
 		var next_cell := _actor.origin_cell + delta
 		assert(BumpAction.is_possible(_actor, next_cell))
 
