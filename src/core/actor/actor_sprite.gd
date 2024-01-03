@@ -19,6 +19,7 @@ const _ANIM_MOVE_STEP := "move_step"
 const _ANIM_ATTACK := "attack"
 const _ANIM_HIT_NO_DIRECTION := "hit_no_direction"
 const _ANIM_HIT_DIRECTION := "hit_from_direction"
+const _ANIM_DIE := "die"
 
 
 ## The offset direction of the sprite from the center. Measured in tiles. Always
@@ -77,6 +78,12 @@ func hit(direction := Vector2i.ZERO) -> void:
 		await _animate_with_start_offset(_ANIM_HIT_DIRECTION, direction)
 	else:
 		await _animate_with_start_offset(_ANIM_HIT_NO_DIRECTION, direction)
+
+
+## Animates the actor dying after being hit from the given direction.[br]
+## [param direction] is normalized.
+func die(direction := Vector2i.ZERO) -> void:
+	await _animate_with_start_offset(_ANIM_DIE, direction)
 
 
 func _tile_size_changed(_old_size: Vector2i) -> void:
