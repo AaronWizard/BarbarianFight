@@ -1,9 +1,24 @@
-[gd_scene load_steps=5 format=3 uid="uid://dg6ygq33001cu"]
+[gd_scene load_steps=9 format=3 uid="uid://dg6ygq33001cu"]
 
 [ext_resource type="Script" path="res://src/core/actor/actor.gd" id="1_vwlen"]
 [ext_resource type="PackedScene" uid="uid://c5r8su0ki15l8" path="res://src/core/actor/actor_sprite.tscn" id="2_shvgh"]
+[ext_resource type="Shader" path="res://src/core/shaders/dissolve.gdshader" id="3_5o16k"]
 [ext_resource type="Script" path="res://src/core/timing/turn_taker.gd" id="3_8plh3"]
 [ext_resource type="Script" path="res://src/core/actor/stats/stamina.gd" id="4_fsdcd"]
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_m88mv"]
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_drdcq"]
+width = 256
+height = 256
+generate_mipmaps = false
+noise = SubResource("FastNoiseLite_m88mv")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_oi5c4"]
+resource_local_to_scene = true
+shader = ExtResource("3_5o16k")
+shader_parameter/dissolve_value = 0.0
+shader_parameter/dissolve_texture = SubResource("NoiseTexture2D_drdcq")
 
 [node name="Actor" type="Node2D"]
 position = Vector2(0, 16)
@@ -13,6 +28,9 @@ script = ExtResource("1_vwlen")
 position = Vector2(0, 0)
 origin_cell = Vector2i(0, -1)
 metadata/_edit_lock_ = true
+
+[node name="Sprite" parent="ActorSprite/SpriteOrigin" index="0"]
+material = SubResource("ShaderMaterial_oi5c4")
 
 [node name="TurnTaker" type="Node" parent="."]
 script = ExtResource("3_8plh3")

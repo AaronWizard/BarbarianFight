@@ -6,6 +6,12 @@ extends TileObject
 ##
 ## An actor. An actor has stats and can take turns.
 
+## Emitted when the actor is added to a new map.
+signal added_to_new_map
+
+## Emitted when the actor is removed from its map.
+signal removed_from_map
+
 ## Emitted when the actor's turn has started and the actor is set to be player
 ## controlled.
 signal player_turn_started
@@ -87,6 +93,10 @@ func set_map(new_map: Map) -> void:
 		push_error("Actor not added to map using Map.add_actor")
 	else:
 		_map = new_map
+		if _map:
+			added_to_new_map.emit()
+		else:
+			removed_from_map.emit()
 
 
 ## Sets the actor's turn clock.

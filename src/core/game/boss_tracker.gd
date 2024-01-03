@@ -29,7 +29,13 @@ const _BOSS_HIDDEN_TURNS_MAX := 3
 
 
 ## The player actor. Used for checking which bosses are visible.
-var player: Actor = null
+var player: Actor = null:
+	set(value):
+		if player:
+			player.added_to_new_map.disconnect(_on_player_change_map)
+		player = value
+		@warning_ignore("return_value_discarded")
+		player.added_to_new_map.connect(_on_player_change_map)
 
 
 var _current_boss: Actor = null
@@ -79,17 +85,22 @@ func _find_new_visible_boss() -> void:
 func _set_boss(new_boss: Actor) -> void:
 	_current_boss = new_boss
 	@warning_ignore("return_value_discarded")
-	_current_boss.stamina.died.connect(_on_boss_died)
+	_current_boss.removed_from_map.connect(_on_boss_died)
 	_boss_hidden_turns = 0
 
 
 func _unset_boss() -> void:
 	if _current_boss:
-		_current_boss.stamina.died.disconnect(_on_boss_died)
+		_current_boss.removed_from_map.disconnect(_on_boss_died)
 		_current_boss = null
 
 
 func _on_boss_died() -> void:
+	_unset_boss()
+	_find_new_visible_boss()
+
+
+func _on_player_change_map() -> void:
 	_unset_boss()
 	_find_new_visible_boss()
 

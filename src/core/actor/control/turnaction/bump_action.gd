@@ -41,6 +41,10 @@ func run() -> void:
 		if hit_actor.stamina.is_alive:
 			hit_actor.sprite.hit(direction)
 			await hit_actor.sprite.animation_finished
+		else:
+			hit_actor.sprite.die(direction)
+			await hit_actor.sprite.animation_finished
+			hit_actor.map.remove_actor(hit_actor)
 
 		if _target_actor.sprite.animation_playing:
 			await _target_actor.sprite.animation_finished
