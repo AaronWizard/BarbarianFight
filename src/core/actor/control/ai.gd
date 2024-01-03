@@ -17,16 +17,24 @@ func set_actor(actor: Actor) -> void:
 func get_action() -> TurnAction:
 	var result: TurnAction = null
 
-	var actions: Array[TurnAction] = []
+	var enemy := _find_enemy()
+	if enemy:
+		var delta := enemy.origin_cell - _actor.origin_cell
+		delta = delta.sign()
+		if delta.length_squared() > 1:
+			delta.y = 0
+		var next_cell := _actor.origin_cell + delta
+		assert(BumpAction.is_possible(_actor, next_cell))
 
-	for dir: Vector2i in [Vector2i.UP, Vector2i.RIGHT, Vector2i.DOWN,
-			Vector2i.LEFT]:
-		var target_cell := _actor.origin_cell + dir
-		if BumpAction.is_possible(_actor, target_cell):
-			actions.append(BumpAction.new(_actor, target_cell))
+		result = BumpAction.new(_actor, next_cell)
 
-	if not actions.is_empty():
-		actions.shuffle()
-		result = actions.front()
+	return result
 
+
+func _find_enemy() -> Actor:
+	var result: Actor = null
+	for actor in _actor.map.actor_map.actors:
+		if actor.is_hostile(_actor):
+			result = actor
+			break
 	return result
