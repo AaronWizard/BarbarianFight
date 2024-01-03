@@ -1,22 +1,15 @@
-[gd_scene load_steps=14 format=3 uid="uid://c5r8su0ki15l8"]
+[gd_scene load_steps=13 format=3 uid="uid://c5r8su0ki15l8"]
 
 [ext_resource type="Script" path="res://src/core/actor/actor_sprite.gd" id="1_yow33"]
 [ext_resource type="Shader" path="res://src/core/shaders/dissolve.gdshader" id="2_alv3n"]
 [ext_resource type="Texture2D" uid="uid://cmfwm1033edy1" path="res://assets/graphics/actors/villain.png" id="2_m070q"]
-
-[sub_resource type="FastNoiseLite" id="FastNoiseLite_m88mv"]
-
-[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_drdcq"]
-width = 256
-height = 256
-generate_mipmaps = false
-noise = SubResource("FastNoiseLite_m88mv")
+[ext_resource type="Texture2D" uid="uid://bujbfg8mbqnqm" path="res://src/core/shaders/dissolve_texture.tres" id="3_8f10h"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_c4ock"]
 resource_local_to_scene = true
 shader = ExtResource("2_alv3n")
 shader_parameter/dissolve_value = 0.0
-shader_parameter/dissolve_texture = SubResource("NoiseTexture2D_drdcq")
+shader_parameter/dissolve_texture = ExtResource("3_8f10h")
 
 [sub_resource type="Animation" id="Animation_8tqa5"]
 length = 0.001

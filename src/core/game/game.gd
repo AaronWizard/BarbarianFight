@@ -16,6 +16,8 @@ var _current_map: Map
 @onready var _game_gui := $GameGUI as GameGUI
 @onready var _player_input := $PlayerInput as PlayerInput
 
+@onready var _screen_fade := $ScreenFade as ScreenFade
+
 
 func _ready() -> void:
 	_player_input.enabled = false
@@ -23,6 +25,7 @@ func _ready() -> void:
 	_init_player()
 	_load_initial_map()
 
+	await _screen_fade.fade_in()
 	_turn_clock.run()
 
 
