@@ -27,9 +27,8 @@ func get_action() -> TurnAction:
 			else:
 				delta.y = 0
 		var next_cell := _actor.origin_cell + delta
-		assert(BumpAction.is_possible(_actor, next_cell))
-
-		result = BumpAction.new(_actor, next_cell)
+		if BumpAction.is_possible(_actor, next_cell):
+			result = BumpAction.new(_actor, next_cell)
 
 	return result
 
