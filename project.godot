@@ -37,6 +37,30 @@ window/stretch/aspect="expand"
 
 theme/custom="res://src/core/ui/resources/gui_theme.tres"
 
+[importer_defaults]
+
+font_data_dynamic={
+"Compress": null,
+"Fallbacks": null,
+"Rendering": null,
+"allow_system_fallback": true,
+"antialiasing": 0,
+"compress": true,
+"fallbacks": [],
+"force_autohinter": false,
+"generate_mipmaps": false,
+"hinting": 1,
+"language_support": {},
+"msdf_pixel_range": 8,
+"msdf_size": 48,
+"multichannel_signed_distance_field": false,
+"opentype_features": {},
+"oversampling": 0.0,
+"preload": [],
+"script_support": {},
+"subpixel_positioning": 1
+}
+
 [input]
 
 mouse_click={
@@ -85,3 +109,4 @@ textures/canvas_textures/default_texture_filter=0
 renderer/rendering_method="gl_compatibility"
 renderer/rendering_method.mobile="gl_compatibility"
 limits/global_shader_variables/buffer_size=16384
+environment/defaults/default_clear_color=Color(0.0823529, 0.0156863, 0.0745098, 1)
