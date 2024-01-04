@@ -14,6 +14,7 @@ func _switch_scene(new_scene: Scene) -> void:
 		remove_child(get_child(0))
 
 	assert(get_child_count() == 0)
-	add_child(new_scene)
+
 	@warning_ignore("return_value_discarded")
 	new_scene.switch_scene.connect(_switch_scene)
+	add_child(new_scene)

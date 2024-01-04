@@ -1,0 +1,49 @@
+[gd_scene load_steps=4 format=3 uid="uid://bibywo5mrgewf"]
+
+[ext_resource type="Script" path="res://src/core/scenes/mainmenu/main_menu.gd" id="1_klmlv"]
+[ext_resource type="PackedScene" uid="uid://cvi0bb84c7308" path="res://src/core/scenes/game/game.tscn" id="2_8cnyl"]
+[ext_resource type="PackedScene" uid="uid://dkntd5g7ap0xd" path="res://src/core/ui/screen_fade.tscn" id="2_e2rr4"]
+
+[node name="MainMenu" type="Node"]
+script = ExtResource("1_klmlv")
+game_scene = ExtResource("2_8cnyl")
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 32
+theme_override_constants/margin_top = 32
+theme_override_constants/margin_right = 32
+theme_override_constants/margin_bottom = 32
+
+[node name="MainContainer" type="VBoxContainer" parent="MarginContainer"]
+layout_mode = 2
+
+[node name="TitleContainer" type="VBoxContainer" parent="MarginContainer/MainContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+alignment = 1
+
+[node name="Title" type="Label" parent="MarginContainer/MainContainer/TitleContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+text = "Barbarian Fight"
+
+[node name="Copyright" type="Label" parent="MarginContainer/MainContainer/TitleContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+text = "© AaronWizard, 2024"
+
+[node name="Start" type="Button" parent="MarginContainer/MainContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 8
+text = "Start"
+
+[node name="ScreenFade" parent="." instance=ExtResource("2_e2rr4")]
+faded_in = true
+
+[connection signal="pressed" from="MarginContainer/MainContainer/Start" to="." method="_on_start_pressed"]
