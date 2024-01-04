@@ -44,6 +44,7 @@ size_flags_horizontal = 4
 text = "(c) AaronWizard, 2024"
 
 [node name="Start" type="Button" parent="MarginContainer/MainContainer"]
+custom_minimum_size = Vector2(32, 16)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 8
