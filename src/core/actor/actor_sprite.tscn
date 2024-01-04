@@ -1,15 +1,8 @@
-[gd_scene load_steps=13 format=3 uid="uid://c5r8su0ki15l8"]
+[gd_scene load_steps=11 format=3 uid="uid://c5r8su0ki15l8"]
 
 [ext_resource type="Script" path="res://src/core/actor/actor_sprite.gd" id="1_yow33"]
-[ext_resource type="Shader" path="res://src/core/shaders/dissolve.gdshader" id="2_alv3n"]
+[ext_resource type="Material" uid="uid://cw10xhc1nbh0" path="res://src/core/shaders/material_actor_sprite.tres" id="2_aphjf"]
 [ext_resource type="Texture2D" uid="uid://cmfwm1033edy1" path="res://assets/graphics/actors/villain.png" id="2_m070q"]
-[ext_resource type="Texture2D" uid="uid://bujbfg8mbqnqm" path="res://src/core/shaders/dissolve_texture.tres" id="3_8f10h"]
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_c4ock"]
-resource_local_to_scene = true
-shader = ExtResource("2_alv3n")
-shader_parameter/dissolve_value = 0.0
-shader_parameter/dissolve_texture = ExtResource("3_8f10h")
 
 [sub_resource type="Animation" id="Animation_8tqa5"]
 length = 0.001
@@ -40,7 +33,7 @@ tracks/1/keys = {
 tracks/2/type = "value"
 tracks/2/imported = false
 tracks/2/enabled = true
-tracks/2/path = NodePath("SpriteOrigin/Sprite:material:shader_parameter/dissolve_value")
+tracks/2/path = NodePath("SpriteOrigin/Sprite:material:shader_parameter/dissolve")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
@@ -100,12 +93,12 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("SpriteOrigin/Sprite:material:shader_parameter/dissolve_value")
+tracks/1/path = NodePath("SpriteOrigin/Sprite:material:shader_parameter/dissolve")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
 "times": PackedFloat32Array(0, 0.3),
-"transitions": PackedFloat32Array(0.4, 1),
+"transitions": PackedFloat32Array(1, 1),
 "update": 0,
 "values": [0.0, 1.0]
 }
@@ -191,7 +184,7 @@ position = Vector2(8, -8)
 metadata/_edit_lock_ = true
 
 [node name="Sprite" type="Sprite2D" parent="SpriteOrigin"]
-material = SubResource("ShaderMaterial_c4ock")
+material = ExtResource("2_aphjf")
 texture = ExtResource("2_m070q")
 
 [node name="RemoteTransform2D" type="RemoteTransform2D" parent="SpriteOrigin/Sprite"]

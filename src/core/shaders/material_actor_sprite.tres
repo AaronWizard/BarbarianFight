@@ -1,0 +1,8 @@
+[gd_resource type="ShaderMaterial" load_steps=2 format=3 uid="uid://cw10xhc1nbh0"]
+
+[ext_resource type="Shader" path="res://src/core/shaders/sprite_dissolve.gdshader" id="1_4lkff"]
+
+[resource]
+resource_local_to_scene = true
+shader = ExtResource("1_4lkff")
+shader_parameter/dissolve = 0.0
