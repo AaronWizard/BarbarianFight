@@ -1,10 +1,10 @@
 [gd_scene load_steps=6 format=3 uid="uid://cn0u6gdopw7sw"]
 
 [ext_resource type="Texture2D" uid="uid://dju1j5y4j6dvg" path="res://assets/graphics/ui/icon_stamina.png" id="1_h7loq"]
-[ext_resource type="Script" path="res://src/core/ui/game/player_stamina.gd" id="1_tl155"]
+[ext_resource type="Script" path="res://src/core/scenes/game/ui/player_stamina.gd" id="1_tl155"]
 [ext_resource type="Texture2D" uid="uid://bgbtfub7nlvww" path="res://assets/graphics/ui/player_stamina_border.png" id="2_c1s6o"]
 [ext_resource type="Texture2D" uid="uid://d3nc7xs8jspkn" path="res://assets/graphics/ui/player_stamina_bar.png" id="3_rk30c"]
-[ext_resource type="Script" path="res://src/core/ui/game/actor_stamina.gd" id="5_5q7qw"]
+[ext_resource type="Script" path="res://src/core/scenes/game/ui/actor_stamina.gd" id="5_5q7qw"]
 
 [node name="PlayerStamina" type="Control"]
 layout_mode = 3
