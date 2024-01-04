@@ -12,13 +12,19 @@ const _SHADER_DISSOLVE_PARAM := "dissolve_value"
 	set(value):
 		faded_in = value
 
-		var dissolve_value := 0.0
-		if faded_in:
-			dissolve_value = 1.0
+		if _color_rect:
+			var shader_material := _color_rect.material as ShaderMaterial
 
-		var shader_material := _color_rect.material as ShaderMaterial
-		shader_material.set_shader_parameter(
-				_SHADER_DISSOLVE_PARAM, dissolve_value)
+			if faded_in:
+				shader_material.set_shader_parameter(
+						_SHADER_DISSOLVE_PARAM, 1.0)
+
+				_color_rect.mouse_filter = Control.MOUSE_FILTER_IGNORE
+			else:
+				shader_material.set_shader_parameter(
+						_SHADER_DISSOLVE_PARAM, 0.0)
+
+				_color_rect.mouse_filter = Control.MOUSE_FILTER_STOP
 
 
 @onready var _color_rect := $ColorRect as ColorRect
