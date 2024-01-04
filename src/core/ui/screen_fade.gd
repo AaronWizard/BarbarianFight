@@ -8,7 +8,7 @@ const _ANIM_FADE_OUT := "fade_out"
 const _SHADER_DISSOLVE_PARAM := "dissolve_value"
 
 
-@export var faded_in := false:
+@export var faded_in := true:
 	set(value):
 		faded_in = value
 
