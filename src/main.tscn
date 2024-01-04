@@ -5,4 +5,4 @@
 
 [node name="Main" type="Node"]
 script = ExtResource("1_cwuap")
-game_scene = ExtResource("2_liux8")
+initial_scene = ExtResource("2_liux8")
