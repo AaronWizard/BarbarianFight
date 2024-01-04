@@ -33,7 +33,7 @@ tracks/1/keys = {
 tracks/2/type = "value"
 tracks/2/imported = false
 tracks/2/enabled = true
-tracks/2/path = NodePath("SpriteOrigin/Sprite:material:shader_parameter/dissolve")
+tracks/2/path = NodePath("SpriteOrigin/SpritePivot/Sprite:material:shader_parameter/dissolve")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
@@ -93,7 +93,7 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("SpriteOrigin/Sprite:material:shader_parameter/dissolve")
+tracks/1/path = NodePath("SpriteOrigin/SpritePivot/Sprite:material:shader_parameter/dissolve")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -183,11 +183,13 @@ script = ExtResource("1_yow33")
 position = Vector2(8, -8)
 metadata/_edit_lock_ = true
 
-[node name="Sprite" type="Sprite2D" parent="SpriteOrigin"]
+[node name="SpritePivot" type="Node2D" parent="SpriteOrigin"]
+
+[node name="Sprite" type="Sprite2D" parent="SpriteOrigin/SpritePivot"]
 material = ExtResource("2_aphjf")
 texture = ExtResource("2_m070q")
 
-[node name="RemoteTransform2D" type="RemoteTransform2D" parent="SpriteOrigin/Sprite"]
+[node name="RemoteTransform2D" type="RemoteTransform2D" parent="SpriteOrigin/SpritePivot/Sprite"]
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {

@@ -27,16 +27,14 @@ const _ANIM_DIE := "die"
 @export var sprite_offset_dir := Vector2.ZERO:
 	set(value):
 		sprite_offset_dir = value.normalized()
-		if _sprite:
-			_set_sprite_offset()
+		_set_sprite_offset()
 
 
 ## The offset distance of the sprite from the center. Measured in tiles.
 @export var sprite_offset_distance := 0.0:
 	set(value):
 		sprite_offset_distance = value
-		if _sprite:
-			_set_sprite_offset()
+		_set_sprite_offset()
 
 
 ## True if an animation is playing, false otherwise.
@@ -48,14 +46,16 @@ var animation_playing: bool:
 ## A [RemoteTransform2D] attached to the sprite.
 var remote_transform: RemoteTransform2D:
 	get:
-		return $SpriteOrigin/Sprite/RemoteTransform2D as RemoteTransform2D
+		return $SpriteOrigin/SpritePivot/Sprite/RemoteTransform2D \
+				as RemoteTransform2D
 
 
 var _animation_playing := false
 
 
 @onready var _sprite_origin := $SpriteOrigin as Node2D
-@onready var _sprite := $SpriteOrigin/Sprite as Sprite2D
+@onready var _sprite_pivot := $SpriteOrigin/SpritePivot as Node2D
+
 @onready var _animation_player := $AnimationPlayer as AnimationPlayer
 
 
@@ -102,8 +102,9 @@ func _update_sprite_origin() -> void:
 
 
 func _set_sprite_offset() -> void:
-	_sprite.position \
-			= sprite_offset_dir * sprite_offset_distance * Vector2(tile_size)
+	if _sprite_pivot:
+		_sprite_pivot.position = sprite_offset_dir * sprite_offset_distance \
+				* Vector2(tile_size)
 
 
 func _animate_with_start_offset(anim_name: String, offset_dir: Vector2) -> void:
