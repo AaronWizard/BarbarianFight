@@ -11,3 +11,8 @@ func _ready() -> void:
 func _on_start_pressed() -> void:
 	await _screen_fade.fade_out()
 	switch_scene(game_scene_path)
+
+
+func _on_quit_pressed() -> void:
+	await _screen_fade.fade_out()
+	get_tree().quit()

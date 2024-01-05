@@ -20,6 +20,7 @@ theme_override_constants/margin_bottom = 32
 
 [node name="MainContainer" type="VBoxContainer" parent="MarginContainer"]
 layout_mode = 2
+theme_override_constants/separation = 1
 
 [node name="TitleContainer" type="VBoxContainer" parent="MarginContainer/MainContainer"]
 layout_mode = 2
@@ -46,6 +47,14 @@ size_flags_horizontal = 4
 size_flags_vertical = 8
 text = "Start"
 
+[node name="Quit" type="Button" parent="MarginContainer/MainContainer"]
+custom_minimum_size = Vector2(32, 16)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 8
+text = "Quit"
+
 [node name="ScreenFade" parent="." instance=ExtResource("2_e2rr4")]
 
 [connection signal="pressed" from="MarginContainer/MainContainer/Start" to="." method="_on_start_pressed"]
+[connection signal="pressed" from="MarginContainer/MainContainer/Quit" to="." method="_on_quit_pressed"]
