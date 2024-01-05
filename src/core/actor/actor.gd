@@ -120,19 +120,12 @@ func do_turn_action(action: TurnAction) -> void:
 	if not _turn_taker.turn_running:
 		push_error("Actor turn not running")
 	else:
-		# Null action is wait
-		var action_speed := TurnConstants.ACTION_WAIT_SPEED
-
 		if action:
-			action_speed = action.get_action_speed()
-
 			if action.wait_for_map_anims() and map.animations_playing:
 				await map.animations_finished
-
 			@warning_ignore("redundant_await")
 			await action.run()
-
-		_turn_taker.end_turn(action_speed)
+		_turn_taker.end_turn()
 
 
 ## Move to [param target_cell] with a walk/step animation.[br]
@@ -161,4 +154,4 @@ func _on_turn_taker_turn_started() -> void:
 		var action := _ai.get_action()
 		await do_turn_action(action)
 	else:
-		_turn_taker.end_turn(TurnConstants.ACTION_WAIT_SPEED)
+		_turn_taker.end_turn()
