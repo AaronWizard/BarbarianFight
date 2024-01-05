@@ -1,9 +1,10 @@
-[gd_resource type="Theme" load_steps=6 format=3 uid="uid://b2502647ouiff"]
+[gd_resource type="Theme" load_steps=7 format=3 uid="uid://b2502647ouiff"]
 
 [ext_resource type="FontFile" uid="uid://d085s8lshp1ly" path="res://assets/fonts/TinyPixie2.ttf" id="1_8f81t"]
 [ext_resource type="StyleBox" uid="uid://c4j7e25yvcmvj" path="res://src/core/ui/resources/style_box_button_disabled.tres" id="1_owx02"]
 [ext_resource type="StyleBox" uid="uid://ccv2gt3cbdkr5" path="res://src/core/ui/resources/style_box_button.tres" id="1_yff5u"]
 [ext_resource type="StyleBox" uid="uid://d1fpdhew1yvx3" path="res://src/core/ui/resources/style_box_button_pressed.tres" id="2_ldskl"]
+[ext_resource type="FontFile" uid="uid://d4h5d2uf55aqs" path="res://assets/fonts/Bitfantasy.ttf" id="4_yad65"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_e4efs"]
 
@@ -24,3 +25,7 @@ Button/styles/pressed = ExtResource("2_ldskl")
 Label/colors/font_color = Color(1, 1, 0.819608, 1)
 Label/colors/font_outline_color = Color(0.0823529, 0.0156863, 0.0745098, 1)
 Label/constants/outline_size = 2
+TitleLabel/base_type = &"Label"
+TitleLabel/constants/line_spacing = -6
+TitleLabel/font_sizes/font_size = 32
+TitleLabel/fonts/font = ExtResource("4_yad65")
