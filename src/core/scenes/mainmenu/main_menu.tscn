@@ -1,12 +1,11 @@
-[gd_scene load_steps=4 format=3 uid="uid://bibywo5mrgewf"]
+[gd_scene load_steps=3 format=3 uid="uid://bibywo5mrgewf"]
 
 [ext_resource type="Script" path="res://src/core/scenes/mainmenu/main_menu.gd" id="1_klmlv"]
-[ext_resource type="PackedScene" uid="uid://cvi0bb84c7308" path="res://src/core/scenes/game/game.tscn" id="2_8cnyl"]
 [ext_resource type="PackedScene" uid="uid://dkntd5g7ap0xd" path="res://src/core/ui/screen_fade.tscn" id="2_e2rr4"]
 
 [node name="MainMenu" type="Node"]
 script = ExtResource("1_klmlv")
-game_scene = ExtResource("2_8cnyl")
+game_scene_path = "res://src/core/scenes/game/game.tscn"
 
 [node name="MarginContainer" type="MarginContainer" parent="."]
 anchors_preset = 15

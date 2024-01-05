@@ -1,0 +1,34 @@
+[gd_scene load_steps=3 format=3 uid="uid://wlolg34g5u1v"]
+
+[ext_resource type="Script" path="res://src/core/scenes/gameover/game_over.gd" id="1_hyjwi"]
+[ext_resource type="PackedScene" uid="uid://dkntd5g7ap0xd" path="res://src/core/ui/screen_fade.tscn" id="3_13hhu"]
+
+[node name="GameOver" type="Node"]
+script = ExtResource("1_hyjwi")
+main_menu_scene_path = "res://src/core/scenes/mainmenu/main_menu.tscn"
+
+[node name="CenterContainer" type="CenterContainer" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CenterContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="CenterContainer/VBoxContainer"]
+layout_mode = 2
+theme_type_variation = &"TitleLabel"
+text = "Game Over"
+horizontal_alignment = 1
+
+[node name="MainMenu" type="Button" parent="CenterContainer/VBoxContainer"]
+custom_minimum_size = Vector2(48, 16)
+layout_mode = 2
+size_flags_horizontal = 4
+text = "Main Menu"
+
+[node name="ScreenFade" parent="." instance=ExtResource("3_13hhu")]
+
+[connection signal="pressed" from="CenterContainer/VBoxContainer/MainMenu" to="." method="_on_main_menu_pressed"]

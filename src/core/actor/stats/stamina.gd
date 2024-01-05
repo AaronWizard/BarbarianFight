@@ -14,6 +14,10 @@ signal stamina_changed(delta: int)
 signal max_stamina_changed(old_max: int)
 
 
+## Emitted when the stamina is zero or less.
+signal died
+
+
 ## The maximum stamina. The current stamina is always less than or equal to the
 ## maximum stamina.
 var max_stamina: int:
@@ -34,6 +38,9 @@ var current_stamina: int:
 		current_stamina = mini(value, max_stamina)
 		if current_stamina != old_current:
 			stamina_changed.emit(current_stamina - old_current)
+
+			if not is_alive:
+				died.emit()
 
 
 ## True if the entity still has stamina, false otherwise.

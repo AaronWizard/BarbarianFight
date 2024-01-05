@@ -16,5 +16,5 @@ func _switch_scene(new_scene: Scene) -> void:
 	assert(get_child_count() == 0)
 
 	@warning_ignore("return_value_discarded")
-	new_scene.switch_scene.connect(_switch_scene)
+	new_scene.scene_switch_requested.connect(_switch_scene)
 	add_child(new_scene)
