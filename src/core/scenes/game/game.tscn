@@ -17,6 +17,8 @@ player_start_marker = "player_start"
 player_actor_scene = ExtResource("3_mn6pd")
 game_over_scene_path = "res://src/core/scenes/gameover/game_over.tscn"
 
+[node name="MapContainer" type="Node" parent="."]
+
 [node name="PlayerCamera" type="Camera2D" parent="."]
 script = ExtResource("4_0bcur")
 

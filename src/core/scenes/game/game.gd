@@ -8,7 +8,16 @@ extends Scene
 @export_file("*.tscn") var game_over_scene_path: String
 
 var _player_actor: Actor
-var _current_map: Map
+
+var _current_map: Map:
+	get:
+		var result: Map = null
+		if _map_container.get_child_count() > 0:
+			assert(_map_container.get_child_count() == 1)
+			result = _map_container.get_child(0) as Map
+		return result
+
+@onready var _map_container := $MapContainer
 
 @onready var _turn_clock := $TurnClock as TurnClock
 @onready var _boss_tracker := $BossTracker as BossTracker
@@ -41,25 +50,37 @@ func _init_player() -> void:
 	_boss_tracker.player = _player_actor
 	_player_input.set_player_actor(_player_actor)
 
+	_player_actor.sprite.remote_transform.remote_path \
+			= _player_camera.get_path()
+
 
 func _load_initial_map() -> void:
 	var map := initial_map_scene.instantiate() as Map
 	var start_cell := map.markers.get_marker(player_start_marker).origin_cell
 
 	_load_map(map, start_cell)
+	# Player node needs to be child of other node for this to work.
+	_game_gui.set_player_actor(_player_actor)
 
 
 func _load_map(map: Map, start_cell: Vector2i) -> void:
-	add_child(map)
-	_current_map = map
+	_unload_map()
+	_map_container.add_child(map)
 
 	_current_map.set_turn_clock(_turn_clock)
 	_current_map.add_actor(_player_actor, start_cell)
 
 	_player_camera.set_bounds(_current_map.pixel_rect)
-	_player_actor.sprite.remote_transform.remote_path \
-			= _player_camera.get_path()
-	_game_gui.set_player_actor(_player_actor)
+
+
+func _unload_map() -> void:
+	if _current_map:
+		_current_map.set_turn_clock(null)
+		_current_map.remove_actor(_player_actor)
+
+		var old_map := _current_map
+		_map_container.remove_child(_current_map)
+		old_map.free()
 
 
 func _on_player_actor_turn_started() -> void:
