@@ -1,0 +1,15 @@
+[gd_resource type="TileSet" load_steps=3 format=3 uid="uid://b7i61d7sctvbv"]
+
+[ext_resource type="Texture2D" uid="uid://bc1hv4a5wxs60" path="res://assets/graphics/mapmarkers/target_highlight.png" id="1_unw5l"]
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_mbnua"]
+texture = ExtResource("1_unw5l")
+0:0/animation_columns = 4
+0:0/animation_frame_0/duration = 0.1
+0:0/animation_frame_1/duration = 0.1
+0:0/animation_frame_2/duration = 0.1
+0:0/animation_frame_3/duration = 0.1
+0:0/0 = 0
+
+[resource]
+sources/0 = SubResource("TileSetAtlasSource_mbnua")

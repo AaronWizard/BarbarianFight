@@ -1,9 +1,10 @@
-[gd_scene load_steps=10 format=3 uid="uid://cvi0bb84c7308"]
+[gd_scene load_steps=11 format=3 uid="uid://cvi0bb84c7308"]
 
 [ext_resource type="Script" path="res://src/core/scenes/game/game.gd" id="1_soc31"]
 [ext_resource type="PackedScene" uid="uid://c0c5o4j30lwif" path="res://src/data/maps/arena.tscn" id="2_4vijj"]
 [ext_resource type="PackedScene" uid="uid://doaykluv6j0vh" path="res://src/data/actors/hero.tscn" id="3_mn6pd"]
 [ext_resource type="Script" path="res://src/core/scenes/game/ui/player_camera.gd" id="4_0bcur"]
+[ext_resource type="PackedScene" uid="uid://853xtf6xxnj3" path="res://src/core/map/range_highlights.tscn" id="4_1m20a"]
 [ext_resource type="Script" path="res://src/core/timing/turn_clock.gd" id="4_17ngi"]
 [ext_resource type="Script" path="res://src/core/scenes/game/ui/player_input.gd" id="5_uekvx"]
 [ext_resource type="Script" path="res://src/core/scenes/game/boss_tracker.gd" id="6_gmxci"]
@@ -18,6 +19,8 @@ player_actor_scene = ExtResource("3_mn6pd")
 game_over_scene_path = "res://src/core/scenes/gameover/game_over.tscn"
 
 [node name="MapContainer" type="Node" parent="."]
+
+[node name="RangeHighlights" parent="." instance=ExtResource("4_1m20a")]
 
 [node name="PlayerCamera" type="Camera2D" parent="."]
 script = ExtResource("4_0bcur")
