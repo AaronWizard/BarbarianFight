@@ -1,0 +1,11 @@
+[gd_scene load_steps=3 format=3 uid="uid://853xtf6xxnj3"]
+
+[ext_resource type="TileSet" uid="uid://b7i61d7sctvbv" path="res://src/core/map/range_highlight_tileset.tres" id="1_8fknn"]
+[ext_resource type="Script" path="res://src/core/map/range_highlights.gd" id="2_5w7tf"]
+
+[node name="RangeHighlights" type="Node2D"]
+script = ExtResource("2_5w7tf")
+
+[node name="RangeMap" type="TileMap" parent="."]
+tile_set = ExtResource("1_8fknn")
+format = 2
