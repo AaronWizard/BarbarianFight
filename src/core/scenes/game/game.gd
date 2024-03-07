@@ -9,6 +9,7 @@ extends Scene
 
 var _player_actor: Actor
 
+
 var _current_map: Map:
 	get:
 		var result: Map = null
@@ -17,8 +18,10 @@ var _current_map: Map:
 			result = _map_container.get_child(0) as Map
 		return result
 
+
 @onready var _map_container := $MapContainer
 @onready var _range_highlights := $RangeHighlights as RangeHighlights
+@onready var _target_cell := $TargetCell as TargetCell
 
 @onready var _turn_clock := $TurnClock as TurnClock
 @onready var _boss_tracker := $BossTracker as BossTracker

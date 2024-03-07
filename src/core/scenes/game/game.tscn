@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3 uid="uid://cvi0bb84c7308"]
+[gd_scene load_steps=12 format=3 uid="uid://cvi0bb84c7308"]
 
 [ext_resource type="Script" path="res://src/core/scenes/game/game.gd" id="1_soc31"]
 [ext_resource type="PackedScene" uid="uid://c0c5o4j30lwif" path="res://src/data/maps/arena.tscn" id="2_4vijj"]
@@ -7,6 +7,7 @@
 [ext_resource type="PackedScene" uid="uid://853xtf6xxnj3" path="res://src/core/map/range_highlights.tscn" id="4_1m20a"]
 [ext_resource type="Script" path="res://src/core/timing/turn_clock.gd" id="4_17ngi"]
 [ext_resource type="Script" path="res://src/core/scenes/game/ui/player_input.gd" id="5_uekvx"]
+[ext_resource type="PackedScene" uid="uid://dkvuuydpfpesc" path="res://src/core/map/target_cell.tscn" id="5_uh85n"]
 [ext_resource type="Script" path="res://src/core/scenes/game/boss_tracker.gd" id="6_gmxci"]
 [ext_resource type="PackedScene" uid="uid://bmtw6f2mimcy3" path="res://src/core/scenes/game/ui/game_gui.tscn" id="6_w1kkj"]
 [ext_resource type="PackedScene" uid="uid://dkntd5g7ap0xd" path="res://src/core/ui/screen_fade.tscn" id="9_gd7wy"]
@@ -21,6 +22,9 @@ game_over_scene_path = "res://src/core/scenes/gameover/game_over.tscn"
 [node name="MapContainer" type="Node" parent="."]
 
 [node name="RangeHighlights" parent="." instance=ExtResource("4_1m20a")]
+
+[node name="TargetCell" parent="." instance=ExtResource("5_uh85n")]
+visible = false
 
 [node name="PlayerCamera" type="Camera2D" parent="."]
 script = ExtResource("4_0bcur")
