@@ -1,0 +1,57 @@
+[gd_scene load_steps=7 format=3 uid="uid://dkvuuydpfpesc"]
+
+[ext_resource type="Script" path="res://src/core/map/target_cell.gd" id="1_20x8u"]
+[ext_resource type="Texture2D" uid="uid://y2a51j5dyp60" path="res://assets/graphics/mapmarkers/target_cell.png" id="2_6icpe"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_dtpr4"]
+atlas = ExtResource("2_6icpe")
+region = Rect2(0, 0, 5, 5)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_akkkd"]
+atlas = ExtResource("2_6icpe")
+region = Rect2(11, 0, 5, 5)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_5668y"]
+atlas = ExtResource("2_6icpe")
+region = Rect2(11, 11, 5, 5)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_atvmb"]
+atlas = ExtResource("2_6icpe")
+region = Rect2(0, 11, 5, 5)
+
+[node name="TargetCell" type="Node2D"]
+position = Vector2(0, 16)
+script = ExtResource("1_20x8u")
+metadata/_edit_group_ = true
+
+[node name="CornerOrigin" type="Node2D" parent="."]
+
+[node name="NW" type="Node2D" parent="CornerOrigin"]
+position = Vector2(0, -16)
+
+[node name="Sprite2D" type="Sprite2D" parent="CornerOrigin/NW"]
+texture = SubResource("AtlasTexture_dtpr4")
+centered = false
+
+[node name="NE" type="Node2D" parent="CornerOrigin"]
+position = Vector2(16, -16)
+
+[node name="Sprite2D" type="Sprite2D" parent="CornerOrigin/NE"]
+position = Vector2(-5, 0)
+texture = SubResource("AtlasTexture_akkkd")
+centered = false
+
+[node name="SE" type="Node2D" parent="CornerOrigin"]
+position = Vector2(16, 0)
+
+[node name="Sprite2D" type="Sprite2D" parent="CornerOrigin/SE"]
+position = Vector2(-5, -5)
+texture = SubResource("AtlasTexture_5668y")
+centered = false
+
+[node name="SW" type="Node2D" parent="CornerOrigin"]
+
+[node name="Sprite2D" type="Sprite2D" parent="CornerOrigin/SW"]
+position = Vector2(0, -5)
+texture = SubResource("AtlasTexture_atvmb")
+centered = false
