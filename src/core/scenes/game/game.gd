@@ -117,3 +117,18 @@ func _on_boss_tracker_boss_tracked(boss: Actor) -> void:
 
 func _on_boss_tracker_boss_untracked() -> void:
 	_game_gui.hide_boss_bar()
+
+
+func _on_player_input_show_target_range(target_range: Array[Vector2i], start_target_cell: Vector2i) -> void:
+	_range_highlights.set_target_range(target_range)
+	_target_cell.origin_cell = start_target_cell
+	_target_cell.show()
+
+
+func _on_player_input_target_cell_changed(_new_target_cell: Vector2i) -> void:
+	pass # Replace with function body.
+
+
+func _on_player_input_hide_target_range() -> void:
+	_range_highlights.clear_range()
+	_target_cell.hide()

@@ -3,7 +3,8 @@ extends Node
 
 signal action_chosen(turn_action: TurnAction)
 
-signal show_target_range(start_target_cell: Vector2i)
+signal show_target_range(
+		target_range: Array[Vector2i], start_target_cell: Vector2i)
 signal target_cell_changed(new_target_cell: Vector2i)
 signal hide_target_range
 
@@ -47,8 +48,11 @@ func set_player_actor(actor: Actor) -> void:
 
 func _check_state() -> void:
 	if Input.is_action_just_pressed("dash"):
+		var target_range := TileGeometry.cells_in_range(_player_actor.rect, 2, 2)
+		show_target_range.emit(target_range, target_range[0])
 		_current_state = State.DASH
 	elif Input.is_action_just_released("dash"):
+		hide_target_range.emit()
 		_current_state = State.BUMP
 
 
