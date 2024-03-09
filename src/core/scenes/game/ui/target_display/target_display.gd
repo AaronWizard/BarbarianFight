@@ -16,7 +16,8 @@ func show_range(range_cells: Array[Vector2i], start_cell: Vector2i) -> void:
 
 
 func set_target_cell(cell: Vector2i) -> void:
-	_target_cell.move_to_cell(cell)
+	if _target_cell.origin_cell != cell:
+		_target_cell.move_to_cell(cell)
 
 
 func clear() -> void:

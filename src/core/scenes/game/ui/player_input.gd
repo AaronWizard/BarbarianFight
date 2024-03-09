@@ -20,6 +20,8 @@ enum State {
 var _player_actor: Actor
 var _current_state := State.BUMP
 
+var _player_target_tracker := PlayerTargetTracker.new()
+
 
 var enabled: bool:
 	set(value):
@@ -48,10 +50,13 @@ func set_player_actor(actor: Actor) -> void:
 
 func _check_state() -> void:
 	if Input.is_action_just_pressed("dash"):
-		var target_range := TileGeometry.cells_in_range(_player_actor.rect, 2, 2)
-		show_target_range.emit(target_range, target_range[0])
+		var target_range := TileGeometry.cells_in_range(
+				_player_actor.rect, 2, 2)
+		_player_target_tracker.set_target_range(target_range)
+		show_target_range.emit(target_range, _player_target_tracker.target_cell)
 		_current_state = State.DASH
 	elif Input.is_action_just_released("dash"):
+		_player_target_tracker.clear()
 		hide_target_range.emit()
 		_current_state = State.BUMP
 
@@ -66,17 +71,27 @@ func _state_bump() -> void:
 
 
 func _state_dash() -> void:
-	pass
+	if Input.is_action_just_released("wait"):
+		print("dashing to ", _player_target_tracker.target_cell)
+	else:
+		var direction := _get_direction_input()
+		if direction.length_squared() == 1:
+			_player_target_tracker.move_target(direction)
+			target_cell_changed.emit(_player_target_tracker.target_cell)
 
 
 func _try_bump() -> TurnAction:
 	var result: TurnAction = null
 
-	var direction := Vector2i(Input.get_vector(
-			"step_west", "step_east", "step_north", "step_south"))
+	var direction := _get_direction_input()
 	if direction.length_squared() == 1:
 		var target_cell := _player_actor.origin_cell + direction
 		if BumpAction.is_possible(_player_actor, target_cell):
 			result = BumpAction.new(_player_actor, target_cell)
 
 	return result
+
+
+func _get_direction_input() -> Vector2i:
+	return Vector2i(Input.get_vector(
+			"step_west", "step_east", "step_north", "step_south"))
