@@ -1,0 +1,9 @@
+[gd_scene load_steps=3 format=3 uid="uid://853xtf6xxnj3"]
+
+[ext_resource type="TileSet" uid="uid://b7i61d7sctvbv" path="res://src/core/scenes/game/ui/target_display/map_target_range_tileset.tres" id="1_k6cdp"]
+[ext_resource type="Script" path="res://src/core/scenes/game/ui/target_display/map_target_range.gd" id="2_g8pq4"]
+
+[node name="MapTargetRange" type="TileMap"]
+tile_set = ExtResource("1_k6cdp")
+format = 2
+script = ExtResource("2_g8pq4")

@@ -1,6 +1,6 @@
 [gd_scene load_steps=7 format=3 uid="uid://dkvuuydpfpesc"]
 
-[ext_resource type="Script" path="res://src/core/map/target_cell.gd" id="1_20x8u"]
+[ext_resource type="Script" path="res://src/core/scenes/game/ui/target_display/target_cell.gd" id="1_20x8u"]
 [ext_resource type="Texture2D" uid="uid://y2a51j5dyp60" path="res://assets/graphics/mapmarkers/target_cell.png" id="2_6icpe"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_dtpr4"]

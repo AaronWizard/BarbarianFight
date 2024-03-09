@@ -20,8 +20,7 @@ var _current_map: Map:
 
 
 @onready var _map_container := $MapContainer
-@onready var _range_highlights := $RangeHighlights as RangeHighlights
-@onready var _target_cell := $TargetCell as TargetCell
+@onready var _target_display := $TargetDisplay as TargetDisplay
 
 @onready var _turn_clock := $TurnClock as TurnClock
 @onready var _boss_tracker := $BossTracker as BossTracker
@@ -119,16 +118,14 @@ func _on_boss_tracker_boss_untracked() -> void:
 	_game_gui.hide_boss_bar()
 
 
-func _on_player_input_show_target_range(target_range: Array[Vector2i], start_target_cell: Vector2i) -> void:
-	_range_highlights.set_target_range(target_range)
-	_target_cell.origin_cell = start_target_cell
-	_target_cell.show()
+func _on_player_input_show_target_range(
+		target_range: Array[Vector2i], start_target_cell: Vector2i) -> void:
+	_target_display.show_range(target_range, start_target_cell)
 
 
-func _on_player_input_target_cell_changed(_new_target_cell: Vector2i) -> void:
-	pass # Replace with function body.
+func _on_player_input_target_cell_changed(new_target_cell: Vector2i) -> void:
+	_target_display.set_target_cell(new_target_cell)
 
 
 func _on_player_input_hide_target_range() -> void:
-	_range_highlights.clear_range()
-	_target_cell.hide()
+	_target_display.clear()

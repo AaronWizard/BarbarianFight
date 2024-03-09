@@ -28,8 +28,6 @@ func move_to_cell(new_cell: Vector2i) -> void:
 	@warning_ignore("return_value_discarded")
 	tween.tween_property(_corner_origin, "position", Vector2.ZERO, _MOVE_TIME) \
 			.set_trans(Tween.TRANS_QUART).set_ease(Tween.EASE_OUT)
-	if tween.is_running():
-		await tween.finished
 
 
 func _tile_size_changed(_old_size: Vector2i) -> void:
