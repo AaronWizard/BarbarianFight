@@ -2,16 +2,19 @@ class_name TargetRangeData
 
 ## The target tiles of an ability from [TargetRange].
 ##
-## The target tiles of an ability from [TargetRange].[br][br]
+## The target tiles of an ability from [TargetRange].
+## [br][br]
 ## Includes the valid targets that may be used by the ability, as well as the
 ## visible cells to highlight for the player. e.g. For an ability that targets
 ## enemies within X cells, the valid targets are the origin cells of the enemies
 ## in range while the visible cells are all cells within X cells regardless of
-## whether any enemies are on them.[br][br]
+## whether any enemies are on them.
+## [br][br]
 ## Target cells may be mapped to a target rectangle shown to the player.
 ## e.g. If an ability targets actors, a target cell would be the origin cell of
 ## an actor while the corresponding target rectangle is the rectangle covering
-## that actor.[br][br]
+## that actor.
+## [br][br]
 ## A direction vector may be associated with a target cell. This is for
 ## abilities where the player chooses a direction instead of a specific cell.
 

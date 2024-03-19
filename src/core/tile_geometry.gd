@@ -3,9 +3,9 @@ class_name TileGeometry
 ## A set of geometry methods related to tiles.
 
 
-## The manhattan distance between two tile cells (number of cells needed to move
-## from [param start] to [param end] while only moving in four cardinal
-## directions).
+## The [url=https://en.wikipedia.org/wiki/Taxicab_geometry]manhattan
+## distance[/url] between two tile cells (number of cells needed to move from
+## [param start] to [param end] while only moving in four cardinal directions).
 static func manhattan_distance(start: Vector2i, end: Vector2i) -> int:
 	var diff := (end - start).abs()
 	return int(diff.x + diff.y)
