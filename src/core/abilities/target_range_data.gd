@@ -26,7 +26,7 @@ func has_target_at_direction(direction: Vector2i) -> bool:
 	return false
 
 
-## Gets the target tile associated with the given direction.[br]
+## Gets the target cell associated with the given direction.[br]
 ## Raises an error if there isn't a valid target.
 func target_from_direction(direction: Vector2i) -> Vector2i:
 	return Vector2i()
