@@ -4,10 +4,12 @@ extends Node2D
 
 ## A node that aligns itself along a grid.
 ##
-## A node that aligns itself along a grid. Tile objects have an origin cell for
-## positioning using tile coordinates, defined as the lower left cell of the
-## tile objects. Tile objects also have a width and height in cells, allowing
-## a tile object to cover multiple cells in a rectangle.
+## A node that aligns itself along a grid.
+## [br][br]
+## Tile objects have an origin cell for positioning using tile coordinates,
+## defined as the lower left cell of a tile object.[br]
+## Tile objects also have a width and height in cells, allowing a tile object to
+## cover multiple cells in a rectangle.
 
 
 ## The size in pixels of the grid cells the tile object aligns itself with.
@@ -53,18 +55,21 @@ extends Node2D
 
 @export_group("Editor Settings")
 
+## The colour of the grid lines used in the editor.
 @export_color_no_alpha var grid_colour := Color.MAROON:
 	set(value):
 		grid_colour = value
 		queue_redraw()
 
 
+## The colour of the origin cell outline used in the editor.
 @export_color_no_alpha var origin_colour := Color.DARK_TURQUOISE:
 	set(value):
 		origin_colour = value
 		queue_redraw()
 
 
+## Show the editor grid lines in-game if true.
 @export var show_grid_in_game := false:
 	set(value):
 		show_grid_in_game = value
