@@ -26,24 +26,24 @@ var valid_targets: Array[Vector2i]:
 
 
 ## The cells to highlight for the player.
-var visible_range: Array[Vector2i]:
+var full_range: Array[Vector2i]:
 	get:
-		return _visible_range
+		return _full_range
 
 
+var _full_range: Array[Vector2i]
 var _valid_targets: Array[Vector2i]
-var _visible_range: Array[Vector2i]
 var _targets_to_rects: Dictionary
 var _directions_to_targets: Dictionary
 
 
 func _init(
+		new_full_range: Array[Vector2i],
 		new_valid_targets: Array[Vector2i],
-		new_visible_range: Array[Vector2i],
 		new_targets_to_rects: Dictionary,
 		new_directions_to_targets: Dictionary) -> void:
+	_full_range = new_full_range
 	_valid_targets = new_valid_targets
-	_visible_range = new_visible_range
 	_targets_to_rects = new_targets_to_rects
 	_directions_to_targets = new_directions_to_targets
 

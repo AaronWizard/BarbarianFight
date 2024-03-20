@@ -78,16 +78,15 @@ func _is_valid_target(cell: Vector2i, source_rect: Rect2i, map: Map) -> bool:
 			result = map.actor_can_enter_cell(source_actor, cell)
 		else:
 			var actor_on_target := map.actor_map.get_actor_on_cell(cell)
-			if TargetType.EMPTY:
-				result = actor_on_target == null
-			else:
+			if actor_on_target:
 				match target_type:
 					TargetType.ENEMY:
 						result = actor_on_target.is_hostile(source_actor)
 					TargetType.ALLY:
 						result = not actor_on_target.is_hostile(source_actor)
-					_:
-						assert(target_type == TargetType.ANY_ACTOR)
+					TargetType.ANY_ACTOR:
 						result = true
+			else:
+				result = target_type == TargetType.EMPTY
 
 	return result
