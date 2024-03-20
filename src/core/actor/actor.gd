@@ -140,7 +140,7 @@ func _tile_size_changed(_old_size: Vector2i) -> void:
 	sprite.tile_size = tile_size
 
 
-func _cell_size_changed(_old_size: Vector2i) -> void:
+func _cell_size_changed(_old_size: int) -> void:
 	sprite.cell_size = cell_size
 
 

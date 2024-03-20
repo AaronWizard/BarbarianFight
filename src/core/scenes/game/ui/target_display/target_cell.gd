@@ -34,13 +34,13 @@ func _tile_size_changed(_old_size: Vector2i) -> void:
 	_position_corners()
 
 
-func _cell_size_changed(_old_size: Vector2i) -> void:
+func _cell_size_changed(_old_size: int) -> void:
 	_position_corners()
 
 
 func _position_corners() -> void:
-	_ne.position.x = cell_size.x * tile_size.x
-	_se.position.x = cell_size.x * tile_size.x
+	_ne.position.x = cell_size * tile_size.x
+	_se.position.x = cell_size * tile_size.x
 
-	_nw.position.y = -cell_size.y * tile_size.y
-	_ne.position.y = -cell_size.y * tile_size.y
+	_nw.position.y = -cell_size * tile_size.y
+	_ne.position.y = -cell_size * tile_size.y

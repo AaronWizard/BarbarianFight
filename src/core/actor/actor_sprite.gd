@@ -90,7 +90,7 @@ func _tile_size_changed(_old_size: Vector2i) -> void:
 	_update_sprite_origin()
 
 
-func _cell_size_changed(_old_size: Vector2i) -> void:
+func _cell_size_changed(_old_size: int) -> void:
 	_update_sprite_origin()
 
 

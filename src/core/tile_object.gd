@@ -16,18 +16,22 @@ extends Node2D
 @export var tile_size := Vector2i(16, 16):
 	set(value):
 		var old_size := tile_size
-
 		# Preserve origin_cell, whose pixel position will change
 		var oc := origin_cell
-		tile_size = value
-		origin_cell = oc
 
+		tile_size = Vector2i(
+			maxi(value.abs().x, 1),
+			maxi(value.abs().y, 1)
+		)
+
+		origin_cell = oc
 		if old_size != tile_size:
 			_tile_size_changed(old_size)
 
 
 ## The tile object's origin cell. Sets the node's pixel position to its lower
-## left corner. Is the lower left cell if the tile object covers multiple cells.
+## left corner. Is the bottom-left cell if the tile object covers multiple
+## cells.
 @export var origin_cell := Vector2i.ZERO:
 	get:
 		return (Vector2i(position) / tile_size) + Vector2i.UP
@@ -42,11 +46,11 @@ extends Node2D
 
 
 ## The width and height in cells of the tile object.
-@export var cell_size := Vector2i.ONE:
+@export var cell_size := 1:
 	set(value):
 		var old_size := cell_size
 
-		cell_size = value
+		cell_size = maxi(value, 1)
 		queue_redraw()
 
 		if old_size != cell_size:
@@ -85,19 +89,22 @@ var covered_cells: Array[Vector2i]:
 ## A rect covering the tile object's cells.
 var rect: Rect2i:
 	get:
-		return Rect2i(_top_left_cell(origin_cell), cell_size)
+		return Rect2i(
+			_top_left_cell(origin_cell),
+			Vector2i(cell_size, cell_size)
+		)
 
 
 func _draw() -> void:
 	if Engine.is_editor_hint() or show_grid_in_game:
-		for x in range(cell_size.x + 1):
+		for x in range(cell_size + 1):
 			var line_x := x * tile_size.x
-			var line_y_end := -cell_size.y * tile_size.y
+			var line_y_end := -cell_size * tile_size.y
 			draw_line(Vector2(line_x, 0), Vector2(line_x, line_y_end),
 					grid_colour, 1)
-		for y in range(cell_size.y + 1):
-			var line_x_end := cell_size.x * tile_size.x
-			var line_y := (y - cell_size.y) * tile_size.y
+		for y in range(cell_size + 1):
+			var line_x_end := cell_size * tile_size.x
+			var line_y := (y - cell_size) * tile_size.y
 			draw_line(Vector2(0, line_y), Vector2(line_x_end, line_y),
 					grid_colour, 1)
 
@@ -112,7 +119,9 @@ func covers_cell(cell: Vector2i) -> bool:
 
 ## The cells the tile object would cover if its origin_cell was [param cell].
 func covered_cells_at_cell(cell: Vector2i) -> Array[Vector2i]:
-	return TileGeometry.cells_in_rect(Rect2i(_top_left_cell(cell), cell_size))
+	return TileGeometry.cells_in_rect(
+		Rect2i(_top_left_cell(cell), Vector2i(cell_size, cell_size))
+	)
 
 
 ## Called after tile_size is changed. Can be overriden.
@@ -126,9 +135,9 @@ func _origin_cell_changed(_old_cell: Vector2i) -> void:
 
 
 ## Called after cell_size is changed. Can be overriden.
-func _cell_size_changed(_old_size: Vector2i) -> void:
+func _cell_size_changed(_old_size: int) -> void:
 	pass
 
 
 func _top_left_cell(cell: Vector2i) -> Vector2i:
-	return cell + (Vector2i.UP * (cell_size.y - 1))
+	return cell + (Vector2i.UP * (cell_size - 1))
