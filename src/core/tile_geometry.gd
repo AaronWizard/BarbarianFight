@@ -40,7 +40,7 @@ static func cells_in_range(source_rect: Rect2i, min_dist: int, max_dist: int,
 	assert(source_rect.size.x > 0)
 	assert(source_rect.size.y > 0)
 	assert(min_dist >= 0)
-	assert(max_dist >= 1)
+	assert(max_dist >= 0)
 	assert(max_dist >= min_dist)
 
 	var result: Array[Vector2i] = []
