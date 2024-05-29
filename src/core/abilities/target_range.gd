@@ -13,20 +13,19 @@ enum TargetType
 	## Any cell that is covered by an actor.[br]
 	## The target rectangle is the rectangle that covers the actor.
 	ANY_ACTOR,
-	## Any cell that is covered by an enemy actor.[br]
+	## Any cell that is covered by an actor that is an enemy of the source
+	## actor.[br]
 	## The source rectangle must contain a single actor.[br]
 	## The target rectangle is the rectangle that covers the actor.
 	ENEMY,
-	## Any cell that is covered by an allied actor.[br]
+	## Any cell that is covered by an actor allied to the source actor.[br]
 	## The source rectangle must contain a single actor.[br]
 	## The target rectangle is the rectangle that covers the actor.
 	ALLY,
 	## Any cell that does not contain actor.[br]
 	## The target rectangle is 1x1.
 	EMPTY,
-	## Any cell that can be the origin cell of the actor in the source
-	## rectangle.[br]
-	## The source rectangle must contain a single actor.[br]
+	## Any cell that can be the origin cell of the source actor.[br]
 	## The target rectangle is the rectangle that the source actor would cover
 	## if positioned at the target cell.
 	ENTERABLE
@@ -37,43 +36,54 @@ enum TargetType
 @export var target_type := TargetRange.TargetType.ANY
 
 
-## Gets the target range around [param source_rect].
+## Gets the cells that can be targeted from [param source_cell] by
+## [param source_actor].
 ## [br][br]
-## If an actor is in [param source_rect] it is treated as the source actor. This
-## is relevant to target types of ENEMY, ALLY, and ENTERABLE.[br]
-## It is assumed that the source actor is fully covered by the source rectangle
-## and that its origin cell is at the bottom-left corner (see [TileObject]).
-func get_target_range(source_rect: Rect2i, map: Map) -> TargetRangeData:
-	var full_range := _get_full_range(source_rect)
-	var valid_targets := _get_valid_targets(full_range, source_rect, map)
+## [param source_actor] is relevant to the target types
+## [enum TargetRange.TargetType.ENEMY], [enum TargetRange.TargetType.ALLY], and
+## [enum TargetRange.TargetType.ENTERABLE].[br]
+## If [param source_size] is greater than 1, the target source is treated as a
+## square with [param source_cell] as the bottom-left corner (see [TileObject]).
+## Assumed to be the cell size of [param source_actor].[br]
+## [param source_cell] does not have to be the origin cell of
+## [param source_actor].
+func get_target_range(source_cell: Vector2i, source_size: int, \
+		source_actor: Actor, map: Map) -> TargetRangeData:
+	var full_range := _get_full_range(source_cell, source_size)
+	var valid_targets := _get_valid_targets(full_range, source_actor, map)
 	return TargetRangeData.new(full_range, valid_targets, {}, {})
 
 
 ## Get the base full target range.[br]
 ## Can be overriden.
-func _get_full_range(_source_rect: Rect2i) -> Array[Vector2i]:
+func _get_full_range(_source_cell: Vector2i, _source_size: int) \
+		-> Array[Vector2i]:
 	push_warning("TargetRange._get_visible_range not implemented")
 	return []
 
 
-func _get_valid_targets(full_range: Array[Vector2i], source_rect: Rect2i,
+func _get_valid_targets(full_range: Array[Vector2i], source_actor: Actor,
 		map: Map) -> Array[Vector2i]:
 	var result: Array[Vector2i] = []
 	for cell in full_range:
-		if _is_valid_target(cell, source_rect, map):
+		if _is_valid_target(cell, source_actor, map):
 			result.append(cell)
 	return result
 
 
-func _is_valid_target(cell: Vector2i, source_rect: Rect2i, map: Map) -> bool:
+func _is_valid_target(cell: Vector2i, source_actor: Actor, map: Map) -> bool:
 	var result := false
+
+	if not source_actor and ( \
+			target_type in [
+				TargetType.ENTERABLE, TargetType.ENEMY, TargetType.ALLY
+			]):
+		push_error("Source actor expected")
+		return false
 
 	if target_type == TargetType.ANY:
 		result = true
 	else:
-		var source_actor := map.actor_map.get_actor_on_cell(
-			TileGeometry.tile_object_origin(source_rect)
-		)
 		if target_type == TargetType.ENTERABLE:
 			result = map.actor_can_enter_cell(source_actor, cell)
 		else:

@@ -12,5 +12,7 @@ extends TargetRange
 @export var max_dist := 1
 
 
-func _get_full_range(source_rect: Rect2i) -> Array[Vector2i]:
+func _get_full_range(source_cell: Vector2i, source_size: int) \
+		-> Array[Vector2i]:
+	var source_rect := TileObject.object_rect(source_cell, source_size)
 	return TileGeometry.cells_in_range(source_rect, min_dist, max_dist)

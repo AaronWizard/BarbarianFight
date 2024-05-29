@@ -89,10 +89,7 @@ var covered_cells: Array[Vector2i]:
 ## A rect covering the tile object's cells.
 var rect: Rect2i:
 	get:
-		return Rect2i(
-			_top_left_cell(origin_cell),
-			Vector2i(cell_size, cell_size)
-		)
+		return TileObject.object_rect(origin_cell, cell_size)
 
 
 func _draw() -> void:
@@ -112,6 +109,29 @@ func _draw() -> void:
 		draw_rect(origin_rect, origin_colour, false, 1)
 
 
+## For a tile object with an origin cell at [param tile_object_origin_cell] and
+## a size of [param tile_object_cell_size], gets the upper left cell of the
+## corresponding square.
+static func top_left_cell( \
+		tile_object_origin_cell: Vector2i, tile_object_cell_size: int) \
+		-> Vector2i:
+	return tile_object_origin_cell + (Vector2i.UP * (tile_object_cell_size - 1))
+
+
+## Gets the rectangle that covers a tile object whose origin is
+## [param tile_object_origin_cell] and cell size is
+## [param tile_object_cell_size].
+static func object_rect( \
+		tile_object_origin_cell: Vector2i, tile_object_cell_size: int) \
+		-> Rect2i:
+	return Rect2i(
+		TileObject.top_left_cell(
+			tile_object_origin_cell, tile_object_cell_size
+		),
+		Vector2i(tile_object_cell_size, tile_object_cell_size)
+	)
+
+
 ## Returns true if the tile object covers [param cell], false otherwise.
 func covers_cell(cell: Vector2i) -> bool:
 	return rect.has_point(cell)
@@ -120,7 +140,7 @@ func covers_cell(cell: Vector2i) -> bool:
 ## The cells the tile object would cover if its origin_cell was [param cell].
 func covered_cells_at_cell(cell: Vector2i) -> Array[Vector2i]:
 	return TileGeometry.cells_in_rect(
-		Rect2i(_top_left_cell(cell), Vector2i(cell_size, cell_size))
+		TileObject.object_rect(cell, cell_size)
 	)
 
 
@@ -137,7 +157,3 @@ func _origin_cell_changed(_old_cell: Vector2i) -> void:
 ## Called after cell_size is changed. Can be overriden.
 func _cell_size_changed(_old_size: int) -> void:
 	pass
-
-
-func _top_left_cell(cell: Vector2i) -> Vector2i:
-	return cell + (Vector2i.UP * (cell_size - 1))
