@@ -25,10 +25,18 @@ extends TargetRange
 ## the actor's whole square to get the right ranges).
 @export var source_is_square := true
 
+## Scales the maximum range by source size.
+@export var scale_extend := true
+
 func _get_full_range(source_cell: Vector2i, source_size: int) \
 		-> Array[Vector2i]:
 	var source_rect := Rect2i(source_cell, Vector2i.ONE)
 	if source_is_square:
 		source_rect = TileObject.object_rect(source_cell, source_size)
+
+	var real_range_extend := range_extend
+	if scale_extend:
+		real_range_extend = ((range_extend + 1) * source_size) - 1
+
 	return TileGeometry.cells_in_range(
-			source_rect, range_start_dist, range_extend)
+			source_rect, range_start_dist, real_range_extend)
