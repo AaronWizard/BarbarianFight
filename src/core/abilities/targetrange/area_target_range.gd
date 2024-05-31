@@ -28,6 +28,7 @@ extends TargetRange
 ## Scales the maximum range by source size.
 @export var scale_extend := true
 
+
 func _get_full_range(source_cell: Vector2i, source_size: int) \
 		-> Array[Vector2i]:
 	var source_rect := Rect2i(source_cell, Vector2i.ONE)
