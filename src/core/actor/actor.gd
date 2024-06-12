@@ -33,6 +33,8 @@ signal player_turn_started
 ## false otherwise.
 @export var is_boss := false
 
+## The actor's abilities
+@export var abilities: Array[Ability] = []
 
 ## The actor's current map.
 var map: Map:
