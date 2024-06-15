@@ -33,8 +33,6 @@ var _current_map: Map:
 
 
 func _ready() -> void:
-	_player_input.enabled = false
-
 	_init_player()
 	_load_initial_map()
 
@@ -91,11 +89,10 @@ func _on_player_actor_turn_started() -> void:
 
 	if _current_map.animations_playing:
 		await _current_map.animations_finished
-	_player_input.enabled = true
+	_player_input.start_turn()
 
 
 func _on_player_input_action_chosen(turn_action: TurnAction) -> void:
-	_player_input.enabled = false
 	_player_actor.do_turn_action(turn_action)
 
 

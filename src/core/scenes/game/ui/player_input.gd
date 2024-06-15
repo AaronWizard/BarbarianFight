@@ -25,15 +25,8 @@ var _current_state := State.BUMP
 var _player_target_tracker := PlayerTargetTracker.new()
 
 
-var enabled: bool:
-	set(value):
-		enabled = value
-		set_process_unhandled_input(enabled)
-
-
 func _ready() -> void:
-	enabled = false
-	_current_state = State.BUMP
+	set_process_unhandled_input(false)
 
 
 func _unhandled_input(_event: InputEvent) -> void:
@@ -50,26 +43,32 @@ func set_player_actor(actor: Actor) -> void:
 	_player_actor = actor
 
 
+func start_turn() -> void:
+	set_process_unhandled_input(true)
+	_current_state = State.BUMP
+
+
+func _end_turn(action: TurnAction) -> void:
+	set_process_unhandled_input(false)
+	_clear_dash()
+	action_chosen.emit(action)
+
+
 func _check_state() -> void:
 	if Input.is_action_just_pressed("dash"):
-		var target_range_data := _get_dash_ability().get_target_range(
-				_player_actor)
-
-		_player_target_tracker.set_target_range(target_range_data.valid_targets)
-		show_target_range.emit(target_range_data.valid_targets,
-				_player_target_tracker.target_cell)
-		_current_state = State.DASH
+		_show_dash()
 	elif Input.is_action_just_released("dash"):
 		_clear_dash()
 
 
 func _state_bump() -> void:
 	if Input.is_action_just_released("wait"):
+		_end_turn(null)
 		action_chosen.emit(null)
 	else:
 		var action := _try_bump()
 		if action:
-			action_chosen.emit(action)
+			_end_turn(action)
 
 
 func _state_dash() -> void:
@@ -78,8 +77,7 @@ func _state_dash() -> void:
 			_player_actor, _player_target_tracker.target_cell,
 			_get_dash_ability()
 		)
-		_clear_dash()
-		action_chosen.emit(action)
+		_end_turn(action)
 	else:
 		var direction := _get_direction_input()
 		if direction.length_squared() == 1:
@@ -87,9 +85,20 @@ func _state_dash() -> void:
 			target_cell_changed.emit(_player_target_tracker.target_cell)
 
 
+func _show_dash() -> void:
+	var target_range_data := _get_dash_ability().get_target_range(_player_actor)
+
+	_player_target_tracker.set_target_range(target_range_data.valid_targets)
+	show_target_range.emit(target_range_data.valid_targets,
+			_player_target_tracker.target_cell)
+
+	_current_state = State.DASH
+
+
 func _clear_dash() -> void:
 	_player_target_tracker.clear()
 	hide_target_range.emit()
+
 	_current_state = State.BUMP
 
 
