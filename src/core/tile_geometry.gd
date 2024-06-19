@@ -22,14 +22,6 @@ static func cells_in_rect(rect: Rect2i) -> Array[Vector2i]:
 	return result
 
 
-## The origin cell of a [TileObject] that would be covered by [param rect].
-static func tile_object_origin(rect: Rect2i) -> Vector2i:
-	var result := rect.position
-	if rect.size.y > 0:
-		result.y += rect.size.y - 1
-	return result
-
-
 ## The cells surrounding [param source_rect] where each cell is between
 ## [param range_start_dist]
 ## and ([param range_start_dist] + [param range_extend]) cells in manhattan
