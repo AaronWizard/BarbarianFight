@@ -1,8 +1,9 @@
-[gd_resource type="TileSet" load_steps=7 format=3 uid="uid://d2bir0vv78xd4"]
+[gd_resource type="TileSet" load_steps=9 format=3 uid="uid://d2bir0vv78xd4"]
 
 [ext_resource type="Texture2D" uid="uid://bpqpe6rc282sa" path="res://assets/graphics/terrain/chasm.png" id="1_wh88c"]
 [ext_resource type="Texture2D" uid="uid://b7l8h030bg5dy" path="res://assets/graphics/terrain/cliff_wall.png" id="2_4twlk"]
 [ext_resource type="Texture2D" uid="uid://dk41sif2k302h" path="res://assets/graphics/terrain/rock_cliff.png" id="3_hx2xo"]
+[ext_resource type="Texture2D" uid="uid://du5ydk640h1b4" path="res://assets/graphics/terrain/brick_wall.png" id="4_ooaip"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_eguif"]
 texture = ExtResource("1_wh88c")
@@ -350,10 +351,29 @@ texture = ExtResource("3_hx2xo")
 8:4/0/terrains_peering_bit/left_side = 0
 8:4/0/terrains_peering_bit/top_side = 0
 
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_42ryf"]
+texture = ExtResource("4_ooaip")
+0:0/0 = 0
+0:0/0/terrain_set = 1
+0:0/0/terrain = 0
+0:0/0/terrains_peering_bit/bottom_side = 0
+0:0/0/terrains_peering_bit/top_side = 0
+0:0/0/custom_data_0 = true
+0:0/0/custom_data_1 = true
+0:1/0 = 0
+0:1/0/terrain_set = 1
+0:1/0/terrain = 0
+0:1/0/terrains_peering_bit/top_side = 0
+0:1/0/custom_data_0 = true
+0:1/0/custom_data_1 = true
+
 [resource]
 terrain_set_0/mode = 0
-terrain_set_0/terrain_0/name = "rock"
-terrain_set_0/terrain_0/color = Color(0.5, 0.34375, 0.25, 1)
+terrain_set_0/terrain_0/name = "cliffground"
+terrain_set_0/terrain_0/color = Color(0.473754, 0.565225, 0.909758, 1)
+terrain_set_1/mode = 2
+terrain_set_1/terrain_0/name = "brickwall"
+terrain_set_1/terrain_0/color = Color(0.937121, 0.618364, 0.612395, 1)
 custom_data_layer_0/name = "block_move"
 custom_data_layer_0/type = 1
 custom_data_layer_1/name = "block_sight"
@@ -361,3 +381,4 @@ custom_data_layer_1/type = 1
 sources/0 = SubResource("TileSetAtlasSource_eguif")
 sources/1 = SubResource("TileSetAtlasSource_4nhx4")
 sources/2 = SubResource("TileSetAtlasSource_67qfr")
+sources/3 = SubResource("TileSetAtlasSource_42ryf")
