@@ -6,10 +6,12 @@ extends Node2D
 ##
 ## A node that aligns itself along a grid.
 ## [br][br]
-## Tile objects have an origin cell for positioning using tile coordinates,
-## defined as the lower left cell of a tile object.[br]
-## Tile objects also have a width and height in cells, allowing a tile object to
-## cover multiple cells in a rectangle.
+## Tile objects have an origin cell for positioning using tile coordinates.
+## A tile object's actual pixel position is its [b]bottom left[/b] corner for
+## the sake of y-sorting.[br]
+## Tile objects also have a cell size, allowing a tile object to cover multiple
+## cells in a square. If a tile object is larger than one cell, its origin cell
+## is its [b]top left[/b] cell.
 
 
 ## The size in pixels of the grid cells the tile object aligns itself with.
@@ -20,8 +22,8 @@ extends Node2D
 		var oc := origin_cell
 
 		tile_size = Vector2i(
-			maxi(value.abs().x, 1),
-			maxi(value.abs().y, 1)
+			maxi(value.x, 1),
+			maxi(value.y, 1)
 		)
 
 		origin_cell = oc
@@ -29,16 +31,16 @@ extends Node2D
 			_tile_size_changed(old_size)
 
 
-## The tile object's origin cell. Sets the node's pixel position to its lower
-## left corner. Is the bottom-left cell if the tile object covers multiple
-## cells.
+## The tile object's origin cell. Sets the node's pixel position to its
+## [b]bottom left[/b] corner. Is the [b]top left[/b] cell if the tile object
+## covers multiple cells.
 @export var origin_cell := Vector2i.ZERO:
 	get:
-		return (Vector2i(position) / tile_size) + Vector2i.UP
+		return (Vector2i(position) / tile_size) - Vector2i(0, cell_size)
 	set(value):
 		var old_cell := origin_cell
 
-		position = (value - Vector2i.UP) * tile_size
+		_set_position(value)
 		queue_redraw()
 
 		if old_cell != origin_cell:
@@ -49,11 +51,14 @@ extends Node2D
 @export var cell_size := 1:
 	set(value):
 		var old_size := cell_size
+		var current_origin_cell := origin_cell
 
 		cell_size = maxi(value, 1)
 		queue_redraw()
 
 		if old_size != cell_size:
+			# Pixel position depends on cell size
+			_set_position(current_origin_cell)
 			_cell_size_changed(old_size)
 
 
@@ -105,29 +110,21 @@ func _draw() -> void:
 			draw_line(Vector2(0, line_y), Vector2(line_x_end, line_y),
 					grid_colour, 1)
 
-		var origin_rect := Rect2(Vector2i.UP * tile_size.y, tile_size)
+		var origin_rect := Rect2(
+			Vector2(0, -cell_size * tile_size.y),
+			tile_size
+		)
 		draw_rect(origin_rect, origin_colour, false, 1)
-
-
-## For a tile object with an origin cell at [param tile_object_origin_cell] and
-## a size of [param tile_object_cell_size], gets the upper left cell of the
-## corresponding square.
-static func top_left_cell( \
-		tile_object_origin_cell: Vector2i, tile_object_cell_size: int) \
-		-> Vector2i:
-	return tile_object_origin_cell + (Vector2i.UP * (tile_object_cell_size - 1))
 
 
 ## Gets the rectangle that covers a tile object whose origin is
 ## [param tile_object_origin_cell] and cell size is
 ## [param tile_object_cell_size].
 static func object_rect( \
-		tile_object_origin_cell: Vector2i, tile_object_cell_size: int) \
-		-> Rect2i:
+		tile_object_origin_cell: Vector2i,
+		tile_object_cell_size: int) -> Rect2i:
 	return Rect2i(
-		TileObject.top_left_cell(
-			tile_object_origin_cell, tile_object_cell_size
-		),
+		tile_object_origin_cell,
 		Vector2i(tile_object_cell_size, tile_object_cell_size)
 	)
 
@@ -142,6 +139,10 @@ func covered_cells_at_cell(cell: Vector2i) -> Array[Vector2i]:
 	return TileGeometry.cells_in_rect(
 		TileObject.object_rect(cell, cell_size)
 	)
+
+
+func _set_position(new_origin_cell: Vector2i) -> void:
+	position = (new_origin_cell + Vector2i(0, cell_size)) * tile_size
 
 
 ## Called after tile_size is changed. Can be overriden.

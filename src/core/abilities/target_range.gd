@@ -43,8 +43,8 @@ enum TargetType
 ## [enum TargetRange.TargetType.ENEMY], [enum TargetRange.TargetType.ALLY], and
 ## [enum TargetRange.TargetType.ENTERABLE].[br]
 ## If [param source_size] is greater than 1, the target source is treated as a
-## square with [param source_cell] as the bottom-left corner (see [TileObject]).
-## Assumed to be the cell size of [param source_actor].[br]
+## square with [param source_cell] as the [b]top left[/b] corner (see
+## [TileObject]). Assumed to be the cell size of [param source_actor].[br]
 ## [param source_cell] does not have to be the origin cell of
 ## [param source_actor].
 func get_target_range(source_cell: Vector2i, source_size: int, \

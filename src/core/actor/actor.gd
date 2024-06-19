@@ -144,6 +144,7 @@ func _tile_size_changed(_old_size: Vector2i) -> void:
 
 func _cell_size_changed(_old_size: int) -> void:
 	sprite.cell_size = cell_size
+	sprite.origin_cell = Vector2i(0, -cell_size)
 
 
 func _on_turn_taker_turn_started() -> void:

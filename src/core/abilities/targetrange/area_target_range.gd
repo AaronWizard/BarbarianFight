@@ -18,7 +18,7 @@ extends TargetRange
 ## The maximum distance is ([member range_start_dist] + [member range_extend]).
 @export var range_extend := 0
 
-## If true, the source is a square with the source cell at its bottom-left
+## If true, the source is a square with the source cell at its [b]top left[/b]
 ## corner (see [TileObject]). If false, the source is a single cell.[br][br]
 ## Useful for actors larger than one cell to differentiate movement abilities
 ## (that only need the actor's origin cell) and attack actions (that would need
