@@ -13,8 +13,7 @@ extends Resource
 
 func get_target_range(source_actor: Actor) -> TargetRangeData:
 	return target_range.get_target_range(
-		source_actor.origin_cell, source_actor.cell_size,
-		source_actor, source_actor.map
+		source_actor.origin_cell, source_actor.cell_size, source_actor
 	)
 
 
@@ -22,4 +21,6 @@ func get_target_range(source_actor: Actor) -> TargetRangeData:
 ## Assumes [param target] is a valid target.
 func perform(target: Vector2i, source_actor: Actor) -> void:
 	@warning_ignore("redundant_await")
-	await effect.apply(target, source_actor)
+	await effect.apply(
+		target, source_actor.origin_cell, source_actor.cell_size, source_actor
+	)

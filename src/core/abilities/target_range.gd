@@ -48,9 +48,9 @@ enum TargetType
 ## [param source_cell] does not have to be the origin cell of
 ## [param source_actor].
 func get_target_range(source_cell: Vector2i, source_size: int, \
-		source_actor: Actor, map: Map) -> TargetRangeData:
+		source_actor: Actor) -> TargetRangeData:
 	var full_range := _get_full_range(source_cell, source_size)
-	var valid_targets := _get_valid_targets(full_range, source_actor, map)
+	var valid_targets := _get_valid_targets(full_range, source_actor)
 	return TargetRangeData.new(full_range, valid_targets, {}, {})
 
 
@@ -62,16 +62,16 @@ func _get_full_range(_source_cell: Vector2i, _source_size: int) \
 	return []
 
 
-func _get_valid_targets(full_range: Array[Vector2i], source_actor: Actor,
-		map: Map) -> Array[Vector2i]:
+func _get_valid_targets(full_range: Array[Vector2i], source_actor: Actor) \
+		-> Array[Vector2i]:
 	var result: Array[Vector2i] = []
 	for cell in full_range:
-		if _is_valid_target(cell, source_actor, map):
+		if _is_valid_target(cell, source_actor):
 			result.append(cell)
 	return result
 
 
-func _is_valid_target(cell: Vector2i, source_actor: Actor, map: Map) -> bool:
+func _is_valid_target(cell: Vector2i, source_actor: Actor) -> bool:
 	var result := false
 
 	if not source_actor and ( \
@@ -85,9 +85,10 @@ func _is_valid_target(cell: Vector2i, source_actor: Actor, map: Map) -> bool:
 		result = true
 	else:
 		if target_type == TargetType.ENTERABLE:
-			result = map.actor_can_enter_cell(source_actor, cell)
+			result = source_actor.map.actor_can_enter_cell(source_actor, cell)
 		else:
-			var actor_on_target := map.actor_map.get_actor_on_cell(cell)
+			var actor_on_target \
+					:= source_actor.map.actor_map.get_actor_on_cell(cell)
 			if actor_on_target:
 				match target_type:
 					TargetType.ENEMY:
