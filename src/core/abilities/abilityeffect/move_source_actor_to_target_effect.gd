@@ -1,6 +1,7 @@
 class_name MoveSourceActorToTargetEffect
 extends AbilityEffect
 
+## Moves the source actor to the target cell.
 
 ## Speed in tiles per second
 @export var speed := 8.0
