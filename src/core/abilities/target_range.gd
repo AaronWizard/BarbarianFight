@@ -42,7 +42,7 @@ enum TargetType
 ## [param source_actor] is relevant to the target types
 ## [enum TargetRange.TargetType.ENEMY], [enum TargetRange.TargetType.ALLY], and
 ## [enum TargetRange.TargetType.ENTERABLE].[br]
-## If [param source_size] is greater than 1, the target source is treated as a
+## If [param source_size] is greater than 1, the ability source is treated as a
 ## square with [param source_cell] as the [b]top left[/b] corner (see
 ## [TileObject]). Assumed to be the cell size of [param source_actor].[br]
 ## [param source_cell] does not have to be the origin cell of
@@ -58,7 +58,7 @@ func get_target_range(source_cell: Vector2i, source_size: int, \
 ## Can be overriden.
 func _get_full_range(_source_cell: Vector2i, _source_size: int) \
 		-> Array[Vector2i]:
-	push_warning("TargetRange._get_visible_range not implemented")
+	push_warning("TargetRange._get_full_range not implemented")
 	return []
 
 
