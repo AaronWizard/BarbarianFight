@@ -11,6 +11,39 @@ static func manhattan_distance(start: Vector2i, end: Vector2i) -> int:
 	return int(diff.x + diff.y)
 
 
+## Get an array of cells forming a line from [param start] to [param end].[br]
+## [code]line(start, end)[/code] is not guaranteed to return the same values as
+## [code]line(end, start)[/code].
+static func line(start: Vector2i, end: Vector2i) -> Array[Vector2i]:
+	# Bresenham algorithm based on https://zingl.github.io/bresenham.html
+	# (because somehow every web site has a different implementation of the
+	# Bresenham algorithm with subtly different results).
+	var result: Array[Vector2i] = [start]
+
+	if end != start:
+		var delta := Vector2i(
+			absi(end.x - start.x),
+			-absi(end.y - start.y)
+		)
+		var line_sign := (end - start).sign()
+		var err := delta.x + delta.y
+
+		var pos := start
+		while pos != end:
+			var e2 := 2 * err
+
+			if e2 >= delta.y:
+				err += delta.y
+				pos.x += line_sign.x
+			if e2 <= delta.x:
+				err += delta.x
+				pos.y += line_sign.y
+
+			result.append(pos)
+
+	return result
+
+
 ## The cells covered by [param rect].
 static func cells_in_rect(rect: Rect2i) -> Array[Vector2i]:
 	var result: Array[Vector2i] = []
