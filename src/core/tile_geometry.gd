@@ -44,6 +44,36 @@ static func line(start: Vector2i, end: Vector2i) -> Array[Vector2i]:
 	return result
 
 
+## Get an array of cells forming a line starting at [param start] and heading
+## towards [param end]. Line can be cut short based on the
+## [param is_blocking_cell_func] function. Last cell is either [param end] or
+## first blocking cell.[br]
+## Uses [method TileGeometry.line]. If [code]line(start, end)[/code] has
+## different results from [code]line(end, start)[/code], the result with the
+## greater number of cells is returned.[br]
+## [code]is_blocking_cell_func(cell: Vector2i) -> bool[/code]: Return true if
+## the cell is a blocking cell.
+static func unblocked_line(start: Vector2i, end: Vector2i,
+		is_blocking_cell_func: Callable) -> Array[Vector2i]:
+	var line_start2end := line(start, end)
+	var unblocked_line_start2end := _unblocked_line_from_line(
+			line_start2end, is_blocking_cell_func)
+
+	var result := unblocked_line_start2end
+
+	if (unblocked_line_start2end[unblocked_line_start2end.size() - 1] != end) \
+			and (start.x != end.x) and (start.y != end.y):
+		var line_end2start := line(end, start)
+		line_end2start.reverse()
+		var unblocked_line_end2start := _unblocked_line_from_line(
+				line_end2start, is_blocking_cell_func)
+
+		if unblocked_line_end2start.size() > unblocked_line_start2end.size():
+			result = unblocked_line_end2start
+
+	return result
+
+
 ## Get the cells covered by [param rect].
 static func cells_in_rect(rect: Rect2i) -> Array[Vector2i]:
 	var result: Array[Vector2i] = []
@@ -142,4 +172,16 @@ static func cells_in_range(source_rect: Rect2i, range_start_dist: int,
 				if (dist_se >= range_start_dist) and (dist_se <= max_dist):
 					result.append(cell_se)
 
+	return result
+
+
+static func _unblocked_line_from_line(ln: Array[Vector2i],
+		is_blocking_cell_func: Callable) -> Array[Vector2i]:
+	var result: Array[Vector2i] = []
+	for cell in ln:
+		result.append(cell)
+		if (cell != ln[0]) and (cell != ln[ln.size() - 1]):
+			var is_blocking := is_blocking_cell_func.call(cell) as bool
+			if is_blocking:
+				break
 	return result
