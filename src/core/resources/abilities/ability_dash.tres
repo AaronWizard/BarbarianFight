@@ -15,6 +15,7 @@ range_extend = 0
 source_is_square = false
 scale_extend = true
 target_type = 5
+los_type = 2
 
 [resource]
 script = ExtResource("1_gomvm")

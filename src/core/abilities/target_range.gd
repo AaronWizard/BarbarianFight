@@ -7,6 +7,9 @@ extends Resource
 ## The type of cells within the full range that are valid.
 @export var target_type := TargetCellFiltering.TargetType.ANY
 
+## What type of line of sight is needed between the source and a target cell.
+@export var los_type := TargetCellFiltering.LineOfSightType.NONE
+
 
 ## Gets the cells that can be targeted from [param source_cell] by
 ## [param source_actor].[br]
@@ -19,7 +22,9 @@ func get_target_range(source_cell: Vector2i, source_size: int, \
 		source_actor: Actor) -> TargetRangeData:
 	var full_range := _get_full_range(source_cell, source_size)
 	var valid_targets := TargetCellFiltering.get_valid_targets(
-			full_range, target_type, source_actor)
+		full_range, source_cell, source_size,
+		target_type, los_type, source_actor
+	)
 	return TargetRangeData.new(full_range, valid_targets, {}, {})
 
 

@@ -3,8 +3,7 @@ class_name TargetCellFiltering
 ## Class for filtering cells from target ranges and AOEs.
 
 
-## The type of target cells that are valid.[br]
-## Also affects the corresponding target rectangle.
+## The type of target cells that are valid.
 enum TargetType
 {
 	## Any cell.
@@ -23,14 +22,31 @@ enum TargetType
 }
 
 
-## Get the subset of cells within [param full_range] that are valid, based on
-## [param target_type] and [param source_actor].[br]
+## What kind of line of sight is needed between the source and the target cell.
+enum LineOfSightType
+{
+	## No line of sight is needed.
+	NONE,
+	## The target cell must be visible from the source cell/square.
+	CAN_SEE,
+	## The source actor must be able to move from the source cell to the target
+	## cell.
+	CAN_MOVE
+}
+
+
+## Get the subset of cells within [param full_range] that are valid.[br]
 ## [param source_actor] is required if [param target_type] is
 ## [enum TargetCellFiltering.TargetType.ENEMY],
 ## [enum TargetCellFiltering.TargetType.ALLY], or
-## [enum TargetCellFiltering.TargetType.ENTERABLE].[br]
+## [enum TargetCellFiltering.TargetType.ENTERABLE]; and if [param losType] is
+## [enum TargetCellFiltering.LineOfSightType.CAN_MOVE].[br]
+## [param source_cell] and [param source_size] do not have to correspond to
+## [param source_actor].
 static func get_valid_targets(
-		full_range: Array[Vector2i], target_type: TargetType,
+		full_range: Array[Vector2i],
+		source_cell: Vector2i, source_size: int,
+		target_type: TargetType, losType: LineOfSightType,
 		source_actor: Actor) -> Array[Vector2i]:
 	var result: Array[Vector2i] = []
 	for cell in full_range:
@@ -68,5 +84,23 @@ static func _is_valid_target(cell: Vector2i, target_type: TargetType,
 						result = true
 			else:
 				result = target_type == TargetType.EMPTY
+
+	return result
+
+
+static func _has_line_of_sight(cell: Vector2i,
+		source_cell: Vector2i, source_size: int, losType: LineOfSightType,
+		source_actor: Actor) -> bool:
+	var result := false
+	return result
+
+
+static func _cell_is_blocked(cell: Vector2i, map: Map,
+		losType: LineOfSightType) -> bool:
+	var result := false
+
+	match losType:
+		LineOfSightType.CAN_SEE:
+			pass
 
 	return result

@@ -5,7 +5,10 @@ extends Resource
 
 
 ## The type of cells within the full range that are valid.
-@export var cell_type := TargetCellFiltering.TargetType.ANY
+@export var target_type := TargetCellFiltering.TargetType.ANY
+
+## What type of line of sight is needed between the source and a target cell.
+@export var los_type := TargetCellFiltering.LineOfSightType.NONE
 
 
 ## Get the area of effect at [param target_cell] for the ability targeted from
@@ -18,7 +21,9 @@ func get_aoe(target_cell: Vector2i, source_cell: Vector2i, source_size: int,
 		source_actor: Actor) -> Array[Vector2i]:
 	var full_range := _get_full_range(target_cell, source_cell, source_size)
 	var valid_targets := TargetCellFiltering.get_valid_targets(
-			full_range, cell_type, source_actor)
+		full_range, source_cell, source_size,
+		target_type, los_type, source_actor
+	)
 	return valid_targets
 
 
