@@ -1,9 +1,9 @@
 class_name TileGeometry
 
-## A set of geometry methods related to tiles.
+## A set of geometry methods related to tiles/cells.
 
 
-## The [url=https://en.wikipedia.org/wiki/Taxicab_geometry]manhattan
+## Get the [url=https://en.wikipedia.org/wiki/Taxicab_geometry]manhattan
 ## distance[/url] between two tile cells (number of cells needed to move from
 ## [param start] to [param end] while only moving in four cardinal directions).
 static func manhattan_distance(start: Vector2i, end: Vector2i) -> int:
@@ -44,7 +44,7 @@ static func line(start: Vector2i, end: Vector2i) -> Array[Vector2i]:
 	return result
 
 
-## The cells covered by [param rect].
+## Get the cells covered by [param rect].
 static func cells_in_rect(rect: Rect2i) -> Array[Vector2i]:
 	var result: Array[Vector2i] = []
 
@@ -55,14 +55,14 @@ static func cells_in_rect(rect: Rect2i) -> Array[Vector2i]:
 	return result
 
 
-## The cells surrounding [param source_rect] where each cell is between
+## Get the cells surrounding [param source_rect] where each cell is between
 ## [param range_start_dist]
 ## and ([param range_start_dist] + [param range_extend]) cells in manhattan
 ## distances to the closest cell covered by [param source_rect].[br]
-## A [param range_start_dist] of 1 includes the cells adjacent to
-## [param source_rect]. A [param range_start_dist] of 0 includes the cells
+## A [param range_start_dist] of 1 starts at the cells adjacent to
+## [param source_rect]. A [param range_start_dist] of 0 starts at the cells
 ## covered by [param source_rect].[br]
-## A [param range_extend] of 0 does not extend the range past
+## A [param range_extend] of 0 only gets the cells that are at a distance of
 ## [param range_start_dist].
 static func cells_in_range(source_rect: Rect2i, range_start_dist: int,
 		range_extend: int, include_diagonals := true) -> Array[Vector2i]:
