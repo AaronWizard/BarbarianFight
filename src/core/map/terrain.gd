@@ -1,20 +1,24 @@
 class_name Terrain
-extends TileMap
-
 
 const _PROPERTY_BLOCKS_MOVE := "block_move"
 const _PROPERTY_BLOCK_SIGHT := "block_sight"
 
+var _tilemap: TileMap
+
+
+func _init(tilemap: TileMap) -> void:
+	_tilemap = tilemap
+
 
 func blocks_move(cell: Vector2i) -> bool:
-	var result := not get_used_rect().has_point(cell)
+	var result := not _tilemap.get_used_rect().has_point(cell)
 	if not result:
 		result = _get_bool_property(cell, _PROPERTY_BLOCKS_MOVE)
 	return result
 
 
 func blocks_sight(cell: Vector2i) -> bool:
-	var result := not get_used_rect().has_point(cell)
+	var result := not _tilemap.get_used_rect().has_point(cell)
 	if not result:
 		result = _get_bool_property(cell, _PROPERTY_BLOCK_SIGHT)
 	return result
@@ -43,8 +47,8 @@ func _get_bool_property(cell: Vector2i, property: String) -> bool:
 func _get_top_cell_tile_data(cell: Vector2i) -> TileData:
 	var result: TileData = null
 
-	for i in range(get_layers_count() - 1, -1, -1):
-		var base_data := get_cell_tile_data(0, cell)
+	for i in range(_tilemap.get_layers_count() - 1, -1, -1):
+		var base_data := _tilemap.get_cell_tile_data(0, cell)
 		if base_data:
 			result = base_data
 			break
