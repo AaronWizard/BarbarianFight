@@ -27,10 +27,10 @@ enum LineOfSightType
 {
 	## No line of sight is needed.
 	NONE,
-	## The target cell must be visible from the source cell/square.
+	## No cell in the line of sight blocks vision.
 	CAN_SEE,
-	## The source actor must be able to move from the source cell to the target
-	## cell.
+	## Every cell in the line of sight can be an origin cell for the source
+	## actor.
 	CAN_MOVE
 }
 
