@@ -360,12 +360,14 @@ texture = ExtResource("4_ooaip")
 0:0/0/terrains_peering_bit/top_side = 0
 0:0/0/custom_data_0 = true
 0:0/0/custom_data_1 = true
+0:0/0/custom_data_2 = true
 0:1/0 = 0
 0:1/0/terrain_set = 1
 0:1/0/terrain = 0
 0:1/0/terrains_peering_bit/top_side = 0
 0:1/0/custom_data_0 = true
 0:1/0/custom_data_1 = true
+0:1/0/custom_data_2 = true
 
 [resource]
 terrain_set_0/mode = 0
@@ -378,6 +380,8 @@ custom_data_layer_0/name = "block_move"
 custom_data_layer_0/type = 1
 custom_data_layer_1/name = "block_sight"
 custom_data_layer_1/type = 1
+custom_data_layer_2/name = "block_ranged"
+custom_data_layer_2/type = 1
 sources/0 = SubResource("TileSetAtlasSource_eguif")
 sources/1 = SubResource("TileSetAtlasSource_4nhx4")
 sources/2 = SubResource("TileSetAtlasSource_67qfr")
