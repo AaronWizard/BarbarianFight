@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dk41sif2k302h"
-path="res://.godot/imported/rock_cliff.png-09e1b7f0bf9b4f7151bb6d9841104d53.ctex"
+uid="uid://djwjwy4w5grl"
+path="res://.godot/imported/cliff_top.png-1f5d4e99bd507d027c761e6f3493d9f9.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/graphics/terrain/rock_cliff.png"
-dest_files=["res://.godot/imported/rock_cliff.png-09e1b7f0bf9b4f7151bb6d9841104d53.ctex"]
+source_file="res://assets/graphics/terrain/cliff_top.png"
+dest_files=["res://.godot/imported/cliff_top.png-1f5d4e99bd507d027c761e6f3493d9f9.ctex"]
 
 [params]
 
