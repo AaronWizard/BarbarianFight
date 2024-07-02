@@ -89,7 +89,7 @@ func _show_dash() -> void:
 	var target_range_data := _get_dash_ability().get_target_range(_player_actor)
 
 	_player_target_tracker.set_target_range(target_range_data.valid_targets)
-	show_target_range.emit(target_range_data.valid_targets,
+	show_target_range.emit(target_range_data.visible_range,
 			_player_target_tracker.target_cell)
 
 	_current_state = State.DASH

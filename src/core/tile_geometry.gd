@@ -175,6 +175,24 @@ static func cells_in_range(source_rect: Rect2i, range_start_dist: int,
 	return result
 
 
+## Find the vector in [param cells] that is closest in distance to
+## [param target].
+static func closest_cell_to_target(cells: Array[Vector2i], target: Vector2i) \
+		-> Vector2i:
+	var result: Vector2i
+	var min_distance_sqr := -1
+
+	for c in cells:
+		var current_distance_sqr := (target - c).length_squared()
+		if (min_distance_sqr < 0) or (current_distance_sqr < min_distance_sqr):
+			result = c
+			min_distance_sqr = current_distance_sqr
+			if min_distance_sqr == 0:
+				break
+
+	return result
+
+
 static func _unblocked_line_from_line(ln: Array[Vector2i],
 		is_blocking_cell_func: Callable) -> Array[Vector2i]:
 	var result: Array[Vector2i] = []
