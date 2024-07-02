@@ -84,7 +84,7 @@ static func _get_los_start_cell(
 		if source_size % 2 != 0:
 			result = source_cell + Vector2i(half_size, half_size)
 		else:
-			var start_cells := [
+			var start_cells: Array[Vector2i] = [
 				source_cell + Vector2i(half_size, half_size),
 				source_cell + Vector2i(half_size, half_size) - Vector2i(1, 1),
 				source_cell + Vector2i(half_size, half_size) - Vector2i(1, 0),
