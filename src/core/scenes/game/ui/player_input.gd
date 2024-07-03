@@ -4,7 +4,8 @@ extends Node
 signal action_chosen(turn_action: TurnAction)
 
 signal show_target_range(
-		target_range: Array[Vector2i], start_target_cell: Vector2i)
+		target_range: Array[Vector2i], valid_targets: Array[Vector2i],
+		start_target_cell: Vector2i)
 signal target_cell_changed(new_target_cell: Vector2i)
 signal hide_target_range
 
@@ -89,8 +90,10 @@ func _show_dash() -> void:
 	var target_range_data := _get_dash_ability().get_target_range(_player_actor)
 
 	_player_target_tracker.set_target_range(target_range_data.valid_targets)
-	show_target_range.emit(target_range_data.visible_range,
-			_player_target_tracker.target_cell)
+	show_target_range.emit(
+		target_range_data.visible_range, target_range_data.valid_targets,
+		_player_target_tracker.target_cell
+	)
 
 	_current_state = State.DASH
 

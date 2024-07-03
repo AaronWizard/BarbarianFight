@@ -1,6 +1,7 @@
-[gd_resource type="TileSet" load_steps=3 format=3 uid="uid://b7i61d7sctvbv"]
+[gd_resource type="TileSet" load_steps=5 format=3 uid="uid://b7i61d7sctvbv"]
 
 [ext_resource type="Texture2D" uid="uid://xf6clwqq7xk0" path="res://assets/graphics/mapmarkers/target_range_border.png" id="2_k1khm"]
+[ext_resource type="Texture2D" uid="uid://2ijatfrmwh1v" path="res://assets/graphics/mapmarkers/valid_target_cell.png" id="2_ui5dg"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_enonw"]
 texture = ExtResource("2_k1khm")
@@ -165,8 +166,21 @@ texture = ExtResource("2_k1khm")
 1:1/0/terrains_peering_bit/bottom_side = 0
 1:1/0/terrains_peering_bit/top_side = 0
 
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_0ekqe"]
+texture = ExtResource("2_ui5dg")
+0:0/animation_frame_0/duration = 0.1
+0:0/animation_frame_1/duration = 0.1
+0:0/animation_frame_2/duration = 0.1
+0:0/animation_frame_3/duration = 0.1
+0:0/animation_frame_4/duration = 0.1
+0:0/animation_frame_5/duration = 0.1
+0:0/animation_frame_6/duration = 0.1
+0:0/animation_frame_7/duration = 0.1
+0:0/0 = 0
+
 [resource]
 terrain_set_0/mode = 2
 terrain_set_0/terrain_0/name = "target_border"
 terrain_set_0/terrain_0/color = Color(0.5, 0.34375, 0.25, 1)
-sources/2 = SubResource("TileSetAtlasSource_enonw")
+sources/0 = SubResource("TileSetAtlasSource_enonw")
+sources/1 = SubResource("TileSetAtlasSource_0ekqe")

@@ -116,8 +116,9 @@ func _on_boss_tracker_boss_untracked() -> void:
 
 
 func _on_player_input_show_target_range(
-		target_range: Array[Vector2i], start_target_cell: Vector2i) -> void:
-	_target_display.show_range(target_range, start_target_cell)
+		target_range: Array[Vector2i], valid_targets: Array[Vector2i],
+		start_target_cell: Vector2i) -> void:
+	_target_display.show_range(target_range, valid_targets, start_target_cell)
 
 
 func _on_player_input_target_cell_changed(new_target_cell: Vector2i) -> void:
