@@ -6,4 +6,7 @@
 [node name="MapTargetRange" type="TileMap"]
 tile_set = ExtResource("1_k6cdp")
 format = 2
+layer_0/name = "target_range"
+layer_1/name = "valid_targets"
+layer_1/tile_data = PackedInt32Array()
 script = ExtResource("2_g8pq4")

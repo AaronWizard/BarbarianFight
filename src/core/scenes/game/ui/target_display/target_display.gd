@@ -9,8 +9,9 @@ func _ready() -> void:
 	_target_cell.visible = false
 
 
-func show_range(range_cells: Array[Vector2i], start_cell: Vector2i) -> void:
-	_map_target_range.set_target_range(range_cells)
+func show_range(range_cells: Array[Vector2i], valid_targets: Array[Vector2i],
+		start_cell: Vector2i) -> void:
+	_map_target_range.set_target_range(range_cells, valid_targets)
 	_target_cell.visible = true
 	_target_cell.origin_cell = start_cell
 

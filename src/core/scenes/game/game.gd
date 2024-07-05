@@ -33,8 +33,6 @@ var _current_map: Map:
 
 
 func _ready() -> void:
-	_player_input.enabled = false
-
 	_init_player()
 	_load_initial_map()
 
@@ -91,11 +89,10 @@ func _on_player_actor_turn_started() -> void:
 
 	if _current_map.animations_playing:
 		await _current_map.animations_finished
-	_player_input.enabled = true
+	_player_input.start_turn()
 
 
 func _on_player_input_action_chosen(turn_action: TurnAction) -> void:
-	_player_input.enabled = false
 	_player_actor.do_turn_action(turn_action)
 
 
@@ -119,8 +116,9 @@ func _on_boss_tracker_boss_untracked() -> void:
 
 
 func _on_player_input_show_target_range(
-		target_range: Array[Vector2i], start_target_cell: Vector2i) -> void:
-	_target_display.show_range(target_range, start_target_cell)
+		target_range: Array[Vector2i], valid_targets: Array[Vector2i],
+		start_target_cell: Vector2i) -> void:
+	_target_display.show_range(target_range, valid_targets, start_target_cell)
 
 
 func _on_player_input_target_cell_changed(new_target_cell: Vector2i) -> void:

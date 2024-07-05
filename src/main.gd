@@ -1,9 +1,11 @@
 extends Node
 
+@export var clear_colour := Color("150413")
 @export var initial_scene: PackedScene
 
 
 func _ready() -> void:
+	RenderingServer.set_default_clear_color(clear_colour)
 	var scene: Scene = initial_scene.instantiate()
 	_switch_scene(scene)
 

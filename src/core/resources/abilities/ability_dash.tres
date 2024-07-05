@@ -1,0 +1,24 @@
+[gd_resource type="Resource" script_class="Ability" load_steps=6 format=3 uid="uid://daoqfsm7y6lck"]
+
+[ext_resource type="Script" path="res://src/core/abilities/abilityeffect/move_source_actor_to_target_effect.gd" id="1_8sbro"]
+[ext_resource type="Script" path="res://src/core/abilities/ability.gd" id="1_gomvm"]
+[ext_resource type="Script" path="res://src/core/abilities/targetrange/area_target_range.gd" id="2_ffjsm"]
+
+[sub_resource type="Resource" id="Resource_hma5d"]
+script = ExtResource("1_8sbro")
+speed = 8.0
+
+[sub_resource type="Resource" id="Resource_08u2x"]
+script = ExtResource("2_ffjsm")
+range_start_dist = 2
+range_extend = 0
+source_is_square = false
+scale_extend = true
+target_type = 5
+los_origin = 0
+
+[resource]
+script = ExtResource("1_gomvm")
+name = "Dash"
+target_range = SubResource("Resource_08u2x")
+effect = SubResource("Resource_hma5d")

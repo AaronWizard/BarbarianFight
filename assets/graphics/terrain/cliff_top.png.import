@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bc1hv4a5wxs60"
-path="res://.godot/imported/target_highlight.png-45b7ad81768648ff660598d941f368b2.ctex"
+uid="uid://djwjwy4w5grl"
+path="res://.godot/imported/cliff_top.png-1f5d4e99bd507d027c761e6f3493d9f9.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/graphics/mapmarkers/target_highlight.png"
-dest_files=["res://.godot/imported/target_highlight.png-45b7ad81768648ff660598d941f368b2.ctex"]
+source_file="res://assets/graphics/terrain/cliff_top.png"
+dest_files=["res://.godot/imported/cliff_top.png-1f5d4e99bd507d027c761e6f3493d9f9.ctex"]
 
 [params]
 

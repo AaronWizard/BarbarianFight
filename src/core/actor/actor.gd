@@ -33,6 +33,8 @@ signal player_turn_started
 ## false otherwise.
 @export var is_boss := false
 
+## The actor's abilities
+@export var abilities: Array[Ability] = []
 
 ## The actor's current map.
 var map: Map:
@@ -140,8 +142,9 @@ func _tile_size_changed(_old_size: Vector2i) -> void:
 	sprite.tile_size = tile_size
 
 
-func _cell_size_changed(_old_size: Vector2i) -> void:
+func _cell_size_changed(_old_size: int) -> void:
 	sprite.cell_size = cell_size
+	sprite.origin_cell = Vector2i(0, -cell_size)
 
 
 func _on_turn_taker_turn_started() -> void:

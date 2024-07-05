@@ -15,6 +15,12 @@ signal actor_removed(actor: Actor)
 signal animations_finished
 
 
+## The map's terrain.
+var terrain: Terrain:
+	get:
+		return _terrain
+
+
 ## The ActorMap containing the map's actors
 var actor_map: ActorMap:
 	get:
@@ -36,20 +42,22 @@ var animations_playing: bool:
 ## The bounds of the map in pixels.
 var pixel_rect: Rect2i:
 	get:
-		var cell_rect := _terrain.get_used_rect()
-		var tile_size := _terrain.tile_set.tile_size
+		var cell_rect := _terrain_tilemap.get_used_rect()
+		var tile_size := _terrain_tilemap.tile_set.tile_size
 		var rectpos := Vector2(cell_rect.position * tile_size)
 		var rectsize := Vector2(cell_rect.size * tile_size)
 		return Rect2i(rectpos, rectsize)
 
 
+var _terrain: Terrain
 var _turn_clock: TurnClock
 var _anim_tracker: MapAnimTracker
 
-@onready var _terrain := $Terrain as Terrain
+@onready var _terrain_tilemap := $Terrain as TileMap
 
 
 func _ready() -> void:
+	_terrain = Terrain.new(_terrain_tilemap)
 	_anim_tracker = MapAnimTracker.new()
 	@warning_ignore("return_value_discarded")
 	_anim_tracker.animations_finished.connect(_on_animations_finished)
@@ -90,9 +98,9 @@ func remove_actor(actor: Actor) -> void:
 
 
 ## True if [param actor] can have its origin_cell property set to [param cell],
-## false otherwise.
+## false otherwise. Checks both terrain and other actors.
 func actor_can_enter_cell(actor: Actor, cell: Vector2i) -> bool:
-	return _terrain.tile_object_can_enter_cell(actor, cell) \
+	return terrain.tile_object_can_enter_cell(actor, cell) \
 			and actor_map.actor_can_enter_cell(actor, cell)
 
 
