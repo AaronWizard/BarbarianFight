@@ -1,18 +1,21 @@
 class_name TargetRangeData
 
-## The target tiles of an ability from [TargetRange].
+## The targeting data from of an ability from [TargetRange].
 ##
-## The target tiles of an ability from [TargetRange].
+## The targeting data from of an ability from [TargetRange].
 ## [br][br]
 ## Includes the valid targets that may be used by the ability, as well as the
 ## visible cells to highlight for the player. e.g. For an ability that targets
-## enemies within X cells, the valid targets are the origin cells of the enemies
-## in range while the visible cells are all cells within X cells regardless of
-## whether any enemies are on them.
+## enemies within X cells, the valid targets are the enemies within range while
+## the visible cells are all cells within X cells regardless of whether any
+## enemies are on them.[br]
+## Targets are squares. Their sizes may be affected by the size of the actor
+## being targeted if any, or by the size of the source actor. The visible range
+## includes all tiles covered by all target squares.
 
 
 ## The valid targets.
-var valid_targets: Array[Vector2i]:
+var valid_targets: Array[Square]:
 	get:
 		return _valid_targets
 
@@ -24,11 +27,11 @@ var visible_range: Array[Vector2i]:
 
 
 var _visible_range: Array[Vector2i]
-var _valid_targets: Array[Vector2i]
+var _valid_targets: Array[Square]
 
 
 func _init(
 		new_visible_range: Array[Vector2i],
-		new_valid_targets: Array[Vector2i]) -> void:
+		new_valid_targets: Array[Square]) -> void:
 	_visible_range = new_visible_range
 	_valid_targets = new_valid_targets

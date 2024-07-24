@@ -43,4 +43,4 @@ script = ExtResource("5_uekvx")
 [connection signal="action_chosen" from="PlayerInput" to="." method="_on_player_input_action_chosen"]
 [connection signal="hide_target_range" from="PlayerInput" to="." method="_on_player_input_hide_target_range"]
 [connection signal="show_target_range" from="PlayerInput" to="." method="_on_player_input_show_target_range"]
-[connection signal="target_cell_changed" from="PlayerInput" to="." method="_on_player_input_target_cell_changed"]
+[connection signal="target_changed" from="PlayerInput" to="." method="_on_player_input_target_changed"]

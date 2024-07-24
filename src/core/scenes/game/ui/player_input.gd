@@ -4,9 +4,9 @@ extends Node
 signal action_chosen(turn_action: TurnAction)
 
 signal show_target_range(
-		target_range: Array[Vector2i], valid_targets: Array[Vector2i],
-		start_target_cell: Vector2i)
-signal target_cell_changed(new_target_cell: Vector2i)
+		visible_range: Array[Vector2i], valid_targets: Array[Square],
+		start_target: Square)
+signal target_changed(new_target: Square)
 signal hide_target_range
 
 
@@ -75,7 +75,7 @@ func _state_bump() -> void:
 func _state_dash() -> void:
 	if Input.is_action_just_released("wait"):
 		var action := AbilityAction.new(
-			_player_actor, _player_target_tracker.target_cell,
+			_player_actor, _player_target_tracker.current_target,
 			_get_dash_ability()
 		)
 		_end_turn(action)
@@ -83,7 +83,7 @@ func _state_dash() -> void:
 		var direction := _get_direction_input()
 		if direction.length_squared() == 1:
 			_player_target_tracker.move_target(direction)
-			target_cell_changed.emit(_player_target_tracker.target_cell)
+			target_changed.emit(_player_target_tracker.current_target)
 
 
 func _show_dash() -> void:
@@ -92,7 +92,7 @@ func _show_dash() -> void:
 	_player_target_tracker.set_target_range(target_range_data.valid_targets)
 	show_target_range.emit(
 		target_range_data.visible_range, target_range_data.valid_targets,
-		_player_target_tracker.target_cell
+		_player_target_tracker.current_target
 	)
 
 	_current_state = State.DASH
