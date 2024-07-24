@@ -2,7 +2,7 @@
 
 [ext_resource type="PackedScene" uid="uid://q2bmei0cija" path="res://src/core/map/map.tscn" id="1_vjwkc"]
 [ext_resource type="PackedScene" uid="uid://detdx2xagdgeb" path="res://src/data/actors/villain.tscn" id="2_b8jt8"]
-[ext_resource type="Script" path="res://src/core/tile_object.gd" id="3_yswh5"]
+[ext_resource type="Script" path="res://src/core/tiles/tile_object.gd" id="3_yswh5"]
 
 [node name="Arena" instance=ExtResource("1_vjwkc")]
 
