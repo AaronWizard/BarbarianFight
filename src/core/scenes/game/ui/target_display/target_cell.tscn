@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3 uid="uid://dkvuuydpfpesc"]
+[gd_scene load_steps=10 format=3 uid="uid://dkvuuydpfpesc"]
 
 [ext_resource type="Script" path="res://src/core/scenes/game/ui/target_display/target_cell.gd" id="1_20x8u"]
 [ext_resource type="Texture2D" uid="uid://y2a51j5dyp60" path="res://assets/graphics/mapmarkers/target_cell.png" id="2_6icpe"]
@@ -19,10 +19,122 @@ region = Rect2(11, 11, 5, 5)
 atlas = ExtResource("2_6icpe")
 region = Rect2(0, 11, 5, 5)
 
+[sub_resource type="Animation" id="Animation_up3wd"]
+resource_name = "pulse"
+length = 0.5
+loop_mode = 1
+step = 0.01
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("CornerOrigin/NW/Sprite2D:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.25),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [Vector2(0, 0), Vector2(-1, -1)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("CornerOrigin/NE/Sprite2D:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.25),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [Vector2(-5, 0), Vector2(-4, -1)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("CornerOrigin/SE/Sprite2D:position")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.25),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [Vector2(-5, -5), Vector2(-4, -4)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("CornerOrigin/SW/Sprite2D:position")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 0.25),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [Vector2(0, -5), Vector2(-1, -4)]
+}
+
+[sub_resource type="Animation" id="Animation_gcohq"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("CornerOrigin/NW/Sprite2D:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("CornerOrigin/NE/Sprite2D:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(-5, 0)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("CornerOrigin/SE/Sprite2D:position")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(-5, -5)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("CornerOrigin/SW/Sprite2D:position")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0, -5)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_0balo"]
+_data = {
+"RESET": SubResource("Animation_gcohq"),
+"pulse": SubResource("Animation_up3wd")
+}
+
 [node name="TargetCell" type="Node2D"]
 position = Vector2(0, 16)
 script = ExtResource("1_20x8u")
 metadata/_edit_group_ = true
+metadata/_edit_lock_ = true
 
 [node name="CornerOrigin" type="Node2D" parent="."]
 
@@ -55,3 +167,9 @@ centered = false
 position = Vector2(0, -5)
 texture = SubResource("AtlasTexture_atvmb")
 centered = false
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_0balo")
+}
+autoplay = "pulse"
