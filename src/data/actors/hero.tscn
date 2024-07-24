@@ -18,11 +18,19 @@ shader = ExtResource("3_yrqlt")
 shader_parameter/dissolve = 0.0
 
 [node name="Hero" instance=ExtResource("1_23n8s")]
+position = Vector2(0, 32)
 actor_name = "Cohen"
 definition = SubResource("Resource_l2s4l")
 player_controlled = true
 faction = 1
 abilities = Array[Resource("res://src/core/abilities/ability.gd")]([ExtResource("3_vnywx")])
+origin_cell = Vector2i(0, 1)
+grid_colour = Color(0.690196, 0.188235, 0.376471, 1)
+origin_colour = Color(0, 0.807843, 0.819608, 1)
+
+[node name="ActorSprite" parent="." index="0"]
+grid_colour = Color(0.690196, 0.188235, 0.376471, 1)
+origin_colour = Color(0, 0.807843, 0.819608, 1)
 
 [node name="Sprite" parent="ActorSprite/SpriteOrigin/SpritePivot" index="0"]
 material = SubResource("ShaderMaterial_jskeg")
