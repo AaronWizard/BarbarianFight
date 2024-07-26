@@ -16,32 +16,21 @@ enum LOSSourceOrigin
 }
 
 
-## Used for determining what cells within a target range are valid targets and
-## what the corresponding target squares are.
+## The type of target cells that are valid.
 enum TargetType
 {
-	## Any cell.[br]
-	## Target square is a 1x1 square over the cell.
+	## Any cell.
 	ANY,
-	## Any cell that is covered by an actor.[br]
-	## Target square is positioned at the actor's origin cell and has the same
-	## size as the actor.
+	## Any cell that is covered by an actor.
 	ANY_ACTOR,
 	## Any cell that is covered by an actor that is an enemy of the source
-	## actor.[br]
-	## Target square is positioned at the actor's origin cell and has the same
-	## size as the actor.
+	## actor.
 	ENEMY,
-	## Any cell that is covered by an actor allied to the source actor.[br]
-	## Target square is positioned at the actor's origin cell and has the same
-	## size as the actor.
+	## Any cell that is covered by an actor allied to the source actor.
 	ALLY,
-	## Any cell that does not contain an actor.[br]
-	## Target square is a 1x1 square over the cell.
+	## Any cell that does not contain actor.
 	EMPTY,
-	## Any cell that can be the origin cell of the source actor.[br]
-	## Target square is positioned at the cell and has the same size as the
-	## source actor.
+	## Any cell that can be the origin cell of the source actor.
 	ENTERABLE
 }
 
@@ -52,62 +41,54 @@ enum TargetType
 ## [param los_origin] determines what cell within the source square is the start
 ## cell of the line of sight.
 static func get_cells_in_line_of_sight(
-		cells: Array[Vector2i], source_square: Square,
+		cells: Array[Vector2i],
+		source_cell: Vector2i, source_size: int,
 		los_origin: LOSSourceOrigin,
 		source_actor: Actor) -> Array[Vector2i]:
 	var result: Array[Vector2i] = []
 	for target_cell in cells:
 		var start_cell := _get_los_start_cell(
-				target_cell, source_square, los_origin)
+				target_cell, source_cell, source_size, los_origin)
 		if _has_line_of_sight(target_cell, start_cell, source_actor.map):
 			result.append(target_cell)
 	return result
 
 
-## Get the valid target squares within [param cells] based on
-## [param target_type].[br]
+## Get the subset of cells within [param cells] that match the given target
+## type.[br]
 ## [param source_actor] is required if [param target_type] is
 ## [enum TargetCellFiltering.TargetType.ENEMY],
 ## [enum TargetCellFiltering.TargetType.ALLY], or
 ## [enum TargetCellFiltering.TargetType.ENTERABLE].[br]
-static func get_valid_targets_from_range(
+static func get_cells_with_target_type(
 		cells: Array[Vector2i],
 		target_type: TargetType,
-		source_actor: Actor) -> Array[Square]:
-	var result: Array[Square] = []
-
-	var targets := {}
-
+		source_actor: Actor) -> Array[Vector2i]:
+	var result: Array[Vector2i] = []
 	for cell in cells:
-		var target := _target_at_cell(cell, target_type, source_actor)
-		if target and ( \
-			not targets.has(cell) \
-			or (targets[cell].size < target.size) \
-		):
-			targets[cell] = target
-	result.assign(targets.values())
+		if _cell_is_of_target_type(cell, target_type, source_actor):
+			result.append(cell)
 	return result
 
 
 static func _get_los_start_cell(
-		target_cell: Vector2i, source_square: Square,
+		target_cell: Vector2i,
+		source_cell: Vector2i, source_size: int,
 		los_origin: LOSSourceOrigin) -> Vector2i:
-	var result := source_square.position
+	var result := source_cell
 
 	if los_origin == LOSSourceOrigin.CENTER:
 		@warning_ignore("integer_division")
-		var half_size := source_square.size / 2
+		var half_size := source_size / 2
 
-		if source_square.size % 2 != 0:
-			result = source_square.position + Vector2i(half_size, half_size)
+		if source_size % 2 != 0:
+			result = source_cell + Vector2i(half_size, half_size)
 		else:
-			var center_bottom_right \
-					:= source_square.position + Vector2i(half_size, half_size)
 			var start_cells: Array[Vector2i] = [
-				center_bottom_right,
-				center_bottom_right - Vector2i(1, 1),
-				center_bottom_right - Vector2i(1, 0),
-				center_bottom_right - Vector2i(0, 1)
+				source_cell + Vector2i(half_size, half_size),
+				source_cell + Vector2i(half_size, half_size) - Vector2i(1, 1),
+				source_cell + Vector2i(half_size, half_size) - Vector2i(1, 0),
+				source_cell + Vector2i(half_size, half_size) - Vector2i(0, 1)
 			]
 			result = TileGeometry.closest_cell_to_target(
 					start_cells, target_cell)
@@ -138,31 +119,34 @@ static func _cell_blocks_los(cell: Vector2i, map: Map) -> bool:
 	return result
 
 
-static func _target_at_cell(cell: Vector2i, target_type: TargetType,
-		source_actor: Actor) -> Square:
-	var result: Square = null
+static func _cell_is_of_target_type(cell: Vector2i, target_type: TargetType,
+		source_actor: Actor) -> bool:
+	var result := false
 
 	if not source_actor and ( \
-		target_type in [
-			TargetType.ENTERABLE, TargetType.ENEMY, TargetType.ALLY
-		]):
+			target_type in [
+				TargetType.ENTERABLE, TargetType.ENEMY, TargetType.ALLY
+			]):
 		push_error("Source actor expected")
-		return result
+		return false
 
 	if target_type == TargetType.ANY:
-		result = Square.new(cell, 1)
+		result = true
 	else:
-		if (target_type == TargetType.ENTERABLE) and source_actor.map.actor_can_enter_cell(source_actor, cell):
-			result = Square.new(cell, source_actor.cell_size)
+		if target_type == TargetType.ENTERABLE:
+			result = source_actor.map.actor_can_enter_cell(source_actor, cell)
 		else:
 			var actor_on_target \
 					:= source_actor.map.actor_map.get_actor_on_cell(cell)
 			if actor_on_target:
-				if (target_type == TargetType.ANY_ACTOR) \
-						or ((target_type == TargetType.ENEMY) and actor_on_target.is_hostile(source_actor)) \
-						or ((target_type == TargetType.ALLY) and not actor_on_target.is_hostile(source_actor)):
-					result = Square.new(source_actor.origin_cell, source_actor.cell_size)
-			elif target_type == TargetType.EMPTY:
-				result = Square.new(cell, 1)
+				match target_type:
+					TargetType.ENEMY:
+						result = actor_on_target.is_hostile(source_actor)
+					TargetType.ALLY:
+						result = not actor_on_target.is_hostile(source_actor)
+					TargetType.ANY_ACTOR:
+						result = true
+			else:
+				result = target_type == TargetType.EMPTY
 
 	return result

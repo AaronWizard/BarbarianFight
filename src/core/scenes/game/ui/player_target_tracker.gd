@@ -8,47 +8,44 @@ class_name PlayerTargetTracker
 ## move this target using directional inputs.
 
 
-var current_target: Square:
+var target_cell: Vector2i:
 	get:
-		return _current_target
+		return _target_cell
 
 
-var _target_range: Array[Square] = []
-var _current_target: Square = null
+var _target_range: Array[Vector2i] = []
+var _target_cell := Vector2i.ZERO
 
 
-func set_target_range(new_target_range: Array[Square]) -> void:
+func set_target_range(new_target_range: Array[Vector2i]) -> void:
 	_target_range.clear()
 	_target_range.assign(new_target_range)
 
-	if _current_target == null:
-		_current_target = new_target_range[0]
-	else:
-		var min_dist_sqr := -1
-		for sqr in _target_range:
-			var diff := sqr.position - _current_target.position
-			if (min_dist_sqr < 0) or (diff.length_squared() < min_dist_sqr):
-				_current_target = sqr
-				min_dist_sqr = diff.length_squared()
+	var min_dist_sqr := -1
+	for c in _target_range:
+		var diff := c - _target_cell
+		if (min_dist_sqr < 0) or (diff.length_squared() < min_dist_sqr):
+			_target_cell = c
+			min_dist_sqr = diff.length_squared()
 
 
 func move_target(direction: Vector2i) -> void:
-	var new_square := _current_target
+	var new_cell := _target_cell
 	var min_dist_sqr := -1
 
 	var moving_horizontal := direction.y == 0
 	var moving_vertical := direction.x == 0
 
-	for sqr in _target_range:
-		var diff := sqr.position - _current_target.position
+	for c in _target_range:
+		var diff := c - _target_cell
 		if (moving_horizontal and (signi(diff.x) == signi(direction.x))) \
 				or (moving_vertical and (signi(diff.y) == signi(direction.y))):
 			if (min_dist_sqr < 0) \
 					or (diff.length_squared() < min_dist_sqr):
-				new_square = sqr
+				new_cell = c
 				min_dist_sqr = diff.length_squared()
 
-	_current_target = new_square
+	_target_cell = new_cell
 
 
 func clear() -> void:

@@ -5,16 +5,16 @@ extends TurnAction
 
 
 var _target_actor: Actor
-var _target: Square
+var _target_cell: Vector2i
 var _ability: Ability
 
 
-func _init(target_actor: Actor, target: Square, ability: Ability) \
+func _init(target_actor: Actor, target_cell: Vector2i, ability: Ability) \
 		-> void:
 	_target_actor = target_actor
-	_target = target
+	_target_cell = target_cell
 	_ability = ability
 
 
 func run() -> void:
-	await _ability.perform(_target, _target_actor)
+	await _ability.perform(_target_cell, _target_actor)

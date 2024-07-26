@@ -29,16 +29,15 @@ extends TargetRange
 @export var scale_extend := true
 
 
-func _get_full_range(source_square: Square) -> Array[Vector2i]:
-	var source_rect: Rect2i
+func _get_full_range(source_cell: Vector2i, source_size: int) \
+		-> Array[Vector2i]:
+	var source_rect := Rect2i(source_cell, Vector2i.ONE)
 	if source_is_square:
-		source_rect = source_square.rect
-	else:
-		source_rect = Rect2i(source_square.position, Vector2i.ONE)
+		source_rect = TileObject.object_rect(source_cell, source_size)
 
 	var real_range_extend := range_extend
 	if scale_extend:
-		real_range_extend = ((range_extend + 1) * source_square.size) - 1
+		real_range_extend = ((range_extend + 1) * source_size) - 1
 
 	return TileGeometry.cells_in_range(
 			source_rect, range_start_dist, real_range_extend)
