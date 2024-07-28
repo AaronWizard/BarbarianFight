@@ -19,7 +19,4 @@ func get_target_range(source_actor: Actor) -> TargetingData:
 ## Assumes [param target] is a valid target.
 func perform(target: Square, source_actor: Actor) -> void:
 	@warning_ignore("redundant_await")
-	await effect.apply(
-		target, Square.new(source_actor.origin_cell, source_actor.cell_size),
-		source_actor
-	)
+	await effect.apply(target, source_actor.square, source_actor)

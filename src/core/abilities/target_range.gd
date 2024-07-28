@@ -10,17 +10,16 @@ extends Resource
 ## The type of cells within the full range that are valid.
 @export var target_type := TargetCellFiltering.TargetType.ANY
 
+## What cell within the source actor is used as the start of the line of sight
+## to a cell inside the target range.
 @export var los_origin := TargetCellFiltering.LOSSourceOrigin.CENTER
 
 
 ## Gets the cells that can be targeted by [param source_actor].
 func get_target_range(source_actor: Actor) -> TargetingData:
-	var source_square := Square.new(
-			source_actor.origin_cell, source_actor.cell_size)
-	var full_range := _get_full_range(source_square)
-
+	var full_range := _get_full_range(source_actor.square)
 	var visible_range := TargetCellFiltering.get_cells_in_line_of_sight(
-			full_range, source_square, los_origin, source_actor.map)
+			full_range, source_actor.square, los_origin, source_actor.map)
 	var targets := TargetCellFiltering.get_targets_in_range(
 		visible_range, target_type, source_actor
 	)

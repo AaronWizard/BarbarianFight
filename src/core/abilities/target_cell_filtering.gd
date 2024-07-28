@@ -144,8 +144,7 @@ static func _target_at_cell(cell: Vector2i, target_type: TargetType,
 				var actor_on_target \
 						:= source_actor.map.actor_map.get_actor_on_cell(cell)
 				if actor_on_target:
-					result = Square.new(actor_on_target.origin_cell,
-							actor_on_target.cell_size)
+					result = actor_on_target.square
 		TargetType.ENEMY:
 			if not source_actor:
 				push_error("Source actor expected")
@@ -154,8 +153,7 @@ static func _target_at_cell(cell: Vector2i, target_type: TargetType,
 						:= source_actor.map.actor_map.get_actor_on_cell(cell)
 				if actor_on_target \
 						and actor_on_target.is_hostile(source_actor):
-					result = Square.new(actor_on_target.origin_cell,
-							actor_on_target.cell_size)
+					result = actor_on_target.square
 		TargetType.ALLY:
 			if not source_actor:
 				push_error("Source actor expected")
@@ -164,8 +162,7 @@ static func _target_at_cell(cell: Vector2i, target_type: TargetType,
 						:= source_actor.map.actor_map.get_actor_on_cell(cell)
 				if actor_on_target \
 						and not actor_on_target.is_hostile(source_actor):
-					result = Square.new(actor_on_target.origin_cell,
-							actor_on_target.cell_size)
+					result = actor_on_target.square
 		TargetType.EMPTY:
 			if not source_actor.map.actor_map.get_actor_on_cell(cell):
 				result = Square.new(cell, 1)
