@@ -19,13 +19,12 @@ enum SourceCellType {
 @export var source_cell_type := SourceCellType.TARGET_CELL
 
 
-func apply(target_cell: Vector2i, source_cell: Vector2i,
-		source_size: int, source_actor: Actor) -> void:
+func apply(target: Square, source: Square, source_actor: Actor) -> void:
 	var aoe_cells := aoe.get_aoe(
-			target_cell, source_cell, source_size, source_actor)
+			target.position, source.position, source.size, source_actor)
 
-	var child_effect_source := target_cell
+	var child_effect_source := target.position
 	if source_cell_type == SourceCellType.SOURCE_CELL:
-		child_effect_source = source_cell
+		child_effect_source = source.position
 
 	pass

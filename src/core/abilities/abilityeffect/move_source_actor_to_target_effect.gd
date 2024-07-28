@@ -7,17 +7,16 @@ extends AbilityEffect
 @export var speed := 8.0
 
 
-func apply(target_cell: Vector2i, _source_cell: Vector2i, _source_size: int,
-		source_actor: Actor) -> void:
-	if not source_actor.map.actor_can_enter_cell(source_actor, target_cell):
+func apply(target: Square, _source: Square, source_actor: Actor) -> void:
+	if not source_actor.map.actor_can_enter_cell(source_actor, target.position):
 		push_warning("Actor '%s' could not enter cell at %v"
-				% [source_actor, target_cell])
+				% [source_actor, target.position])
 		return
 
-	var diff := source_actor.origin_cell - target_cell
+	var diff := source_actor.origin_cell - target.position
 	var distance := diff.length()
 
-	source_actor.origin_cell = target_cell
+	source_actor.origin_cell = target.position
 	source_actor.sprite.sprite_offset_dir = diff
 	source_actor.sprite.sprite_offset_distance = distance
 

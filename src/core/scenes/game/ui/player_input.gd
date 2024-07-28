@@ -93,7 +93,7 @@ func _state_bump() -> void:
 func _ability_input() -> void:
 	if Input.is_action_just_released("wait"):
 		var action := AbilityAction.new(
-			_player_actor, _player_target_tracker.target.position,
+			_player_actor, _player_target_tracker.target,
 			_current_ability
 		)
 		_end_turn(action)
