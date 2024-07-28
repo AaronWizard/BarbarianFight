@@ -3,7 +3,6 @@ extends TurnAction
 
 ## A turn action where an actor performs an ability.
 
-
 var _target_actor: Actor
 var _target: Square
 var _ability: Ability
