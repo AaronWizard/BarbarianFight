@@ -1,4 +1,4 @@
-class_name TargetRangeData
+class_name TargetingData
 extends Node
 
 ## A class representing the valid targets of an actor's ability.
