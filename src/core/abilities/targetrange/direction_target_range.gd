@@ -14,22 +14,22 @@ extends TargetRange
 @export_range(0, 1, 1, "or_greater") var range_extend := 0
 
 
-func _get_full_range(source_cell: Vector2i, source_size: int) \
+func _get_full_range(source: Square) \
 		-> Array[Vector2i]:
 	var result: Array[Vector2i] = []
 
-	var north := _get_line(source_cell + Vector2i.UP, Vector2i.UP)
+	var north := _get_line(source.position + Vector2i.UP, Vector2i.UP)
 	result.append_array(north)
 
-	var east := _get_line(source_cell + (Vector2i.RIGHT * source_size),
+	var east := _get_line(source.position + (Vector2i.RIGHT * source.size),
 			Vector2i.RIGHT)
 	result.append_array(east)
 
-	var south := _get_line(source_cell + (Vector2i.DOWN * source_size),
+	var south := _get_line(source.position + (Vector2i.DOWN * source.size),
 			Vector2i.DOWN)
 	result.append_array(south)
 
-	var west := _get_line(source_cell + Vector2i.LEFT, Vector2i.LEFT)
+	var west := _get_line(source.position + Vector2i.LEFT, Vector2i.LEFT)
 	result.append_array(west)
 
 	return result

@@ -105,15 +105,11 @@ func _ability_input() -> void:
 
 
 func _show_ability() -> void:
-	var target_range_data := _current_ability.get_target_range(_player_actor)
+	var targeting_data := _current_ability.get_target_range(_player_actor)
 
-	var target_squares: Array[Square] = []
-	for c in target_range_data.valid_targets:
-		target_squares.append(Square.new(c, 1))
-
-	_player_target_tracker.set_targets(target_squares)
+	_player_target_tracker.set_targets(targeting_data.targets)
 	show_target_range.emit(
-		target_range_data.visible_range, target_range_data.valid_targets,
+		targeting_data.visible_range, targeting_data.selectable_cells,
 		_player_target_tracker.target
 	)
 
