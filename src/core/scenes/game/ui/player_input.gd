@@ -93,7 +93,7 @@ func _state_bump() -> void:
 func _ability_input() -> void:
 	if Input.is_action_just_released("wait"):
 		var action := AbilityAction.new(
-			_player_actor, _player_target_tracker.target_cell,
+			_player_actor, _player_target_tracker.target.position,
 			_current_ability
 		)
 		_end_turn(action)
@@ -101,16 +101,20 @@ func _ability_input() -> void:
 		var direction := _get_direction_input()
 		if direction.length_squared() == 1:
 			_player_target_tracker.move_target(direction)
-			target_changed.emit(Square.new(_player_target_tracker.target_cell, 1))
+			target_changed.emit(_player_target_tracker.target)
 
 
 func _show_ability() -> void:
 	var target_range_data := _current_ability.get_target_range(_player_actor)
 
-	_player_target_tracker.set_target_range(target_range_data.valid_targets)
+	var target_squares: Array[Square] = []
+	for c in target_range_data.valid_targets:
+		target_squares.append(Square.new(c, 1))
+
+	_player_target_tracker.set_targets(target_squares)
 	show_target_range.emit(
 		target_range_data.visible_range, target_range_data.valid_targets,
-		Square.new(_player_target_tracker.target_cell, 1)
+		_player_target_tracker.target
 	)
 
 	_current_state = State.DASH
