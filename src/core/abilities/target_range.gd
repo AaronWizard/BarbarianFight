@@ -17,7 +17,7 @@ extends Resource
 ## [param source_cell] does not have to be the origin cell of
 ## [param source_actor].
 func get_target_range(source_cell: Vector2i, source_size: int, \
-		source_actor: Actor) -> TargetRangeData:
+		source_actor: Actor) -> TargetRangeData_old:
 	var full_range := _get_full_range(source_cell, source_size)
 
 	var visible_range := TargetCellFiltering.get_cells_in_line_of_sight(
@@ -26,7 +26,7 @@ func get_target_range(source_cell: Vector2i, source_size: int, \
 		visible_range, target_type, source_actor
 	)
 
-	return TargetRangeData.new(visible_range, valid_targets)
+	return TargetRangeData_old.new(visible_range, valid_targets)
 
 
 ## Get the base full target range.[br]

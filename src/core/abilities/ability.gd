@@ -11,7 +11,7 @@ extends Resource
 @export var effect: AbilityEffect
 
 
-func get_target_range(source_actor: Actor) -> TargetRangeData:
+func get_target_range(source_actor: Actor) -> TargetRangeData_old:
 	return target_range.get_target_range(
 		source_actor.origin_cell, source_actor.cell_size, source_actor
 	)

@@ -1,4 +1,4 @@
-class_name TargetRangeData
+class_name TargetRangeData_old
 
 ## The target tiles of an ability from [TargetRange].
 ##
