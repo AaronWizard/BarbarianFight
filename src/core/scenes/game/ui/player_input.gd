@@ -4,9 +4,9 @@ extends Node
 signal action_chosen(turn_action: TurnAction)
 
 signal show_target_range(
-		target_range: Array[Vector2i], valid_targets: Array[Vector2i],
-		start_target_cell: Vector2i)
-signal target_cell_changed(new_target_cell: Vector2i)
+		visible_range: Array[Vector2i], selectable_cells: Array[Vector2i],
+		start_target: Square)
+signal target_changed(new_target: Square)
 signal hide_target_range
 
 
@@ -101,7 +101,7 @@ func _ability_input() -> void:
 		var direction := _get_direction_input()
 		if direction.length_squared() == 1:
 			_player_target_tracker.move_target(direction)
-			target_cell_changed.emit(_player_target_tracker.target_cell)
+			target_changed.emit(Square.new(_player_target_tracker.target_cell, 1))
 
 
 func _show_ability() -> void:
@@ -110,7 +110,7 @@ func _show_ability() -> void:
 	_player_target_tracker.set_target_range(target_range_data.valid_targets)
 	show_target_range.emit(
 		target_range_data.visible_range, target_range_data.valid_targets,
-		_player_target_tracker.target_cell
+		Square.new(_player_target_tracker.target_cell, 1)
 	)
 
 	_current_state = State.DASH
