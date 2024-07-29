@@ -24,6 +24,8 @@ func get_target_range(source_actor: Actor) -> TargetingData:
 		visible_range, target_type, source_actor
 	)
 
+	_post_processing(visible_range, targets, source_actor.square)
+
 	return TargetingData.new(visible_range, targets)
 
 
@@ -32,3 +34,10 @@ func get_target_range(source_actor: Actor) -> TargetingData:
 func _get_full_range(_source: Square) -> Array[Vector2i]:
 	push_warning("TargetRange._get_full_range not implemented")
 	return []
+
+
+## Post-processing of visible range and targets.[br]
+## Can be overriden.
+func _post_processing(_visible_range: Array[Vector2i],
+		_targets: Array[Square], _source: Square) -> void:
+	pass

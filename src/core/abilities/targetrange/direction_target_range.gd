@@ -33,6 +33,13 @@ func _get_full_range(source: Square) \
 	return result
 
 
+func _post_processing(visible_range: Array[Vector2i], targets: Array[Square],
+		source: Square) -> void:
+	for target in targets:
+		target.size = source.size
+	TargetCellFiltering.extend_visible_range_by_size(visible_range, source.size)
+
+
 func _get_line(source: Square, delta: Vector2i) -> Array[Vector2i]:
 	var result: Array[Vector2i] = []
 

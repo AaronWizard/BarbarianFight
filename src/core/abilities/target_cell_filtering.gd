@@ -82,6 +82,21 @@ static func get_targets_in_range(
 	return result
 
 
+static func extend_visible_range_by_size(visible_range: Array[Vector2i],
+		size: int) -> void:
+	var extra_cells_dict := {}
+	for visible_cell in visible_range:
+		var v_square := Square.new(visible_cell, size)
+		for cell in TileGeometry.cells_in_rect(v_square.rect):
+			extra_cells_dict[cell] = true
+
+	var extra_cells: Array[Vector2i] = []
+	extra_cells.assign(extra_cells_dict.keys())
+	for cell in extra_cells:
+		if cell not in visible_range:
+			visible_range.append(cell)
+
+
 static func _get_los_start_cell(
 		target_cell: Vector2i, source: Square,
 		los_origin: LOSSourceOrigin) -> Vector2i:
