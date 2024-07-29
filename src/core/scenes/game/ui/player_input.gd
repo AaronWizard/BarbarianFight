@@ -91,17 +91,18 @@ func _state_bump() -> void:
 
 
 func _ability_input() -> void:
-	if Input.is_action_just_released("wait"):
-		var action := AbilityAction.new(
-			_player_actor, _player_target_tracker.target,
-			_current_ability
-		)
-		_end_turn(action)
-	else:
-		var direction := _get_direction_input()
-		if direction.length_squared() == 1:
-			_player_target_tracker.move_target(direction)
-			target_changed.emit(_player_target_tracker.target)
+	if _player_target_tracker.has_targets:
+		if Input.is_action_just_released("wait"):
+			var action := AbilityAction.new(
+				_player_actor, _player_target_tracker.target,
+				_current_ability
+			)
+			_end_turn(action)
+		else:
+			var direction := _get_direction_input()
+			if direction.length_squared() == 1:
+				_player_target_tracker.move_target(direction)
+				target_changed.emit(_player_target_tracker.target)
 
 
 func _show_ability() -> void:

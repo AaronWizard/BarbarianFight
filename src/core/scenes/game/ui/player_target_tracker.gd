@@ -8,6 +8,11 @@ class_name PlayerTargetTracker
 ## move this target using directional inputs.
 
 
+var has_targets: bool:
+	get:
+		return not _targets.is_empty()
+
+
 var target: Square:
 	get:
 		return _current_target
@@ -21,7 +26,8 @@ func set_targets(new_targets: Array[Square]) -> void:
 	_targets.clear()
 	_targets.assign(new_targets)
 
-	_current_target = _targets[0]
+	if not _targets.is_empty():
+		_current_target = _targets[0]
 
 
 func move_target(direction: Vector2i) -> void:

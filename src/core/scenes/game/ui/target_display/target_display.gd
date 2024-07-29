@@ -12,9 +12,11 @@ func _ready() -> void:
 func show_range(visible_range: Array[Vector2i],
 		selectable_cells: Array[Vector2i], start_target: Square) -> void:
 	_map_target_range.set_target_range(visible_range, selectable_cells)
-	_target.visible = true
-	_target.origin_cell = start_target.position
-	_target.cell_size = start_target.size
+
+	_target.visible = start_target != null
+	if _target.visible:
+		_target.origin_cell = start_target.position
+		_target.cell_size = start_target.size
 
 
 func set_target(target: Square) -> void:
