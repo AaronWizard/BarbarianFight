@@ -15,7 +15,7 @@ extends Resource
 @export var los_origin := TargetCellFiltering.LOSSourceOrigin.CENTER
 
 
-## Gets the cells that can be targeted by [param source_actor].
+## Gets the targets for an abilith whose source is [param source_actor].
 func get_target_range(source_actor: Actor) -> TargetingData:
 	var full_range := _get_full_range(source_actor.square)
 	var visible_range := TargetCellFiltering.get_cells_in_line_of_sight(

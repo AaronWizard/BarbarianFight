@@ -6,13 +6,13 @@ extends Resource
 ## Class for getting the area of effect around an ability target. This is
 ## represented by a set of target squares contained in a [TargetingData] object.
 
-
 ## The type of cells within the full range that are valid.
 @export var target_type := TargetCellFiltering.TargetType.ANY
 
 ## What cell within the source actor is used as the start of the line of sight
 ## to a cell inside the target range.
 @export var los_origin := TargetCellFiltering.LOSSourceOrigin.CENTER
+
 
 ## Get the area of effect at [param target] for the ability targeted from
 ## [param source].[br]
