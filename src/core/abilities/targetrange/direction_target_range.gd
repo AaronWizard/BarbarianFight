@@ -18,28 +18,26 @@ func _get_full_range(source: Square) \
 		-> Array[Vector2i]:
 	var result: Array[Vector2i] = []
 
-	var north := _get_line(source.position + Vector2i.UP, Vector2i.UP)
+	var north := _get_line(source, Vector2i.UP)
 	result.append_array(north)
 
-	var east := _get_line(source.position + (Vector2i.RIGHT * source.size),
-			Vector2i.RIGHT)
+	var east := _get_line(source, Vector2i.RIGHT)
 	result.append_array(east)
 
-	var south := _get_line(source.position + (Vector2i.DOWN * source.size),
-			Vector2i.DOWN)
+	var south := _get_line(source, Vector2i.DOWN)
 	result.append_array(south)
 
-	var west := _get_line(source.position + Vector2i.LEFT, Vector2i.LEFT)
+	var west := _get_line(source, Vector2i.LEFT)
 	result.append_array(west)
 
 	return result
 
 
-func _get_line(start_cell: Vector2i, delta: Vector2i) -> Array[Vector2i]:
+func _get_line(source: Square, delta: Vector2i) -> Array[Vector2i]:
 	var result: Array[Vector2i] = []
 
 	for i in range(range_start_dist - 1, range_start_dist + range_extend):
-		var cell := start_cell + (delta * i)
+		var cell := source.position + (delta * source.size) + (delta * i)
 		result.append(cell)
 
 	return result
