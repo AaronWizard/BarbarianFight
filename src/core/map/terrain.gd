@@ -1,5 +1,7 @@
 class_name Terrain
 
+## A [TileMap] wrapper for getting the properties of a map's terrain.
+
 const _PROPERTY_BLOCK_MOVE := "block_move"
 const _PROPERTY_BLOCK_SIGHT := "block_sight"
 const _PROPERTY_BLOCK_RANGED := "block_ranged"
@@ -11,18 +13,23 @@ func _init(tilemap: TileMap) -> void:
 	_tilemap = tilemap
 
 
+## If true, the cell blockes movement.
 func blocks_move(cell: Vector2i) -> bool:
 	return _get_bool_property(cell, _PROPERTY_BLOCK_MOVE, true)
 
 
+## If true, the cell blocks actor vision.
 func blocks_sight(cell: Vector2i) -> bool:
 	return _get_bool_property(cell, _PROPERTY_BLOCK_SIGHT, true)
 
 
+## If true, the cell blockes ranged abilities.
 func blocks_ranged(cell: Vector2i) -> bool:
 	return _get_bool_property(cell, _PROPERTY_BLOCK_RANGED, true)
 
 
+## Returns true if either [param tile_object] does not contain [param cell] or
+## [param cell] does not block movement.
 func tile_object_can_enter_cell(tile_object: TileObject, cell: Vector2i) \
 		-> bool:
 	var result := true
