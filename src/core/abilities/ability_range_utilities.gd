@@ -1,4 +1,4 @@
-class_name TargetCellFiltering
+class_name AbilityRangeUtilities
 
 ## Methods for filtering cells and getting targets from target ranges and AOEs.
 
@@ -64,9 +64,9 @@ static func get_cells_in_line_of_sight(
 ## Get a list of valid target squares within [param visible_range] based on
 ## [param target_type].[br]
 ## [param source_actor] is required if [param target_type] is
-## [enum TargetCellFiltering.TargetType.ENEMY],
-## [enum TargetCellFiltering.TargetType.ALLY], or
-## [enum TargetCellFiltering.TargetType.ENTERABLE].
+## [enum AbilityRangeUtilities.TargetType.ENEMY],
+## [enum AbilityRangeUtilities.TargetType.ALLY], or
+## [enum AbilityRangeUtilities.TargetType.ENTERABLE].
 static func get_targets_in_range(
 		visible_range: Array[Vector2i],
 		target_type: TargetType,

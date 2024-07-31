@@ -44,5 +44,5 @@ func _get_full_range(source: Square) -> Array[Vector2i]:
 
 func _post_processing(visible_range: Array[Vector2i], _targets: Array[Square],
 		source: Square) -> void:
-	if target_type == TargetCellFiltering.TargetType.ENTERABLE:
-		TargetCellFiltering.extend_visible_range_by_size(visible_range, source.size)
+	if target_type == AbilityRangeUtilities.TargetType.ENTERABLE:
+		AbilityRangeUtilities.extend_visible_range_by_size(visible_range, source.size)

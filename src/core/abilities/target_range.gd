@@ -8,19 +8,19 @@ extends Resource
 
 
 ## The type of cells within the full range that are valid.
-@export var target_type := TargetCellFiltering.TargetType.ANY
+@export var target_type := AbilityRangeUtilities.TargetType.ANY
 
 ## What cell within the source actor is used as the start of the line of sight
 ## to a cell inside the target range.
-@export var los_origin := TargetCellFiltering.LOSSourceOrigin.CENTER
+@export var los_origin := AbilityRangeUtilities.LOSSourceOrigin.CENTER
 
 
 ## Gets the targets for an abilith whose source is [param source_actor].
 func get_target_range(source_actor: Actor) -> TargetingData:
 	var full_range := _get_full_range(source_actor.square)
-	var visible_range := TargetCellFiltering.get_cells_in_line_of_sight(
+	var visible_range := AbilityRangeUtilities.get_cells_in_line_of_sight(
 			full_range, source_actor.square, los_origin, source_actor.map)
-	var targets := TargetCellFiltering.get_targets_in_range(
+	var targets := AbilityRangeUtilities.get_targets_in_range(
 		visible_range, target_type, source_actor
 	)
 
