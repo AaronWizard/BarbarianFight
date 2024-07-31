@@ -2,10 +2,10 @@ class_name AreaTargetRange
 extends TargetRange
 
 ## A target range that is all cells between a min and max distance of the source
-## cell or rectangle.
+## square.
 ##
 ## A target range that is all cells between a min and max distance of the source
-## cell or rectangle. Distance is measured using
+## square. Distance is measured using
 ## [url=https://en.wikipedia.org/wiki/Taxicab_geometry]Taxicab geometry[/url].
 
 ## The minimum range.[br]
