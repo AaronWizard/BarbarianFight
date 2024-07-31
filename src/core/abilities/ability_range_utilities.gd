@@ -1,7 +1,6 @@
 class_name AbilityRangeUtilities
 
-## Methods for filtering cells and getting targets from target ranges and AOEs.
-
+## Methods related to ability target ranges and ares of effect.
 
 ## What cell within a source square is used as the start of the line of sight to
 ## a cell inside a target range.
@@ -52,11 +51,21 @@ static func get_cells_in_line_of_sight(
 		cells: Array[Vector2i],
 		source: Square,
 		los_origin: LOSSourceOrigin,
-		map: Map) -> Array[Vector2i]:
+		actor: Actor,
+		los_blocked_by_enemies: bool,
+		los_blocked_by_allies: bool,
+		los_blocked_by_move_blocking: bool,
+		los_ignores_ranged_blocking: bool) -> Array[Vector2i]:
 	var result: Array[Vector2i] = []
 	for target_cell in cells:
 		var start_cell := _get_los_start_cell(target_cell, source, los_origin)
-		if _has_line_of_sight(target_cell, start_cell, map):
+		if _has_line_of_sight(
+				target_cell, start_cell,
+				actor,
+				los_blocked_by_enemies,
+				los_blocked_by_allies,
+				los_blocked_by_move_blocking,
+				los_ignores_ranged_blocking):
 			result.append(target_cell)
 	return result
 
@@ -124,10 +133,24 @@ static func _get_los_start_cell(
 	return result
 
 
-static func _has_line_of_sight(target_cell: Vector2i, start_cell: Vector2i,
-		map: Map) -> bool:
-	var block_check_func \
-			:= func (cell: Vector2i) -> bool: return _cell_blocks_los(cell, map)
+static func _has_line_of_sight(
+		target_cell: Vector2i,
+		start_cell: Vector2i,
+		actor: Actor,
+		los_blocked_by_enemies: bool,
+		los_blocked_by_allies: bool,
+		los_blocked_by_move_blocking: bool,
+		los_ignores_ranged_blocking: bool) -> bool:
+	var block_check_func := func (cell: Vector2i) -> bool:
+		return _cell_blocks_los(
+			cell,
+			actor,
+			los_blocked_by_enemies,
+			los_blocked_by_allies,
+			los_blocked_by_move_blocking,
+			los_ignores_ranged_blocking
+		)
+
 	var unblocked_line := TileGeometry.unblocked_line(
 			start_cell, target_cell, block_check_func)
 	var end_cell := unblocked_line[unblocked_line.size() - 1]
@@ -139,9 +162,28 @@ static func _has_line_of_sight(target_cell: Vector2i, start_cell: Vector2i,
 	return result
 
 
-static func _cell_blocks_los(cell: Vector2i, map: Map) -> bool:
-	var result := map.terrain.blocks_sight(cell) \
-			or map.terrain.blocks_ranged(cell)
+static func _cell_blocks_los(
+		cell: Vector2i,
+		actor: Actor,
+		los_blocked_by_enemies: bool,
+		los_blocked_by_allies: bool,
+		los_blocked_by_move_blocking: bool,
+		los_ignores_ranged_blocking: bool) -> bool:
+	var result := actor.map.terrain.blocks_sight(cell)
+
+	var other_actor := actor.map.actor_map.get_actor_on_cell(cell)
+	if other_actor == actor:
+		other_actor = null
+
+	if los_blocked_by_enemies:
+		result = result or (other_actor and other_actor.is_hostile(actor))
+	if los_blocked_by_allies:
+		result = result or (other_actor and not other_actor.is_hostile(actor))
+	if los_blocked_by_move_blocking:
+		result = result or actor.map.terrain.blocks_move(cell)
+	if not los_ignores_ranged_blocking:
+		result = result or actor.map.terrain.blocks_ranged(cell)
+
 	return result
 
 

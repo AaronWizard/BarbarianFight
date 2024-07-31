@@ -15,14 +15,27 @@ extends Resource
 @export var los_origin := AbilityRangeUtilities.LOSSourceOrigin.CENTER
 
 
+## If true, line of sight blocked by enemy actors.
+@export var los_blocked_by_enemies := false
+
+
+## If true, line of sight blocked by allied actors.
+@export var los_blocked_by_allies := false
+
+
+## If true, line of sight blocked by cells that block movement.
+@export var los_blocked_by_move_blocking := false
+
+
+## If true, line of sight ignores cells that block ranged abilities.
+@export var los_ignores_ranged_blocking := false
+
+
 ## Gets the targets for an abilith whose source is [param source_actor].
 func get_target_range(source_actor: Actor) -> TargetingData:
 	var full_range := _get_full_range(source_actor.square)
-	var visible_range := AbilityRangeUtilities.get_cells_in_line_of_sight(
-			full_range, source_actor.square, los_origin, source_actor.map)
-	var targets := AbilityRangeUtilities.get_targets_in_range(
-		visible_range, target_type, source_actor
-	)
+	var visible_range := _get_visible_range(full_range, source_actor)
+	var targets := _get_targets(visible_range, source_actor)
 
 	_post_processing(visible_range, targets, source_actor.square)
 
@@ -41,3 +54,23 @@ func _get_full_range(_source: Square) -> Array[Vector2i]:
 func _post_processing(_visible_range: Array[Vector2i],
 		_targets: Array[Square], _source: Square) -> void:
 	pass
+
+
+func _get_visible_range(full_range: Array[Vector2i], source_actor: Actor) \
+		-> Array[Vector2i]:
+	return AbilityRangeUtilities.get_cells_in_line_of_sight(
+		full_range,
+		source_actor.square, los_origin,
+		source_actor,
+		los_blocked_by_enemies,
+		los_blocked_by_allies,
+		los_blocked_by_move_blocking,
+		los_ignores_ranged_blocking
+	)
+
+
+func _get_targets(visible_range: Array[Vector2i], source_actor: Actor) \
+		-> Array[Square]:
+	return AbilityRangeUtilities.get_targets_in_range(
+		visible_range, target_type, source_actor
+	)

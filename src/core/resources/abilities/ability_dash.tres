@@ -16,6 +16,10 @@ use_source_size = false
 scale_extend = true
 target_type = 5
 los_origin = 0
+los_blocked_by_enemies = false
+los_blocked_by_allies = false
+los_blocked_by_move_blocking = false
+los_ignores_ranged_blocking = false
 
 [resource]
 script = ExtResource("1_gomvm")
