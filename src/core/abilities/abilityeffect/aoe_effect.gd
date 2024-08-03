@@ -20,8 +20,7 @@ enum SourceCellType {
 
 
 func apply(target: Square, source: Square, source_actor: Actor) -> void:
-	var aoe_cells := aoe.get_aoe(
-			target.position, source.position, source.size, source_actor)
+	var aoe_cells := aoe.get_aoe(target, source, source_actor)
 
 	var child_effect_source := target.position
 	if source_cell_type == SourceCellType.SOURCE_CELL:
