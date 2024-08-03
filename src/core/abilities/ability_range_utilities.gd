@@ -112,21 +112,8 @@ static func _get_los_start_cell(
 	var result := source.position
 
 	if los_origin == LOSSourceOrigin.CENTER:
-		@warning_ignore("integer_division")
-		var half_size := source.size / 2
-		var center_cell := source.position + Vector2i(half_size, half_size)
-
-		if source.size % 2 != 0:
-			result = center_cell
-		else:
-			var start_cells: Array[Vector2i] = [
-				center_cell,
-				center_cell - Vector2i(1, 1),
-				center_cell - Vector2i(1, 0),
-				center_cell - Vector2i(0, 1)
-			]
-			result = TileGeometry.closest_cell_to_target(
-					start_cells, target_cell)
+		result = TileGeometry.rect_center_cell_closest_to_target(
+				source.rect, target_cell)
 	else:
 		assert(los_origin == LOSSourceOrigin.TOP_LEFT)
 
