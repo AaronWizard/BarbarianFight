@@ -33,11 +33,18 @@ func _get_full_range(source: Square) \
 	return result
 
 
-func _post_processing(visible_range: Array[Vector2i], targets: Array[Square],
+func _cell_blocks_los(_cell: Vector2i, _source_actor: Actor) -> bool:
+	return false
+
+
+func _target_at_cell(cell: Vector2i, source_actor: Actor) -> Square:
+	return Square.new(cell, source_actor.cell_size)
+
+
+func _range_post_processing(visible_range: Array[Vector2i],
 		source: Square) -> void:
-	for target in targets:
-		target.size = source.size
-	AbilityRangeUtilities.extend_visible_range_by_size(visible_range, source.size)
+	AbilityRangeUtilities.extend_visible_range_by_size(
+			visible_range, source.size)
 
 
 func _get_line(source: Square, delta: Vector2i) -> Array[Vector2i]:

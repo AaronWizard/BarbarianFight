@@ -29,6 +29,10 @@ extends TargetRange
 @export var scale_extend := true
 
 
+## The type of cells within the full range that are valid.
+@export var target_type := AbilityRangeUtilities.TargetType.ANY
+
+
 func _get_full_range(source: Square) -> Array[Vector2i]:
 	var source_rect := source.rect
 	if not use_source_size:
@@ -42,7 +46,21 @@ func _get_full_range(source: Square) -> Array[Vector2i]:
 			source_rect, range_start_dist, real_range_extend)
 
 
-func _post_processing(visible_range: Array[Vector2i], _targets: Array[Square],
+func _los_start_cell(cell: Vector2i, ability_source: Square) -> Vector2i:
+	var result: Vector2i
+	if target_type == AbilityRangeUtilities.TargetType.ENTERABLE:
+		result = ability_source.position
+	else:
+		result = super(cell, ability_source)
+	return result
+
+
+func _target_at_cell(cell: Vector2i, source_actor: Actor) -> Square:
+	return AbilityRangeUtilities.target_at_cell(cell, target_type, source_actor)
+
+
+func _range_post_processing(visible_range: Array[Vector2i],
 		source: Square) -> void:
 	if target_type == AbilityRangeUtilities.TargetType.ENTERABLE:
-		AbilityRangeUtilities.extend_visible_range_by_size(visible_range, source.size)
+		AbilityRangeUtilities.extend_visible_range_by_size(
+				visible_range, source.size)

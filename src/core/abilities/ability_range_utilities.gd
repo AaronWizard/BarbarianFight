@@ -2,19 +2,6 @@ class_name AbilityRangeUtilities
 
 ## Methods related to ability target ranges and ares of effect.
 
-## What cell within a source square is used as the start of the line of sight to
-## a cell inside a target range.
-enum LOSSourceOrigin
-{
-	## The center cell if the source square has odd dimensions, or the closest
-	## of the four center cells to the target cell if the source square has
-	## even dimensions.
-	CENTER,
-	## The top left cell of the source square.
-	TOP_LEFT
-}
-
-
 ## The type of cells in a target/AOE range that can have targets. Determines the
 ## corresponding target
 ## square.
@@ -43,138 +30,45 @@ enum TargetType
 }
 
 
-## Get the subset of cells within [param cells] that have line of sight with
-## [param source].[br]
-## [param los_origin] determines what cell within the source square is the start
-## cell of the line of sight.
-static func get_cells_in_line_of_sight(
-		cells: Array[Vector2i],
-		source: Square,
-		los_origin: LOSSourceOrigin,
-		actor: Actor,
-		los_blocked_by_enemies: bool,
-		los_blocked_by_allies: bool,
-		los_blocked_by_move_blocking: bool,
-		los_ignores_ranged_blocking: bool) -> Array[Vector2i]:
+## Get the subset of cells within [param full_range] that are visible.[br]
+## [code]los_start_cell_func(cell: Vector2i) -> Vector2i[/code]:
+## Return the cell to use as the start cell when checking line-of-sight to the
+## end cell.[br]
+## [code]block_check_func(cell: Vector2i) -> bool[/code]:
+## Return true if the cell blocks line-of-sight to the source actor.
+static func get_visible_range(
+		full_range: Array[Vector2i],
+		los_start_cell_func: Callable, block_check_func: Callable) \
+		-> Array[Vector2i]:
 	var result: Array[Vector2i] = []
-	for target_cell in cells:
-		var start_cell := _get_los_start_cell(target_cell, source, los_origin)
-		if _has_line_of_sight(
-				target_cell, start_cell,
-				actor,
-				los_blocked_by_enemies,
-				los_blocked_by_allies,
-				los_blocked_by_move_blocking,
-				los_ignores_ranged_blocking):
+	for target_cell in full_range:
+		var start_cell := los_start_cell_func.call(target_cell) as Vector2i
+		if _has_line_of_sight(target_cell, start_cell, block_check_func):
 			result.append(target_cell)
 	return result
 
 
-## Get a list of valid target squares within [param visible_range] based on
-## [param target_type].[br]
-## [param source_actor] is required if [param target_type] is
-## [enum AbilityRangeUtilities.TargetType.ENEMY],
-## [enum AbilityRangeUtilities.TargetType.ALLY], or
-## [enum AbilityRangeUtilities.TargetType.ENTERABLE].
-static func get_targets_in_range(
-		visible_range: Array[Vector2i],
-		target_type: TargetType,
-		source_actor: Actor) -> Array[Square]:
-	var result: Array[Square] = []
-
+## Get a list of valid target squares within [param visible_range].[br]
+## [code]target_at_cell(cell: Vector2i) -> Square[/code]: Returns a square that
+## covers the cell. The square's position may be different from the cell.
+static func get_targets_in_range(visible_range: Array[Vector2i],
+		target_at_cell_func: Callable) -> Array[Square]:
 	var targets := {} # Avoid duplicates
 	for cell in visible_range:
-		var target := _target_at_cell(cell, target_type, source_actor)
-		if target:
-			targets[target] = true
-	result.assign(targets.keys())
-	return result
+		var target := target_at_cell_func.call(cell) as Square
+		if target and ( \
+			not targets.has(cell) or (target.size > targets[cell].size) \
+		):
+			targets[cell] = target
 
-
-static func extend_visible_range_by_size(visible_range: Array[Vector2i],
-		size: int) -> void:
-	var extra_cells_dict := {}
-	for visible_cell in visible_range:
-		var v_square := Square.new(visible_cell, size)
-		for cell in TileGeometry.cells_in_rect(v_square.rect):
-			extra_cells_dict[cell] = true
-
-	var extra_cells: Array[Vector2i] = []
-	extra_cells.assign(extra_cells_dict.keys())
-	for cell in extra_cells:
-		if cell not in visible_range:
-			visible_range.append(cell)
-
-
-static func _get_los_start_cell(
-		target_cell: Vector2i, source: Square,
-		los_origin: LOSSourceOrigin) -> Vector2i:
-	var result := source.position
-
-	if los_origin == LOSSourceOrigin.CENTER:
-		result = TileGeometry.rect_center_cell_closest_to_target(
-				source.rect, target_cell)
-	else:
-		assert(los_origin == LOSSourceOrigin.TOP_LEFT)
+	var result: Array[Square] = []
+	result.assign(targets.values())
 
 	return result
 
 
-static func _has_line_of_sight(
-		target_cell: Vector2i,
-		start_cell: Vector2i,
-		actor: Actor,
-		los_blocked_by_enemies: bool,
-		los_blocked_by_allies: bool,
-		los_blocked_by_move_blocking: bool,
-		los_ignores_ranged_blocking: bool) -> bool:
-	var block_check_func := func (cell: Vector2i) -> bool:
-		return _cell_blocks_los(
-			cell,
-			actor,
-			los_blocked_by_enemies,
-			los_blocked_by_allies,
-			los_blocked_by_move_blocking,
-			los_ignores_ranged_blocking
-		)
-
-	var unblocked_line := TileGeometry.unblocked_line(
-			start_cell, target_cell, block_check_func)
-	var end_cell := unblocked_line[unblocked_line.size() - 1]
-
-	var result := end_cell == target_cell
-	if result:
-		result = not (block_check_func.call(end_cell) as bool)
-
-	return result
-
-
-static func _cell_blocks_los(
-		cell: Vector2i,
-		actor: Actor,
-		los_blocked_by_enemies: bool,
-		los_blocked_by_allies: bool,
-		los_blocked_by_move_blocking: bool,
-		los_ignores_ranged_blocking: bool) -> bool:
-	var result := actor.map.terrain.blocks_sight(cell)
-
-	var other_actor := actor.map.actor_map.get_actor_on_cell(cell)
-	if other_actor == actor:
-		other_actor = null
-
-	if los_blocked_by_enemies:
-		result = result or (other_actor and other_actor.is_hostile(actor))
-	if los_blocked_by_allies:
-		result = result or (other_actor and not other_actor.is_hostile(actor))
-	if los_blocked_by_move_blocking:
-		result = result or actor.map.terrain.blocks_move(cell)
-	if not los_ignores_ranged_blocking:
-		result = result or actor.map.terrain.blocks_ranged(cell)
-
-	return result
-
-
-static func _target_at_cell(cell: Vector2i, target_type: TargetType,
+## Get a target at [param cell] based on [param target_type].
+static func target_at_cell(cell: Vector2i, target_type: TargetType,
 		source_actor: Actor) -> Square:
 	var result: Square = null
 
@@ -215,5 +109,35 @@ static func _target_at_cell(cell: Vector2i, target_type: TargetType,
 				push_error("Source actor expected")
 			elif source_actor.map.actor_can_enter_cell(source_actor, cell):
 				result = Square.new(cell, source_actor.cell_size)
+
+	return result
+
+
+static func extend_visible_range_by_size(visible_range: Array[Vector2i],
+		size: int) -> void:
+	var extra_cells_dict := {}
+	for visible_cell in visible_range:
+		var v_square := Square.new(visible_cell, size)
+		for cell in TileGeometry.cells_in_rect(v_square.rect):
+			extra_cells_dict[cell] = true
+
+	var extra_cells: Array[Vector2i] = []
+	extra_cells.assign(extra_cells_dict.keys())
+	for cell in extra_cells:
+		if cell not in visible_range:
+			visible_range.append(cell)
+
+
+static func _has_line_of_sight(
+		target_cell: Vector2i,
+		start_cell: Vector2i,
+		block_check_func: Callable) -> bool:
+	var unblocked_line := TileGeometry.unblocked_line(
+			start_cell, target_cell, block_check_func)
+	var end_cell := unblocked_line[unblocked_line.size() - 1]
+
+	var result := end_cell == target_cell
+	if result:
+		result = not (block_check_func.call(end_cell) as bool)
 
 	return result
