@@ -85,6 +85,20 @@ static func cells_in_rect(rect: Rect2i) -> Array[Vector2i]:
 	return result
 
 
+## Get the centermost [Vector2i] cell inside [param rect] that is also closest to
+## [param target].
+static func rect_center_cell_closest_to_target(rect: Rect2i, target: Vector2i) \
+		-> Vector2i:
+	var result := rect.position + (rect.size / 2)
+
+	if (rect.size.x % 2 == 0) and (result.x < target.x):
+		result.x += 1
+	if (rect.size.y % 2 == 0) and (result.y < target.y):
+		result.y += 1
+
+	return result
+
+
 ## Get the cells surrounding [param source_rect] where each cell is between
 ## [param range_start_dist]
 ## and ([param range_start_dist] + [param range_extend]) cells in manhattan

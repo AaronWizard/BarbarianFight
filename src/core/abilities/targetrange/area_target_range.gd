@@ -2,42 +2,65 @@ class_name AreaTargetRange
 extends TargetRange
 
 ## A target range that is all cells between a min and max distance of the source
-## cell or rectangle.
+## square.
 ##
 ## A target range that is all cells between a min and max distance of the source
-## cell or rectangle. Distance is measured using
+## square. Distance is measured using
 ## [url=https://en.wikipedia.org/wiki/Taxicab_geometry]Taxicab geometry[/url].
 
 ## The minimum range.[br]
-## A value of 1 includes the cells adjacent to the source cell/rectangle.[br]
-## A value of 0 includes the source cell / cells covered by the source
-## rectangle.
-@export var range_start_dist := 1
+## With a value of 0, the range starts with the cells inside the source square.
+## [br]
+## With a value of 1, the range starts at the cells adjacent to the source.
+@export_range(0, 1, 1, "or_greater") var range_start_dist := 1
 
 ## The distance to extend the range past [member range_start_dist].[br]
 ## The maximum distance is ([member range_start_dist] + [member range_extend]).
-@export var range_extend := 0
+@export_range(0, 1, 1, "or_greater") var range_extend := 0
 
-## If true, the source is a square with the source cell at its [b]top left[/b]
-## corner (see [TileObject]). If false, the source is a single cell.[br][br]
-## Useful for actors larger than one cell to differentiate movement abilities
-## (that only need the actor's origin cell) and attack actions (that would need
-## the actor's whole square to get the right ranges).
-@export var source_is_square := true
+## If true, use the whole source square as the source of the target range. If
+## false, only use the single cell at the source's position (its top left cell).
+## [br][br]
+## Setting this to false is appropriate for abilities whose targeting only uses
+## the source actor's origin cell, such as movement abilities.
+@export var use_source_size := true
 
-## Scales the maximum range by source size.
+## If true, scale the maximum range by the source's size.
 @export var scale_extend := true
 
 
-func _get_full_range(source_cell: Vector2i, source_size: int) \
-		-> Array[Vector2i]:
-	var source_rect := Rect2i(source_cell, Vector2i.ONE)
-	if source_is_square:
-		source_rect = TileObject.object_rect(source_cell, source_size)
+## The type of cells within the full range that are valid.
+@export var target_type := AbilityRangeUtilities.TargetType.ANY
+
+
+func _get_full_range(source: Square) -> Array[Vector2i]:
+	var source_rect := source.rect
+	if not use_source_size:
+		source_rect = Rect2i(source.position, Vector2i.ONE)
 
 	var real_range_extend := range_extend
 	if scale_extend:
-		real_range_extend = ((range_extend + 1) * source_size) - 1
+		real_range_extend = ((range_extend + 1) * source.size) - 1
 
 	return TileGeometry.cells_in_range(
 			source_rect, range_start_dist, real_range_extend)
+
+
+func _los_start_cell(cell: Vector2i, ability_source: Square) -> Vector2i:
+	var result: Vector2i
+	if target_type == AbilityRangeUtilities.TargetType.ENTERABLE:
+		result = ability_source.position
+	else:
+		result = super(cell, ability_source)
+	return result
+
+
+func _target_at_cell(cell: Vector2i, source_actor: Actor) -> Square:
+	return AbilityRangeUtilities.target_at_cell(cell, target_type, source_actor)
+
+
+func _range_post_processing(visible_range: Array[Vector2i],
+		source: Square) -> void:
+	if target_type == AbilityRangeUtilities.TargetType.ENTERABLE:
+		AbilityRangeUtilities.extend_visible_range_by_size(
+				visible_range, source.size)

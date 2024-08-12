@@ -12,10 +12,9 @@ speed = 8.0
 script = ExtResource("2_ffjsm")
 range_start_dist = 2
 range_extend = 0
-source_is_square = false
+use_source_size = false
 scale_extend = true
 target_type = 5
-los_origin = 0
 
 [resource]
 script = ExtResource("1_gomvm")

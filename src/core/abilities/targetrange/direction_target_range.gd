@@ -14,32 +14,44 @@ extends TargetRange
 @export_range(0, 1, 1, "or_greater") var range_extend := 0
 
 
-func _get_full_range(source_cell: Vector2i, source_size: int) \
+func _get_full_range(source: Square) \
 		-> Array[Vector2i]:
 	var result: Array[Vector2i] = []
 
-	var north := _get_line(source_cell + Vector2i.UP, Vector2i.UP)
+	var north := _get_line(source, Vector2i.UP)
 	result.append_array(north)
 
-	var east := _get_line(source_cell + (Vector2i.RIGHT * source_size),
-			Vector2i.RIGHT)
+	var east := _get_line(source, Vector2i.RIGHT)
 	result.append_array(east)
 
-	var south := _get_line(source_cell + (Vector2i.DOWN * source_size),
-			Vector2i.DOWN)
+	var south := _get_line(source, Vector2i.DOWN)
 	result.append_array(south)
 
-	var west := _get_line(source_cell + Vector2i.LEFT, Vector2i.LEFT)
+	var west := _get_line(source, Vector2i.LEFT)
 	result.append_array(west)
 
 	return result
 
 
-func _get_line(start_cell: Vector2i, delta: Vector2i) -> Array[Vector2i]:
+func _cell_blocks_los(_cell: Vector2i, _source_actor: Actor) -> bool:
+	return false
+
+
+func _target_at_cell(cell: Vector2i, source_actor: Actor) -> Square:
+	return Square.new(cell, source_actor.cell_size)
+
+
+func _range_post_processing(visible_range: Array[Vector2i],
+		source: Square) -> void:
+	AbilityRangeUtilities.extend_visible_range_by_size(
+			visible_range, source.size)
+
+
+func _get_line(source: Square, delta: Vector2i) -> Array[Vector2i]:
 	var result: Array[Vector2i] = []
 
 	for i in range(range_start_dist - 1, range_start_dist + range_extend):
-		var cell := start_cell + (delta * i)
+		var cell := source.position + (delta * source.size) + (delta * i)
 		result.append(cell)
 
 	return result

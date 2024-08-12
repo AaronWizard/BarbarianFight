@@ -7,8 +7,6 @@
 script = ExtResource("2_wygnl")
 range_start_dist = 1
 range_extend = 0
-target_type = 0
-los_origin = 0
 
 [resource]
 script = ExtResource("1_robij")
