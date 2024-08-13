@@ -1,7 +1,10 @@
 class_name MoveSourceActorToTargetEffect
 extends AbilityEffect
 
-## Moves the source actor to the target cell.
+## Moves the source actor to the position of the target.
+##
+## Moves the source actor to the position of the target. The size of the target
+## is ignored.
 
 ## Speed in tiles per second
 @export var speed := 8.0
@@ -9,7 +12,7 @@ extends AbilityEffect
 
 func apply(target: Square, _source: Square, source_actor: Actor) -> void:
 	if not source_actor.map.actor_can_enter_cell(source_actor, target.position):
-		push_warning("Actor '%s' could not enter cell at %v"
+		push_error("Actor '%s' could not enter cell at %v"
 				% [source_actor, target.position])
 		return
 
