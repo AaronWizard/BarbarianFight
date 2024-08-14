@@ -91,10 +91,10 @@ static func rect_center_cell_closest_to_target(rect: Rect2i, target: Vector2i) \
 		-> Vector2i:
 	var result := rect.position + (rect.size / 2)
 
-	if (rect.size.x % 2 == 0) and (result.x < target.x):
-		result.x += 1
-	if (rect.size.y % 2 == 0) and (result.y < target.y):
-		result.y += 1
+	if (rect.size.x % 2 == 0) and (result.x > target.x):
+		result.x -= 1
+	if (rect.size.y % 2 == 0) and (result.y > target.y):
+		result.y -= 1
 
 	return result
 
