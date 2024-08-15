@@ -33,6 +33,6 @@ func _get_targets(_target_range: Array[Vector2i], _source_actor: Actor) \
 
 ## Post-processing of the target range.[br]
 ## Can be overriden.
-func _range_post_processing(_visible_range: Array[Vector2i],
+func _range_post_processing(_target_range: Array[Vector2i],
 		_source_actor: Actor) -> void:
 	pass

@@ -33,7 +33,7 @@ extends TargetRange
 @export var target_type := AbilityRangeUtilities.TargetType.ANY
 
 
-func _get_target_range(_source_actor: Actor) -> Array[Vector2i]:
+func _get_target_range(source_actor: Actor) -> Array[Vector2i]:
 	var source_rect := source_actor.rect
 	if not use_source_size:
 		source_rect.size = Vector2i.ONE
@@ -56,11 +56,6 @@ func _get_targets(target_range: Array[Vector2i], source_actor: Actor) \
 	return []
 
 
-func _range_post_processing(_visible_range: Array[Vector2i],
-		_source_actor: Actor) -> void:
-	pass
-
-
 func _los_start_cell(cell: Vector2i, ability_source: Rect2i) -> Vector2i:
 	var result: Vector2i
 	if target_type == AbilityRangeUtilities.TargetType.ENTERABLE:
@@ -74,8 +69,8 @@ func _target_at_cell(cell: Vector2i, source_actor: Actor) -> Square:
 	return AbilityRangeUtilities.target_at_cell(cell, target_type, source_actor)
 
 
-func _range_post_processing(visible_range: Array[Vector2i],
+func _range_post_processing(target_range: Array[Vector2i],
 		source_actor: Actor) -> void:
 	if target_type == AbilityRangeUtilities.TargetType.ENTERABLE:
 		AbilityRangeUtilities.extend_visible_range_by_size(
-				visible_range, source_actor.cell_size)
+				target_range, source_actor.cell_size)
