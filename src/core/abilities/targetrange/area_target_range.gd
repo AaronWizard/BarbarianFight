@@ -33,20 +33,35 @@ extends TargetRange
 @export var target_type := AbilityRangeUtilities.TargetType.ANY
 
 
-func _get_full_range(source: Square) -> Array[Vector2i]:
-	var source_rect := source.rect
+func _get_target_range(_source_actor: Actor) -> Array[Vector2i]:
+	var source_rect := source_actor.rect
 	if not use_source_size:
-		source_rect = Rect2i(source.position, Vector2i.ONE)
+		source_rect.size = Vector2i.ONE
 
 	var real_range_extend := range_extend
 	if scale_extend:
-		real_range_extend = ((range_extend + 1) * source.size) - 1
+		real_range_extend = ((range_extend + 1) * source_actor.cell_size) - 1
 
 	return TileGeometry.cells_in_range(
 			source_rect, range_start_dist, real_range_extend)
 
 
-func _los_start_cell(cell: Vector2i, ability_source: Square) -> Vector2i:
+func _get_targets(target_range: Array[Vector2i], source_actor: Actor) \
+		-> Array[Rect2i]:
+	var result: Array[Rect2i] = []
+
+	for cell in target_range:
+		pass
+
+	return []
+
+
+func _range_post_processing(_visible_range: Array[Vector2i],
+		_source_actor: Actor) -> void:
+	pass
+
+
+func _los_start_cell(cell: Vector2i, ability_source: Rect2i) -> Vector2i:
 	var result: Vector2i
 	if target_type == AbilityRangeUtilities.TargetType.ENTERABLE:
 		result = ability_source.position
@@ -60,7 +75,7 @@ func _target_at_cell(cell: Vector2i, source_actor: Actor) -> Square:
 
 
 func _range_post_processing(visible_range: Array[Vector2i],
-		source: Square) -> void:
+		source_actor: Actor) -> void:
 	if target_type == AbilityRangeUtilities.TargetType.ENTERABLE:
 		AbilityRangeUtilities.extend_visible_range_by_size(
-				visible_range, source.size)
+				visible_range, source_actor.cell_size)

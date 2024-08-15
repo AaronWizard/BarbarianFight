@@ -9,7 +9,8 @@ extends Node
 ## [AreaOfEffect] where they will all be affected by the ability.[br][br]
 ##
 ## TargetRangeData has three components:[br]
-## - A list of [Square] objects representing the actual targets.[br]
+## - A list of [Rect2i] objects whose positions are the actual targets. These
+##   are rectangles instead of single cells for display to the player.[br]
 ## - A list of [Vector2i] cells representing the target/AOE range shown to the
 ## player.[br]
 ## - A list of [Vector2i] cells representing the cells the player may select.
@@ -17,12 +18,12 @@ extends Node
 
 
 ## The true target squares within the target/AOE range.
-var targets: Array[Square]:
+var targets: Array[Rect2i]:
 	get:
-		var result: Array[Square] = []
+		var result: Array[Rect2i] = []
 
 		## I really wish Godot had typed dictionaries.
-		var all_targets: Array[Square] = []
+		var all_targets: Array[Rect2i] = []
 		all_targets.assign(_targets_by_selectable_cell.values())
 		for target in all_targets:
 			if not target in result:
@@ -47,18 +48,18 @@ var selectable_cells: Array[Vector2i]:
 
 # The cells highlighted for the player representing the target/AOE range.
 var _visible_range: Array[Vector2i]
-# A dictionary of (Vector2i: Square) pairs. The keys are cells the player may
+# A dictionary of (Vector2i: Rect2i) pairs. The keys are cells the player may
 # select, while the values are the corresponding target squares.
 var _targets_by_selectable_cell: Dictionary
 
 
-func _init(new_visible_range: Array[Vector2i], new_targets: Array[Square]) \
+func _init(new_visible_range: Array[Vector2i], new_targets: Array[Rect2i]) \
 		-> void:
 	_visible_range = new_visible_range
 
 	_targets_by_selectable_cell = {}
 	for target in new_targets:
-		var target_cells := TileGeometry.cells_in_rect(target.rect)
+		var target_cells := TileGeometry.cells_in_rect(target)
 		for cell in target_cells:
 			if cell in _visible_range:
 				_targets_by_selectable_cell[cell] = target

@@ -17,6 +17,6 @@ func get_target_range(source_actor: Actor) -> TargetingData:
 
 ## Performs the ability at [param target] for [param source_actor].[br]
 ## Assumes [param target] is a valid target.
-func perform(target: Square, source_actor: Actor) -> void:
+func perform(target: Vector2i, source_actor: Actor) -> void:
 	@warning_ignore("redundant_await")
-	await effect.apply(target, source_actor.square, source_actor)
+	await effect.apply(target, source_actor.rect, source_actor)

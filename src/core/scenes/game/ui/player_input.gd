@@ -94,7 +94,7 @@ func _ability_input() -> void:
 	if _player_target_tracker.has_targets:
 		if Input.is_action_just_released("wait"):
 			var action := AbilityAction.new(
-				_player_actor, _player_target_tracker.target,
+				_player_actor, _player_target_tracker.target.position,
 				_current_ability
 			)
 			_end_turn(action)
