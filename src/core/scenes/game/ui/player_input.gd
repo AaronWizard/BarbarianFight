@@ -3,10 +3,8 @@ extends Node
 
 signal action_chosen(turn_action: TurnAction)
 
-signal show_target_range(
-		visible_range: Array[Vector2i], selectable_cells: Array[Vector2i],
-		start_target: Square)
-signal target_changed(new_target: Square)
+signal show_target_range(targeting_data: TargetingData)
+signal target_changed(new_target: Rect2i)
 signal hide_target_range
 
 
@@ -109,10 +107,7 @@ func _show_ability() -> void:
 	var targeting_data := _current_ability.get_target_range(_player_actor)
 
 	_player_target_tracker.set_targets(targeting_data.targets)
-	show_target_range.emit(
-		targeting_data.visible_range, targeting_data.selectable_cells,
-		_player_target_tracker.target
-	)
+	show_target_range.emit(targeting_data)
 
 	_current_state = State.DASH
 
