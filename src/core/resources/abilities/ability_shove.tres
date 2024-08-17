@@ -10,6 +10,9 @@ range_extend = 0
 use_source_size = true
 scale_extend = false
 target_type = 2
+movement_blocking_los = false
+actor_blocking = 0
+ignore_range_blocking = false
 
 [resource]
 script = ExtResource("1_robij")
