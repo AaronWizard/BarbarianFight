@@ -3,9 +3,9 @@ extends Node
 
 signal action_chosen(turn_action: TurnAction)
 
-signal show_target_range(targeting_data: TargetingData)
+signal target_range_set(targeting_data: TargetingData)
 signal target_changed(new_target: Rect2i)
-signal hide_target_range
+signal target_range_cleared
 
 
 ## Current state, determining what actions will be done in response to input.
@@ -107,14 +107,14 @@ func _show_ability() -> void:
 	var targeting_data := _current_ability.get_target_range(_player_actor)
 
 	_player_target_tracker.set_targets(targeting_data.targets)
-	show_target_range.emit(targeting_data)
+	target_range_set.emit(targeting_data)
 
 	_current_state = State.DASH
 
 
 func _clear_ability() -> void:
 	_player_target_tracker.clear()
-	hide_target_range.emit()
+	target_range_cleared.emit()
 
 	_current_state = State.BUMP
 

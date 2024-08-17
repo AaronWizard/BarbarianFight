@@ -115,7 +115,7 @@ func _on_boss_tracker_boss_untracked() -> void:
 	_game_gui.hide_boss_bar()
 
 
-func _on_player_input_show_target_range(targeting_data: TargetingData) -> void:
+func _on_player_input_target_range_set(targeting_data: TargetingData) -> void:
 	_target_display.show_range(targeting_data)
 
 
@@ -123,5 +123,5 @@ func _on_player_input_target_changed(new_target: Rect2i) -> void:
 	_target_display.set_target(new_target)
 
 
-func _on_player_input_hide_target_range() -> void:
+func _on_player_input_target_range_cleared() -> void:
 	_target_display.clear()

@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3 uid="uid://cvi0bb84c7308"]
+[gd_scene load_steps=12 format=3 uid="uid://cvi0bb84c7308"]
 
 [ext_resource type="Script" path="res://src/core/scenes/game/game.gd" id="1_soc31"]
 [ext_resource type="PackedScene" uid="uid://c0c5o4j30lwif" path="res://src/data/maps/arena.tscn" id="2_4vijj"]
@@ -10,6 +10,7 @@
 [ext_resource type="Script" path="res://src/core/scenes/game/boss_tracker.gd" id="6_gmxci"]
 [ext_resource type="PackedScene" uid="uid://bmtw6f2mimcy3" path="res://src/core/scenes/game/ui/game_gui.tscn" id="6_w1kkj"]
 [ext_resource type="PackedScene" uid="uid://dkntd5g7ap0xd" path="res://src/core/ui/screen_fade.tscn" id="9_gd7wy"]
+[ext_resource type="Script" path="res://src/core/statemachine/state.gd" id="12_awymb"]
 
 [node name="Game" type="Node"]
 script = ExtResource("1_soc31")
@@ -38,9 +39,12 @@ script = ExtResource("5_uekvx")
 
 [node name="ScreenFade" parent="." instance=ExtResource("9_gd7wy")]
 
+[node name="OtherState" type="Node" parent="."]
+script = ExtResource("12_awymb")
+
 [connection signal="boss_tracked" from="BossTracker" to="." method="_on_boss_tracker_boss_tracked"]
 [connection signal="boss_untracked" from="BossTracker" to="." method="_on_boss_tracker_boss_untracked"]
 [connection signal="action_chosen" from="PlayerInput" to="." method="_on_player_input_action_chosen"]
-[connection signal="hide_target_range" from="PlayerInput" to="." method="_on_player_input_hide_target_range"]
-[connection signal="show_target_range" from="PlayerInput" to="." method="_on_player_input_show_target_range"]
 [connection signal="target_changed" from="PlayerInput" to="." method="_on_player_input_target_changed"]
+[connection signal="target_range_cleared" from="PlayerInput" to="." method="_on_player_input_target_range_cleared"]
+[connection signal="target_range_set" from="PlayerInput" to="." method="_on_player_input_target_range_set"]
