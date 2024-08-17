@@ -73,6 +73,6 @@ func _init(new_visible_range: Array[Vector2i], new_targets: Array[Rect2i]) \
 
 
 ## The target at the selected cell.
-func target_at_selected_cell(selected_cell: Vector2i) -> Square:
+func target_at_selected_cell(selected_cell: Vector2i) -> Rect2i:
 	@warning_ignore("unsafe_cast")
-	return _targets_by_selectable_cell[selected_cell] as Square
+	return _targets_by_selectable_cell[selected_cell] as Rect2i

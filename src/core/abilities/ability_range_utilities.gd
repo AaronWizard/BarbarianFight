@@ -48,68 +48,77 @@ static func get_visible_range(
 	return result
 
 
-## Get a list of valid target squares within [param visible_range].[br]
-## [code]target_at_cell(cell: Vector2i) -> Square[/code]: Returns a square that
-## covers the cell. The square's position may be different from the cell.
-static func get_targets_in_range(visible_range: Array[Vector2i],
-		target_at_cell_func: Callable) -> Array[Square]:
+## Get a list of valid target rectangles within [param target_range] based on a
+## given target type.
+static func get_targets_in_range(target_range: Array[Vector2i],
+		target_type: TargetType, source_actor: Actor) -> Array[Rect2i]:
 	var targets := {} # Avoid duplicates
-	for cell in visible_range:
-		var target := target_at_cell_func.call(cell) as Square
-		if target and ( \
-			not targets.has(cell) or (target.size > targets[cell].size) \
-		):
-			targets[cell] = target
-
-	var result: Array[Square] = []
+	for cell in target_range:
+		if _cell_is_target(cell, target_type, source_actor):
+			var target := _target_rectangle(cell, target_type, source_actor)
+			if not targets.has(cell) or (target.size > targets[cell].size):
+				targets[cell] = target
+	var result: Array[Rect2i] = []
 	result.assign(targets.values())
 
 	return result
 
 
 ## Get a target at [param cell] based on [param target_type].
-static func target_at_cell(cell: Vector2i, target_type: TargetType,
-		source_actor: Actor) -> Square:
-	var result: Square = null
+static func _cell_is_target(cell: Vector2i, target_type: TargetType,
+		source_actor: Actor) -> bool:
+	var result := false
 
 	match target_type:
 		TargetType.ANY:
-			result = Square.new(cell, 1)
+			result = true
 		TargetType.ANY_ACTOR:
 			if not source_actor:
 				push_error("Source actor expected")
 			else:
-				var actor_on_target \
-						:= source_actor.map.actor_map.get_actor_on_cell(cell)
-				if actor_on_target:
-					result = actor_on_target.square
+				result = source_actor.map.actor_map.get_actor_on_cell(cell) \
+						!= null
 		TargetType.ENEMY:
 			if not source_actor:
 				push_error("Source actor expected")
 			else:
 				var actor_on_target \
 						:= source_actor.map.actor_map.get_actor_on_cell(cell)
-				if actor_on_target \
-						and actor_on_target.is_hostile(source_actor):
-					result = actor_on_target.square
+				result = actor_on_target \
+						and actor_on_target.is_hostile(source_actor)
 		TargetType.ALLY:
 			if not source_actor:
 				push_error("Source actor expected")
 			else:
 				var actor_on_target \
 						:= source_actor.map.actor_map.get_actor_on_cell(cell)
-				if actor_on_target \
-						and not actor_on_target.is_hostile(source_actor):
-					result = actor_on_target.square
+				result = actor_on_target \
+						and not actor_on_target.is_hostile(source_actor)
+
 		TargetType.EMPTY:
-			if not source_actor.map.actor_map.get_actor_on_cell(cell):
-				result = Square.new(cell, 1)
+			result = source_actor.map.actor_map.get_actor_on_cell(cell) == null
 		TargetType.ENTERABLE:
 			if not source_actor:
 				push_error("Source actor expected")
-			elif source_actor.map.actor_can_enter_cell(source_actor, cell):
-				result = Square.new(cell, source_actor.cell_size)
+			else:
+				result = source_actor.map.actor_can_enter_cell(
+						source_actor, cell)
 
+	return result
+
+
+static func _target_rectangle(target_cell: Vector2i, target_type: TargetType,
+		source_actor: Actor) -> Rect2i:
+	var result := Rect2i(target_cell, Vector2i.ONE)
+	match target_type:
+		TargetType.ANY_ACTOR, TargetType.ENEMY, TargetType.ALLY:
+			var other_actor := source_actor.map.actor_map.get_actor_on_cell(
+					target_cell)
+			result.position = other_actor.origin_cell
+			result.size = Vector2i(other_actor.cell_size, other_actor.cell_size)
+		TargetType.ENTERABLE:
+			result.size = Vector2i(
+					source_actor.cell_size, source_actor.cell_size)
 	return result
 
 
@@ -117,8 +126,8 @@ static func extend_visible_range_by_size(visible_range: Array[Vector2i],
 		size: int) -> void:
 	var extra_cells_dict := {}
 	for visible_cell in visible_range:
-		var v_square := Square.new(visible_cell, size)
-		for cell in TileGeometry.cells_in_rect(v_square.rect):
+		var v_rect := Rect2i(visible_cell, Vector2i(size, size))
+		for cell in TileGeometry.cells_in_rect(v_rect):
 			extra_cells_dict[cell] = true
 
 	var extra_cells: Array[Vector2i] = []
