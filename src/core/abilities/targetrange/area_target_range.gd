@@ -32,6 +32,15 @@ extends TargetRange
 ## The type of cells within the full range that are valid.
 @export var target_type := AbilityRangeUtilities.TargetType.ANY
 
+## If true, terrain that blocks the source actor's movement blocks line-of-sight.
+@export var movement_blocking_los := false
+
+## Whether other actors block line-of-sight.
+@export var actor_blocking := AbilityRangeUtilities.LOSActorBlocking.NONE
+
+## Ignores terrain that blocks ranged abilities if true.
+@export var ignore_range_blocking := false
+
 
 func _get_target_range(source_actor: Actor) -> Array[Vector2i]:
 	var source_rect := source_actor.rect
@@ -42,8 +51,19 @@ func _get_target_range(source_actor: Actor) -> Array[Vector2i]:
 	if scale_extend:
 		real_range_extend = ((range_extend + 1) * source_actor.cell_size) - 1
 
-	return TileGeometry.cells_in_range(
+	var base_range := TileGeometry.cells_in_range(
 			source_rect, range_start_dist, real_range_extend)
+
+	var los_start_cell_func := func (cell: Vector2i) -> Vector2i:
+		return _los_start_cell(cell, source_actor)
+	var is_los_blocking_cell_func := func (cell: Vector2i) -> bool:
+		return AbilityRangeUtilities.is_los_blocking_cell(
+			cell, source_actor,
+			movement_blocking_los, actor_blocking, ignore_range_blocking
+		)
+
+	return AbilityRangeUtilities.get_visible_range(
+			base_range, los_start_cell_func, is_los_blocking_cell_func)
 
 
 func _get_targets(target_range: Array[Vector2i], source_actor: Actor) \
@@ -52,17 +72,18 @@ func _get_targets(target_range: Array[Vector2i], source_actor: Actor) \
 			target_range, target_type, source_actor)
 
 
-func _los_start_cell(cell: Vector2i, ability_source: Rect2i) -> Vector2i:
-	var result: Vector2i
-	if target_type == AbilityRangeUtilities.TargetType.ENTERABLE:
-		result = ability_source.position
-	#else:
-		#result = super(cell, ability_source)
-	return result
-
-
 func _range_post_processing(target_range: Array[Vector2i],
 		source_actor: Actor) -> void:
 	if target_type == AbilityRangeUtilities.TargetType.ENTERABLE:
 		AbilityRangeUtilities.extend_visible_range_by_size(
 				target_range, source_actor.cell_size)
+
+
+func _los_start_cell(target_cell: Vector2i, source_actor: Actor) -> Vector2i:
+	var result: Vector2i
+	if target_type == AbilityRangeUtilities.TargetType.ENTERABLE:
+		result = source_actor.origin_cell
+	else:
+		result = TileGeometry.rect_center_cell_closest_to_target(
+				source_actor.rect, target_cell)
+	return result

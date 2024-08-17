@@ -3,8 +3,7 @@ class_name AbilityRangeUtilities
 ## Methods related to ability target ranges and ares of effect.
 
 ## The type of cells in a target/AOE range that can have targets. Determines the
-## corresponding target
-## square.
+## corresponding target rectangle.
 enum TargetType
 {
 	## Any cell.[br]
@@ -30,21 +29,76 @@ enum TargetType
 }
 
 
+## A configuration for whether line-of-sight to a target cell is blocked by
+## actors.
+enum LOSActorBlocking
+{
+	## Actors do not block line-of-sight.
+	NONE,
+	## Any actor blocks line-of-sight.
+	ANY,
+	## Only enemies block line-of-sight.
+	ENEMIES
+}
+
+
+## Checks if there's line-of-sight between [param start_cell] and
+## [param target_cell], based on [param is_blocking_cell_func].[br]
+## [code]is_blocking_cell_func(cell: Vector2i) -> bool[/code]: Return true if
+## the cell is a blocking cell.
+
 ## Get the subset of cells within [param full_range] that are visible.[br]
 ## [code]los_start_cell_func(cell: Vector2i) -> Vector2i[/code]:
 ## Return the cell to use as the start cell when checking line-of-sight to the
 ## end cell.[br]
-## [code]block_check_func(cell: Vector2i) -> bool[/code]:
+## [code]is_los_blocking_cell_func(cell: Vector2i) -> bool[/code]:
 ## Return true if the cell blocks line-of-sight to the source actor.
 static func get_visible_range(
 		full_range: Array[Vector2i],
-		los_start_cell_func: Callable, block_check_func: Callable) \
+		los_start_cell_func: Callable, is_los_blocking_cell_func: Callable) \
 		-> Array[Vector2i]:
 	var result: Array[Vector2i] = []
 	for target_cell in full_range:
+		@warning_ignore("unsafe_cast")
 		var start_cell := los_start_cell_func.call(target_cell) as Vector2i
-		if _has_line_of_sight(target_cell, start_cell, block_check_func):
+		if TileGeometry.unblocked_line_exists(
+				start_cell, target_cell, is_los_blocking_cell_func):
 			result.append(target_cell)
+	return result
+
+
+## Check if [param target_cell] blocks line-of-sight.[br]
+## A cell blocks line-of-sight if:
+## - It blocks sight[br]
+## - It blocks movement and [param blocks_movement] is true
+## - An actor other than the source actor is covering it, depending on
+##   [param actor_blocking][br]
+## - It blocks ranged abilities and [param ignore_range_blocking] is false[br]
+static func is_los_blocking_cell(
+		cell: Vector2i,
+		source_actor: Actor,
+		blocks_movement: bool,
+		actor_blocking: LOSActorBlocking,
+		ignore_range_blocking: bool) \
+		-> bool:
+	var result := source_actor.map.terrain.blocks_sight(cell)
+
+	if blocks_movement:
+		result = result and not source_actor.map.actor_can_enter_cell(
+				source_actor, cell)
+
+	if actor_blocking != LOSActorBlocking.NONE:
+		var other_actor := source_actor.map.actor_map.get_actor_on_cell(cell)
+		if other_actor != source_actor:
+			match actor_blocking:
+				LOSActorBlocking.ANY:
+					result = true
+				LOSActorBlocking.ENEMIES:
+					result = result and other_actor.is_hostile(source_actor)
+
+	if not ignore_range_blocking:
+		result = result and source_actor.map.terrain.blocks_ranged(cell)
+
 	return result
 
 
@@ -63,8 +117,21 @@ static func get_targets_in_range(target_range: Array[Vector2i],
 
 	return result
 
+static func extend_visible_range_by_size(visible_range: Array[Vector2i],
+		size: int) -> void:
+	var extra_cells_dict := {}
+	for visible_cell in visible_range:
+		var v_rect := Rect2i(visible_cell, Vector2i(size, size))
+		for cell in TileGeometry.cells_in_rect(v_rect):
+			extra_cells_dict[cell] = true
 
-## Get a target at [param cell] based on [param target_type].
+	var extra_cells: Array[Vector2i] = []
+	extra_cells.assign(extra_cells_dict.keys())
+	for cell in extra_cells:
+		if cell not in visible_range:
+			visible_range.append(cell)
+
+
 static func _cell_is_target(cell: Vector2i, target_type: TargetType,
 		source_actor: Actor) -> bool:
 	var result := false
@@ -119,34 +186,4 @@ static func _target_rectangle(target_cell: Vector2i, target_type: TargetType,
 		TargetType.ENTERABLE:
 			result.size = Vector2i(
 					source_actor.cell_size, source_actor.cell_size)
-	return result
-
-
-static func extend_visible_range_by_size(visible_range: Array[Vector2i],
-		size: int) -> void:
-	var extra_cells_dict := {}
-	for visible_cell in visible_range:
-		var v_rect := Rect2i(visible_cell, Vector2i(size, size))
-		for cell in TileGeometry.cells_in_rect(v_rect):
-			extra_cells_dict[cell] = true
-
-	var extra_cells: Array[Vector2i] = []
-	extra_cells.assign(extra_cells_dict.keys())
-	for cell in extra_cells:
-		if cell not in visible_range:
-			visible_range.append(cell)
-
-
-static func _has_line_of_sight(
-		target_cell: Vector2i,
-		start_cell: Vector2i,
-		block_check_func: Callable) -> bool:
-	var unblocked_line := TileGeometry.unblocked_line(
-			start_cell, target_cell, block_check_func)
-	var end_cell := unblocked_line[unblocked_line.size() - 1]
-
-	var result := end_cell == target_cell
-	if result:
-		result = not (block_check_func.call(end_cell) as bool)
-
 	return result
