@@ -7,18 +7,19 @@ class_name TargetingData
 ## selected for an ability, or they may be the targets returned by an
 ## [AreaOfEffect] where they will all be affected by the ability.[br][br]
 ##
-## TargetRangeData has three components: a list of [Rect2i] objects whose
-## positions are the targets, a list of [Vector2i] cells representing the
-## target/AOE range shown to the player, and a list of [Vector2i] cells
-## representing the cells the player may select.[br]
-## [br]
-## The positions of the target rectangles can be used as an ability or ability
-## effect target. The other cells covered by a target rectangle map to the
-## rectangle's position for getting the target cell, and are used to populate
-## the set of selectible cells. Target rectangles are assumed to not overlap.
-## Rectangles are used instead of just target positions for display to the
-## player, e.g. for an ability that targets actors each target rectangle covers
-## a whole actor instead of just its origin cell.
+## Each target is represented by a [Rect2i]. Only the position of a target
+## rectangle is needed to use as an ability or AOE target. The size is meant for
+## display to the player. For example, for an ability that targets actors a
+## target rectangle's position would be an actor's origin cell while the size
+## would be the actor's size. Here the target rectangle's position is used for
+## the ability itself while its size is used for sizing the target graphic when
+## an actor is selected as a target. All cells covered by a target rectangle
+## map to the rectangle's position for the purposes of ability or AOE
+## targetting.[br][br]
+##
+## TargetingData also has the cells representing the target/AOE range shown to
+## the player. Within this range is a set of selectable cells, which each map to
+## a target. These are based on the cells covered by the target rectangles.
 
 
 ## The true target squares within the target/AOE range.
