@@ -16,14 +16,13 @@ func show_range(targeting_data: TargetingData) -> void:
 	_target.visible = not targeting_data.targets.is_empty()
 	if _target.visible:
 		var start_target := targeting_data.targets[0]
-		_target.origin_cell = start_target.position
-		_target.cell_size = start_target.size.x
+		_target.set_cell(start_target.position)
+		_target.cell_size = start_target.size
 
 
 func set_target(target: Rect2i) -> void:
-	_target.cell_size = target.size.x
-	if _target.origin_cell != target.position:
-		_target.move_to_cell(target.position)
+	_target.cell_size = target.size
+	_target.move_to_cell(target.position)
 
 
 func clear() -> void:
