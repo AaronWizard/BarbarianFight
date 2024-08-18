@@ -24,3 +24,4 @@ script = ExtResource("1_gomvm")
 name = "Dash"
 target_range = SubResource("Resource_08u2x")
 effect = SubResource("Resource_hma5d")
+use_attack_anim = false
