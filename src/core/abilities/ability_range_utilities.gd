@@ -84,20 +84,23 @@ static func is_los_blocking_cell(
 	var result := source_actor.map.terrain.blocks_sight(cell)
 
 	if blocks_movement:
-		result = result and not source_actor.map.actor_can_enter_cell(
+		result = result or not source_actor.map.actor_can_enter_cell(
 				source_actor, cell)
 
 	if actor_blocking != LOSActorBlocking.NONE:
 		var other_actor := source_actor.map.actor_map.get_actor_on_cell(cell)
-		if other_actor != source_actor:
+		if other_actor and (other_actor != source_actor):
 			match actor_blocking:
 				LOSActorBlocking.ANY:
 					result = true
 				LOSActorBlocking.ENEMIES:
-					result = result and other_actor.is_hostile(source_actor)
+					result = result or other_actor.is_hostile(source_actor)
+				_:
+					push_error("Unknown value for actor_blocking: '%s'"
+							% actor_blocking)
 
 	if not ignore_range_blocking:
-		result = result and source_actor.map.terrain.blocks_ranged(cell)
+		result = result or source_actor.map.terrain.blocks_ranged(cell)
 
 	return result
 
