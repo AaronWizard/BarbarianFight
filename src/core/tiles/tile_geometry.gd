@@ -121,6 +121,49 @@ static func rect_center_cell_closest_to_target(rect: Rect2i, target: Vector2i) \
 	return result
 
 
+## Get the closest cardinal direction vector (up, down, left, or right) from
+## [param start] to [param target].[br]
+## If [param start] and [param target] are equal, the direction is zero.
+static func cardinal_dir_between_cells(start: Vector2i, end: Vector2i) \
+		-> Vector2i:
+	var result := end - start
+
+	if absi(result.x) > absi(result.y):
+		result.x /= absi(result.x)
+		result.y = 0
+	else:
+		result.y /= absi(result.y)
+		result.x = 0
+
+	assert((result.length_squared() == 1) || (result.length_squared() == 0))
+	return result
+
+
+## Get the closest cardinal direction vector (up, down, left, or right) from
+## [param rect] to [param target].
+static func cardinal_dir_from_rect_to_cell(rect: Rect2i, target: Vector2i) \
+		-> Vector2i:
+	var result := Vector2i.ZERO
+
+	var dir_from_center := func () -> Vector2i:
+		var center_cell := TileGeometry.rect_center_cell_closest_to_target(
+				rect, target)
+		return TileGeometry.cardinal_dir_between_cells(center_cell, target)
+
+	if rect.has_point(target):
+		result = dir_from_center.call()
+	else:
+		if (target.x >= rect.position.x) and (target.x < rect.end.x):
+			result.y = signi(target.y - rect.position.y)
+		elif (target.y >= rect.position.y) and (target.y < rect.end.y):
+			result.x = signi(target.x - rect.position.x)
+		else:
+			result = dir_from_center.call()
+
+	assert((result.length_squared() == 1) || (result.length_squared() == 0))
+	return result
+
+
 ## Get the cells surrounding [param source_rect] where each cell is between
 ## [param range_start_dist]
 ## and ([param range_start_dist] + [param range_extend]) cells in manhattan
