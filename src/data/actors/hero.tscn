@@ -25,12 +25,6 @@ definition = SubResource("Resource_l2s4l")
 player_controlled = true
 faction = 1
 abilities = Array[ExtResource("3_ydc34")]([ExtResource("3_vnywx"), ExtResource("4_63tb4")])
-grid_colour = Color(0.690196, 0.188235, 0.376471, 1)
-origin_colour = Color(0, 0.807843, 0.819608, 1)
-
-[node name="ActorSprite" parent="." index="0"]
-grid_colour = Color(0.690196, 0.188235, 0.376471, 1)
-origin_colour = Color(0, 0.807843, 0.819608, 1)
 
 [node name="Sprite" parent="ActorSprite/SpriteOrigin/SpritePivot" index="0"]
 material = SubResource("ShaderMaterial_jskeg")
