@@ -48,7 +48,7 @@ extends Node2D
 
 
 ## The width and height in cells of the tile object.
-@export var cell_size := 1:
+@export_range(1, 1, 1, "or_greater") var cell_size := 1:
 	set(value):
 		var old_size := cell_size
 		var current_origin_cell := origin_cell
