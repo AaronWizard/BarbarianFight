@@ -9,20 +9,20 @@ func _ready() -> void:
 	_target.visible = false
 
 
-func show_range(visible_range: Array[Vector2i],
-		selectable_cells: Array[Vector2i], start_target: Square) -> void:
-	_map_target_range.set_target_range(visible_range, selectable_cells)
+func show_range(targeting_data: TargetingData) -> void:
+	_map_target_range.set_target_range(
+			targeting_data.visible_range, targeting_data.selectable_cells)
 
-	_target.visible = start_target != null
+	_target.visible = not targeting_data.targets.is_empty()
 	if _target.visible:
-		_target.origin_cell = start_target.position
+		var start_target := targeting_data.targets[0]
+		_target.set_cell(start_target.position)
 		_target.cell_size = start_target.size
 
 
-func set_target(target: Square) -> void:
+func set_target(target: Rect2i) -> void:
 	_target.cell_size = target.size
-	if _target.origin_cell != target.position:
-		_target.move_to_cell(target.position)
+	_target.move_to_cell(target.position)
 
 
 func clear() -> void:

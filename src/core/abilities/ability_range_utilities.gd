@@ -3,8 +3,7 @@ class_name AbilityRangeUtilities
 ## Methods related to ability target ranges and ares of effect.
 
 ## The type of cells in a target/AOE range that can have targets. Determines the
-## corresponding target
-## square.
+## corresponding target rectangle.
 enum TargetType
 {
 	## Any cell.[br]
@@ -30,95 +29,100 @@ enum TargetType
 }
 
 
+## A configuration for whether line-of-sight to a target cell is blocked by
+## actors.
+enum LOSActorBlocking
+{
+	## Actors do not block line-of-sight.
+	NONE,
+	## Any actor blocks line-of-sight.
+	ANY,
+	## Only enemies block line-of-sight.
+	ENEMIES
+}
+
+
+## Checks if there's line-of-sight between [param start_cell] and
+## [param target_cell], based on [param is_blocking_cell_func].[br]
+## [code]is_blocking_cell_func(cell: Vector2i) -> bool[/code]: Return true if
+## the cell is a blocking cell.
+
 ## Get the subset of cells within [param full_range] that are visible.[br]
 ## [code]los_start_cell_func(cell: Vector2i) -> Vector2i[/code]:
 ## Return the cell to use as the start cell when checking line-of-sight to the
 ## end cell.[br]
-## [code]block_check_func(cell: Vector2i) -> bool[/code]:
+## [code]is_los_blocking_cell_func(cell: Vector2i) -> bool[/code]:
 ## Return true if the cell blocks line-of-sight to the source actor.
 static func get_visible_range(
 		full_range: Array[Vector2i],
-		los_start_cell_func: Callable, block_check_func: Callable) \
+		los_start_cell_func: Callable, is_los_blocking_cell_func: Callable) \
 		-> Array[Vector2i]:
 	var result: Array[Vector2i] = []
 	for target_cell in full_range:
+		@warning_ignore("unsafe_cast")
 		var start_cell := los_start_cell_func.call(target_cell) as Vector2i
-		if _has_line_of_sight(target_cell, start_cell, block_check_func):
+		if TileGeometry.unblocked_line_exists(
+				start_cell, target_cell, is_los_blocking_cell_func):
 			result.append(target_cell)
 	return result
 
 
-## Get a list of valid target squares within [param visible_range].[br]
-## [code]target_at_cell(cell: Vector2i) -> Square[/code]: Returns a square that
-## covers the cell. The square's position may be different from the cell.
-static func get_targets_in_range(visible_range: Array[Vector2i],
-		target_at_cell_func: Callable) -> Array[Square]:
-	var targets := {} # Avoid duplicates
-	for cell in visible_range:
-		var target := target_at_cell_func.call(cell) as Square
-		if target and ( \
-			not targets.has(cell) or (target.size > targets[cell].size) \
-		):
-			targets[cell] = target
+## Check if [param target_cell] blocks line-of-sight.[br]
+## A cell blocks line-of-sight if:
+## - It blocks sight[br]
+## - It blocks movement and [param blocks_movement] is true
+## - An actor other than the source actor is covering it, depending on
+##   [param actor_blocking][br]
+## - It blocks ranged abilities and [param ignore_range_blocking] is false[br]
+static func is_los_blocking_cell(
+		cell: Vector2i,
+		source_actor: Actor,
+		blocks_movement: bool,
+		actor_blocking: LOSActorBlocking,
+		ignore_range_blocking: bool) \
+		-> bool:
+	var result := source_actor.map.terrain.blocks_sight(cell)
 
-	var result: Array[Square] = []
+	if blocks_movement:
+		result = result and not source_actor.map.actor_can_enter_cell(
+				source_actor, cell)
+
+	if actor_blocking != LOSActorBlocking.NONE:
+		var other_actor := source_actor.map.actor_map.get_actor_on_cell(cell)
+		if other_actor != source_actor:
+			match actor_blocking:
+				LOSActorBlocking.ANY:
+					result = true
+				LOSActorBlocking.ENEMIES:
+					result = result and other_actor.is_hostile(source_actor)
+
+	if not ignore_range_blocking:
+		result = result and source_actor.map.terrain.blocks_ranged(cell)
+
+	return result
+
+
+## Get a list of valid target rectangles within [param target_range] based on a
+## given target type.
+static func get_targets_in_range(target_range: Array[Vector2i],
+		target_type: TargetType, source_actor: Actor) -> Array[Rect2i]:
+	var targets := {} # Avoid duplicates
+	for cell in target_range:
+		if _cell_is_target(cell, target_type, source_actor):
+			var target := _target_rectangle(cell, target_type, source_actor)
+			if not targets.has(cell) or (target.size > targets[cell].size):
+				targets[cell] = target
+	var result: Array[Rect2i] = []
 	result.assign(targets.values())
 
 	return result
-
-
-## Get a target at [param cell] based on [param target_type].
-static func target_at_cell(cell: Vector2i, target_type: TargetType,
-		source_actor: Actor) -> Square:
-	var result: Square = null
-
-	match target_type:
-		TargetType.ANY:
-			result = Square.new(cell, 1)
-		TargetType.ANY_ACTOR:
-			if not source_actor:
-				push_error("Source actor expected")
-			else:
-				var actor_on_target \
-						:= source_actor.map.actor_map.get_actor_on_cell(cell)
-				if actor_on_target:
-					result = actor_on_target.square
-		TargetType.ENEMY:
-			if not source_actor:
-				push_error("Source actor expected")
-			else:
-				var actor_on_target \
-						:= source_actor.map.actor_map.get_actor_on_cell(cell)
-				if actor_on_target \
-						and actor_on_target.is_hostile(source_actor):
-					result = actor_on_target.square
-		TargetType.ALLY:
-			if not source_actor:
-				push_error("Source actor expected")
-			else:
-				var actor_on_target \
-						:= source_actor.map.actor_map.get_actor_on_cell(cell)
-				if actor_on_target \
-						and not actor_on_target.is_hostile(source_actor):
-					result = actor_on_target.square
-		TargetType.EMPTY:
-			if not source_actor.map.actor_map.get_actor_on_cell(cell):
-				result = Square.new(cell, 1)
-		TargetType.ENTERABLE:
-			if not source_actor:
-				push_error("Source actor expected")
-			elif source_actor.map.actor_can_enter_cell(source_actor, cell):
-				result = Square.new(cell, source_actor.cell_size)
-
-	return result
-
 
 static func extend_visible_range_by_size(visible_range: Array[Vector2i],
 		size: int) -> void:
 	var extra_cells_dict := {}
 	for visible_cell in visible_range:
-		var v_square := Square.new(visible_cell, size)
-		for cell in TileGeometry.cells_in_rect(v_square.rect):
+		var v_rect := Rect2i(visible_cell, Vector2i(size, size))
+		for cell in TileGeometry.cells_in_rect(v_rect):
 			extra_cells_dict[cell] = true
 
 	var extra_cells: Array[Vector2i] = []
@@ -128,16 +132,58 @@ static func extend_visible_range_by_size(visible_range: Array[Vector2i],
 			visible_range.append(cell)
 
 
-static func _has_line_of_sight(
-		target_cell: Vector2i,
-		start_cell: Vector2i,
-		block_check_func: Callable) -> bool:
-	var unblocked_line := TileGeometry.unblocked_line(
-			start_cell, target_cell, block_check_func)
-	var end_cell := unblocked_line[unblocked_line.size() - 1]
+static func _cell_is_target(cell: Vector2i, target_type: TargetType,
+		source_actor: Actor) -> bool:
+	var result := false
 
-	var result := end_cell == target_cell
-	if result:
-		result = not (block_check_func.call(end_cell) as bool)
+	match target_type:
+		TargetType.ANY:
+			result = true
+		TargetType.ANY_ACTOR:
+			if not source_actor:
+				push_error("Source actor expected")
+			else:
+				result = source_actor.map.actor_map.get_actor_on_cell(cell) \
+						!= null
+		TargetType.ENEMY:
+			if not source_actor:
+				push_error("Source actor expected")
+			else:
+				var actor_on_target \
+						:= source_actor.map.actor_map.get_actor_on_cell(cell)
+				result = actor_on_target \
+						and actor_on_target.is_hostile(source_actor)
+		TargetType.ALLY:
+			if not source_actor:
+				push_error("Source actor expected")
+			else:
+				var actor_on_target \
+						:= source_actor.map.actor_map.get_actor_on_cell(cell)
+				result = actor_on_target \
+						and not actor_on_target.is_hostile(source_actor)
 
+		TargetType.EMPTY:
+			result = source_actor.map.actor_map.get_actor_on_cell(cell) == null
+		TargetType.ENTERABLE:
+			if not source_actor:
+				push_error("Source actor expected")
+			else:
+				result = source_actor.map.actor_can_enter_cell(
+						source_actor, cell)
+
+	return result
+
+
+static func _target_rectangle(target_cell: Vector2i, target_type: TargetType,
+		source_actor: Actor) -> Rect2i:
+	var result := Rect2i(target_cell, Vector2i.ONE)
+	match target_type:
+		TargetType.ANY_ACTOR, TargetType.ENEMY, TargetType.ALLY:
+			var other_actor := source_actor.map.actor_map.get_actor_on_cell(
+					target_cell)
+			result.position = other_actor.origin_cell
+			result.size = Vector2i(other_actor.cell_size, other_actor.cell_size)
+		TargetType.ENTERABLE:
+			result.size = Vector2i(
+					source_actor.cell_size, source_actor.cell_size)
 	return result

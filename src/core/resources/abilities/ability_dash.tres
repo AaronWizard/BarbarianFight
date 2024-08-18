@@ -15,6 +15,9 @@ range_extend = 0
 use_source_size = false
 scale_extend = true
 target_type = 5
+movement_blocking_los = false
+actor_blocking = 0
+ignore_range_blocking = false
 
 [resource]
 script = ExtResource("1_gomvm")

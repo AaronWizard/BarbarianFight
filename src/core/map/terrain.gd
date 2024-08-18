@@ -6,10 +6,10 @@ const _PROPERTY_BLOCK_MOVE := "block_move"
 const _PROPERTY_BLOCK_SIGHT := "block_sight"
 const _PROPERTY_BLOCK_RANGED := "block_ranged"
 
-var _tilemap: TileMap
+var _tilemap: TileMapLayer
 
 
-func _init(tilemap: TileMap) -> void:
+func _init(tilemap: TileMapLayer) -> void:
 	_tilemap = tilemap
 
 
@@ -58,11 +58,7 @@ func _get_bool_property(cell: Vector2i, property: String,
 
 func _get_top_cell_tile_data(cell: Vector2i) -> TileData:
 	var result: TileData = null
-
-	for i in range(_tilemap.get_layers_count() - 1, -1, -1):
-		var base_data := _tilemap.get_cell_tile_data(0, cell)
-		if base_data:
-			result = base_data
-			break
-
+	var base_data := _tilemap.get_cell_tile_data(cell)
+	if base_data:
+		result = base_data
 	return result

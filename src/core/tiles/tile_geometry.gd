@@ -51,6 +51,8 @@ static func line(start: Vector2i, end: Vector2i) -> Array[Vector2i]:
 ## Uses [method TileGeometry.line]. If [code]line(start, end)[/code] has
 ## different results from [code]line(end, start)[/code], the result with the
 ## greater number of cells is returned.[br]
+## This does not check if [param start] and [param end] are themselves blocking
+## cells.[br]
 ## [code]is_blocking_cell_func(cell: Vector2i) -> bool[/code]: Return true if
 ## the cell is a blocking cell.
 static func unblocked_line(start: Vector2i, end: Vector2i,
@@ -70,6 +72,26 @@ static func unblocked_line(start: Vector2i, end: Vector2i,
 
 		if unblocked_line_end2start.size() > unblocked_line_start2end.size():
 			result = unblocked_line_end2start
+
+	return result
+
+
+## Returns true if an unblocked line exists between [param start_cell] and
+## [param end_cell], based on [method TileGeometry.unblocked_line].
+## [code]is_blocking_cell_func(cell: Vector2i) -> bool[/code]: Return true if
+## the cell is a blocking cell.
+static func unblocked_line_exists(
+		start_cell: Vector2i,
+		end_cell: Vector2i,
+		is_blocking_cell_func: Callable) -> bool:
+	var ln := TileGeometry.unblocked_line(start_cell, end_cell,
+			is_blocking_cell_func)
+	var line_end_cell := ln[ln.size() - 1]
+
+	var result := line_end_cell == end_cell
+	if result:
+		@warning_ignore("unsafe_cast")
+		result = not (is_blocking_cell_func.call(end_cell) as bool)
 
 	return result
 
@@ -189,30 +211,17 @@ static func cells_in_range(source_rect: Rect2i, range_start_dist: int,
 	return result
 
 
-## Find the vector in [param cells] that is closest in distance to
-## [param target].
-static func closest_cell_to_target(cells: Array[Vector2i], target: Vector2i) \
-		-> Vector2i:
-	var result: Vector2i
-	var min_distance_sqr := -1
-
-	for c in cells:
-		var current_distance_sqr := (target - c).length_squared()
-		if (min_distance_sqr < 0) or (current_distance_sqr < min_distance_sqr):
-			result = c
-			min_distance_sqr = current_distance_sqr
-			if min_distance_sqr == 0:
-				break
-
-	return result
-
-
 static func _unblocked_line_from_line(ln: Array[Vector2i],
 		is_blocking_cell_func: Callable) -> Array[Vector2i]:
 	var result: Array[Vector2i] = []
+
+	var line_start := ln[0]
+	var line_end := ln[ln.size() - 1]
+
 	for cell in ln:
 		result.append(cell)
-		if (cell != ln[0]) and (cell != ln[ln.size() - 1]):
+		if (cell != line_start) and (cell != line_end):
+			@warning_ignore("unsafe_cast")
 			var is_blocking := is_blocking_cell_func.call(cell) as bool
 			if is_blocking:
 				break

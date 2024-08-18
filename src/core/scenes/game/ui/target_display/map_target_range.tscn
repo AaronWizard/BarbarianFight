@@ -3,10 +3,13 @@
 [ext_resource type="TileSet" uid="uid://b7i61d7sctvbv" path="res://src/core/scenes/game/ui/target_display/map_target_range_tileset.tres" id="1_k6cdp"]
 [ext_resource type="Script" path="res://src/core/scenes/game/ui/target_display/map_target_range.gd" id="2_g8pq4"]
 
-[node name="MapTargetRange" type="TileMap"]
-tile_set = ExtResource("1_k6cdp")
-format = 2
-layer_0/name = "target_range"
-layer_1/name = "valid_targets"
-layer_1/tile_data = PackedInt32Array()
+[node name="MapTargetRange" type="Node2D"]
 script = ExtResource("2_g8pq4")
+
+[node name="TargetRange" type="TileMapLayer" parent="."]
+use_parent_material = true
+tile_set = ExtResource("1_k6cdp")
+
+[node name="ValidTargets" type="TileMapLayer" parent="."]
+use_parent_material = true
+tile_set = ExtResource("1_k6cdp")

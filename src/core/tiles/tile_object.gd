@@ -91,10 +91,10 @@ var covered_cells: Array[Vector2i]:
 		return covered_cells_at_cell(origin_cell)
 
 
-## A [Square] matching the position and size in cells of the tile object.
-var square: Square:
+## A [Rect2i] matching the position and size in cells of the tile object.
+var rect: Rect2i:
 	get:
-		return Square.new(origin_cell, cell_size)
+		return TileObject.object_rect(origin_cell, cell_size)
 
 
 func _draw() -> void:
@@ -131,7 +131,7 @@ static func object_rect( \
 
 ## Returns true if the tile object covers [param cell], false otherwise.
 func covers_cell(cell: Vector2i) -> bool:
-	return square.rect.has_point(cell)
+	return rect.has_point(cell)
 
 
 ## The cells the tile object would cover if its origin_cell was [param cell].

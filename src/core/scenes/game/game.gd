@@ -20,14 +20,17 @@ var _current_map: Map:
 
 
 @onready var _map_container := $MapContainer
-@onready var _target_display := $TargetDisplay as TargetDisplay
 
 @onready var _turn_clock := $TurnClock as TurnClock
-@onready var _boss_tracker := $BossTracker as BossTracker
 
 @onready var _player_camera := $PlayerCamera as PlayerCamera
 @onready var _game_gui := $GameGUI as GameGUI
-@onready var _player_input := $PlayerInput as PlayerInput
+@onready var _boss_tracker := $BossTracker as BossTracker
+
+@onready var _state_machine := $PlayerStateMachine as StateMachine
+@onready var _player_movement_state := $PlayerStateMachine/PlayerMovementState \
+		as PlayerMovementState
+
 
 @onready var _screen_fade := $ScreenFade as ScreenFade
 
@@ -49,7 +52,6 @@ func _init_player() -> void:
 	_player_actor.stamina.died.connect(_on_player_died)
 
 	_boss_tracker.player = _player_actor
-	_player_input.set_player_actor(_player_actor)
 
 	_player_actor.sprite.remote_transform.remote_path \
 			= _player_camera.get_path()
@@ -89,10 +91,13 @@ func _on_player_actor_turn_started() -> void:
 
 	if _current_map.animations_playing:
 		await _current_map.animations_finished
-	_player_input.start_turn()
+
+	_state_machine.change_state(
+			_player_movement_state, {player = _player_actor})
 
 
-func _on_player_input_action_chosen(turn_action: TurnAction) -> void:
+func _on_player_action_state_player_action_chosen(turn_action: TurnAction) \
+		-> void:
 	_player_actor.do_turn_action(turn_action)
 
 
@@ -113,17 +118,3 @@ func _on_boss_tracker_boss_tracked(boss: Actor) -> void:
 
 func _on_boss_tracker_boss_untracked() -> void:
 	_game_gui.hide_boss_bar()
-
-
-func _on_player_input_show_target_range(
-		visible_range: Array[Vector2i], selectable_cells: Array[Vector2i],
-		start_target: Square) -> void:
-	_target_display.show_range(visible_range, selectable_cells, start_target)
-
-
-func _on_player_input_target_changed(new_target: Square) -> void:
-	_target_display.set_target(new_target)
-
-
-func _on_player_input_hide_target_range() -> void:
-	_target_display.clear()

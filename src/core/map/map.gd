@@ -53,7 +53,7 @@ var _terrain: Terrain
 var _turn_clock: TurnClock
 var _anim_tracker: MapAnimTracker
 
-@onready var _terrain_tilemap := $Terrain as TileMap
+@onready var _terrain_tilemap := $Terrain as TileMapLayer
 
 
 func _ready() -> void:

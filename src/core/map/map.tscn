@@ -9,10 +9,9 @@
 script = ExtResource("1_wmjs2")
 metadata/_edit_lock_ = true
 
-[node name="Terrain" type="TileMap" parent="."]
+[node name="Terrain" type="TileMapLayer" parent="."]
+use_parent_material = true
 tile_set = ExtResource("2_let0g")
-format = 2
-metadata/_edit_lock_ = true
 
 [node name="ActorMap" type="Node2D" parent="."]
 y_sort_enabled = true

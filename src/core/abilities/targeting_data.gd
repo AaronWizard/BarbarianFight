@@ -1,5 +1,4 @@
 class_name TargetingData
-extends Node
 
 ## A class representing the valid targets of an actor's ability.
 ##
@@ -8,21 +7,28 @@ extends Node
 ## selected for an ability, or they may be the targets returned by an
 ## [AreaOfEffect] where they will all be affected by the ability.[br][br]
 ##
-## TargetRangeData has three components:[br]
-## - A list of [Square] objects representing the actual targets.[br]
-## - A list of [Vector2i] cells representing the target/AOE range shown to the
-## player.[br]
-## - A list of [Vector2i] cells representing the cells the player may select.
-## These are mapped to a corresponding target.
+## Each target is represented by a [Rect2i]. Only the position of a target
+## rectangle is needed to use as an ability or AOE target. The size is meant for
+## display to the player. For example, for an ability that targets actors a
+## target rectangle's position would be an actor's origin cell while the size
+## would be the actor's size. Here the target rectangle's position is used for
+## the ability itself while its size is used for sizing the target graphic when
+## an actor is selected as a target. All cells covered by a target rectangle
+## map to the rectangle's position for the purposes of ability or AOE
+## targetting.[br][br]
+##
+## TargetingData also has the cells representing the target/AOE range shown to
+## the player. Within this range is a set of selectable cells, which each map to
+## a target. These are based on the cells covered by the target rectangles.
 
 
 ## The true target squares within the target/AOE range.
-var targets: Array[Square]:
+var targets: Array[Rect2i]:
 	get:
-		var result: Array[Square] = []
+		var result: Array[Rect2i] = []
 
 		## I really wish Godot had typed dictionaries.
-		var all_targets: Array[Square] = []
+		var all_targets: Array[Rect2i] = []
 		all_targets.assign(_targets_by_selectable_cell.values())
 		for target in all_targets:
 			if not target in result:
@@ -47,18 +53,18 @@ var selectable_cells: Array[Vector2i]:
 
 # The cells highlighted for the player representing the target/AOE range.
 var _visible_range: Array[Vector2i]
-# A dictionary of (Vector2i: Square) pairs. The keys are cells the player may
+# A dictionary of (Vector2i: Rect2i) pairs. The keys are cells the player may
 # select, while the values are the corresponding target squares.
 var _targets_by_selectable_cell: Dictionary
 
 
-func _init(new_visible_range: Array[Vector2i], new_targets: Array[Square]) \
+func _init(new_visible_range: Array[Vector2i], new_targets: Array[Rect2i]) \
 		-> void:
 	_visible_range = new_visible_range
 
 	_targets_by_selectable_cell = {}
 	for target in new_targets:
-		var target_cells := TileGeometry.cells_in_rect(target.rect)
+		var target_cells := TileGeometry.cells_in_rect(target)
 		for cell in target_cells:
 			if cell in _visible_range:
 				_targets_by_selectable_cell[cell] = target
@@ -68,6 +74,6 @@ func _init(new_visible_range: Array[Vector2i], new_targets: Array[Square]) \
 
 
 ## The target at the selected cell.
-func target_at_selected_cell(selected_cell: Vector2i) -> Square:
+func target_at_selected_cell(selected_cell: Vector2i) -> Rect2i:
 	@warning_ignore("unsafe_cast")
-	return _targets_by_selectable_cell[selected_cell] as Square
+	return _targets_by_selectable_cell[selected_cell] as Rect2i
