@@ -35,7 +35,8 @@ func run() -> void:
 		var direction := _target_cell - _target_actor.origin_cell
 
 		_target_actor.sprite.attack(direction)
-		await _target_actor.sprite.attack_anim_hit
+		if _target_actor.sprite.animation_playing:
+			await _target_actor.sprite.attack_anim_hit
 
 		hit_actor.stamina.current_stamina -= _target_actor.definition.attack
 		if hit_actor.stamina.is_alive:
