@@ -176,7 +176,6 @@ _data = {
 }
 
 [node name="ActorSprite" type="Node2D"]
-position = Vector2(0, 16)
 script = ExtResource("1_yow33")
 
 [node name="SpriteOrigin" type="Node2D" parent="."]

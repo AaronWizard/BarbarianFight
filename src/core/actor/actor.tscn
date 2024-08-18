@@ -16,8 +16,6 @@ position = Vector2(0, 16)
 script = ExtResource("1_vwlen")
 
 [node name="ActorSprite" parent="." instance=ExtResource("2_shvgh")]
-position = Vector2(0, 0)
-origin_cell = Vector2i(0, -1)
 metadata/_edit_lock_ = true
 
 [node name="Sprite" parent="ActorSprite/SpriteOrigin/SpritePivot" index="0"]

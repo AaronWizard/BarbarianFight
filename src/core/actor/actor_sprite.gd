@@ -1,6 +1,6 @@
 @tool
 class_name ActorSprite
-extends TileObject
+extends Node2D
 
 ## An actor's sprite.
 ##
@@ -20,6 +20,18 @@ const _ANIM_ATTACK := "attack"
 const _ANIM_HIT_NO_DIRECTION := "hit_no_direction"
 const _ANIM_HIT_DIRECTION := "hit_from_direction"
 const _ANIM_DIE := "die"
+
+
+@export var tile_size := Vector2i(16, 16):
+	set(value):
+		tile_size = value
+		_update_sprite_origin()
+
+
+@export_range(1, 1, 1, "or_greater") var cell_size := 1:
+	set(value):
+		cell_size = value
+		_update_sprite_origin()
 
 
 ## The offset direction of the sprite from the center. Measured in tiles. Always
@@ -52,8 +64,9 @@ var remote_transform: RemoteTransform2D:
 
 var _animation_playing := false
 
-
+# Keep the sprite's origin at the center of the parent actor.
 @onready var _sprite_origin := $SpriteOrigin as Node2D
+# Position the sprite itself.
 @onready var _sprite_pivot := $SpriteOrigin/SpritePivot as Node2D
 
 @onready var _animation_player := $AnimationPlayer as AnimationPlayer
