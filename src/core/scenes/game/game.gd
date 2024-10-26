@@ -102,8 +102,7 @@ func _on_player_action_state_player_action_chosen(turn_action: TurnAction) \
 
 
 func _on_player_died() -> void:
-	if _player_actor.sprite.animation_playing:
-		await _player_actor.sprite.animation_finished
+	await _player_actor.sprite.wait_for_animation()
 
 	_turn_clock.running = false
 	await get_tree().create_timer(0.5).timeout # Dramatic pause!

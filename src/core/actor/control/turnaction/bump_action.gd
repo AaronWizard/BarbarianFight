@@ -32,23 +32,23 @@ func run() -> void:
 		var hit_actor := _target_actor.map.actor_map.get_actor_on_cell(
 				_target_cell)
 
-		var direction := _target_cell - _target_actor.origin_cell
+		#var direction := _target_cell - _target_actor.origin_cell
 
-		_target_actor.sprite.attack(direction)
-		if _target_actor.sprite.animation_playing:
-			await _target_actor.sprite.attack_anim_hit
+		#_target_actor.sprite.attack(direction)
+		#if _target_actor.sprite.animation_playing:
+			#await _target_actor.sprite.attack_anim_hit
 
 		hit_actor.stamina.current_stamina -= _target_actor.definition.attack
 		if hit_actor.stamina.is_alive:
-			hit_actor.sprite.hit(direction)
-			await hit_actor.sprite.animation_finished
+			pass
+			#hit_actor.sprite.hit(direction)
+			#await hit_actor.sprite.animation_finished
 		else:
-			hit_actor.sprite.die(direction)
-			await hit_actor.sprite.animation_finished
+			#hit_actor.sprite.die(direction)
+			#await hit_actor.sprite.animation_finished
 			hit_actor.map.remove_actor(hit_actor)
 
-		if _target_actor.sprite.animation_playing:
-			await _target_actor.sprite.animation_finished
+		await _target_actor.sprite.wait_for_animation()
 
 
 static func is_possible(target_actor: Actor, target_cell: Vector2i) -> bool:

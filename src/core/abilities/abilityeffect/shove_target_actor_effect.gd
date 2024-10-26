@@ -21,14 +21,14 @@ func apply(target: Vector2i, _source: Rect2i, source_actor: Actor) -> void:
 			source_actor.rect, target)
 
 	var shove_cell := _shove_destination(target_actor, direction)
-	var diff := target_actor.origin_cell - shove_cell
-	var distance := diff.length()
+	#var diff := target_actor.origin_cell - shove_cell
+	#var distance := diff.length()
 
 	target_actor.origin_cell = shove_cell
-	target_actor.sprite.sprite_offset_dir = diff
-	target_actor.sprite.sprite_offset_distance = distance
+	#target_actor.sprite.sprite_offset_dir = diff
+	#target_actor.sprite.sprite_offset_distance = distance
 
-	await _move_with_no_collision(target_actor, distance)
+	#await _move_with_no_collision(target_actor, distance)
 	#if distance < max_distance:
 		#await _move_with_collision(target_actor, distance)
 	#else:
@@ -52,14 +52,14 @@ func _shove_destination(actor: Actor, direction: Vector2i) -> Vector2i:
 	#pass
 
 
-func _move_with_no_collision(actor: Actor, distance: float) -> void:
-	var tween := actor.sprite.create_tween()
-	@warning_ignore("return_value_discarded")
-	tween.set_ease(Tween.EASE_OUT)
-	@warning_ignore("return_value_discarded")
-	tween.set_trans(Tween.TRANS_QUAD)
-	@warning_ignore("return_value_discarded")
-	tween.tween_property(actor.sprite, "sprite_offset_distance", 0,
-			distance / _SPEED)
-	if tween.is_running():
-		await tween.finished
+#func _move_with_no_collision(actor: Actor, distance: float) -> void:
+	#var tween := actor.sprite.create_tween()
+	#@warning_ignore("return_value_discarded")
+	#tween.set_ease(Tween.EASE_OUT)
+	#@warning_ignore("return_value_discarded")
+	#tween.set_trans(Tween.TRANS_QUAD)
+	#@warning_ignore("return_value_discarded")
+	#tween.tween_property(actor.sprite, "sprite_offset_distance", 0,
+			#distance / _SPEED)
+	#if tween.is_running():
+		#await tween.finished
