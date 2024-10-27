@@ -133,9 +133,9 @@ func do_turn_action(action: TurnAction) -> void:
 ## Move to [param target_cell] with a walk/step animation.[br]
 ## Assumes [param target_cell] is adjacent to the actor's origin_cell.
 func move_step(target_cell: Vector2i) -> void:
-	var anim_target_cell := target_cell - origin_cell
+	var target_vector := target_cell - origin_cell
 	origin_cell = target_cell
-	await sprite.move_step(anim_target_cell)
+	await sprite.move_step(target_vector)
 
 
 func _tile_size_changed(_old_size: Vector2i) -> void:

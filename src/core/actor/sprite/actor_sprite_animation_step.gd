@@ -55,11 +55,11 @@ enum TimeType {
 
 
 ## Animates an actor's sprite. Returns [member step_name] when finished.[br]
-## [param target_cell] is relative to the actor's origin cell. [param tile_size]
+## [param target_vector] is relative to the actor's origin cell. [param tile_size]
 ## is in pixels.
-func animate(sprite: Sprite2D, target_cell: Vector2, tile_size: Vector2i) \
+func animate(sprite: Sprite2D, target_vector: Vector2, tile_size: Vector2i) \
 		-> String:
-	var final_cell_position := _get_final_cell_position(target_cell)
+	var final_cell_position := _get_final_cell_position(target_vector)
 	var final_pixel_position := final_cell_position * Vector2(tile_size)
 
 	var final_duration := _get_final_duration(
@@ -84,9 +84,9 @@ func animate(sprite: Sprite2D, target_cell: Vector2, tile_size: Vector2i) \
 	return step_name
 
 
-func _get_final_cell_position(target_cell: Vector2) -> Vector2:
-	var interpolated_position := target_cell * interpolated_distance
-	var cell_position := target_cell.normalized() * cell_distance
+func _get_final_cell_position(target_vector: Vector2) -> Vector2:
+	var interpolated_position := target_vector * interpolated_distance
+	var cell_position := target_vector.normalized() * cell_distance
 	return interpolated_position + cell_position
 
 
