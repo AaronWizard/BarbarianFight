@@ -1,0 +1,8 @@
+[gd_resource type="Resource" script_class="ActorSpriteAnimation" load_steps=3 format=3 uid="uid://cvhl2dgih1bqd"]
+
+[ext_resource type="Script" path="res://src/core/actor/actor_sprite_animation.gd" id="1_6542q"]
+[ext_resource type="Script" path="res://src/core/actor/actor_sprite_animation_step.gd" id="2_qecc5"]
+
+[resource]
+script = ExtResource("1_6542q")
+steps = Array[ExtResource("2_qecc5")]([])

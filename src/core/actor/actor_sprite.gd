@@ -28,6 +28,19 @@ signal animation_finished
 		_update_sprite_origin()
 
 
+## The animation for movement.
+@export var anim_move: ActorSpriteAnimation
+
+## The animation for attacks.
+@export var anim_attack: ActorSpriteAnimation
+
+## The animation for getting hit.
+@export var anim_hit: ActorSpriteAnimation
+
+## The animation for dying.
+@export var anim_death: ActorSpriteAnimation
+
+
 ## A [RemoteTransform2D] attached to the sprite.
 var remote_transform: RemoteTransform2D:
 	get:

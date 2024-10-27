@@ -1,0 +1,50 @@
+class_name ActorSpriteAnimationStep
+extends Resource
+
+## A single step of an animation for an actor sprite.
+##
+## A single step of an animation for an actor sprite. Describes a position to
+## move the sprite to, which is relative to the actor's origin cell and a
+## target cell.
+
+## Sets whether the sprite moves at a constant speed or if the animation runs
+## for a constant duration.
+enum TimeType {
+	## The sprite moves from its original position to the step's new position
+	## at a certain speed.[br]
+	## Measured in cells per second.
+	SPEED,
+	## The animation lasts for a set duration, regardless of distance between
+	## the sprite's current position and the step's new position.[br]
+	## Measured in seconds.
+	DURATION
+}
+
+## Positions the sprite at the interpolated point between the actor's origin
+## cell and the animation's target cell. e.g. If this value is 0.5, the sprite
+## is moved to halfway between the actor's origin cell and the target cell. Can
+## be negative.[br]
+## Combined with [member ActorSpriteAnimationStep.cell_distance].
+@export var interpolated_distance := 0.0
+
+## Positions the sprite along the vector from the actor's origin cell to the
+## animation's target cell, at this value away from the origin cell. e.g. If
+## this value is 2, the sprite is moved to a position along the vector 2 cells
+## away from the actor's origin cell. Measured in cells. Can be negative.[br]
+## Combined with [member ActorSpriteAnimationStep.interpolated_distance].
+@export var cell_distance := 0.0
+
+## The amount of time it takes to move the sprite from its current position to
+## the step's new position. If this is zero, the sprite's position is updated
+## instantly.
+@export var time := 0.0
+
+## Sets whether the sprite moves at a constant speed or if the animation runs
+## for a constant duration.
+@export var time_type := TimeType.DURATION
+
+## The animation's transition type.
+@export var trans_type := Tween.TRANS_LINEAR
+
+## The animation's easing type.
+@export var ease_type := Tween.EASE_IN_OUT
