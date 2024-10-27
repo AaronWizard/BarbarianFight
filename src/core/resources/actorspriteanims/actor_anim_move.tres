@@ -6,8 +6,8 @@
 [sub_resource type="Resource" id="Resource_a8o7k"]
 script = ExtResource("2_ui0na")
 step_name = ""
-interpolated_distance = 0.0
-cell_distance = -1.0
+interpolated_distance = -1.0
+cell_distance = 0.0
 speed_or_duration = 0.0
 time_type = 1
 trans_type = 0
