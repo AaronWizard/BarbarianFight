@@ -68,12 +68,19 @@ func play_animation(target_cell: Vector2i, anim: ActorSpriteAnimation) -> void:
 	_animation_playing = true
 	animation_started.emit()
 
-	anim.animate(_sprite, target_cell, tile_size)
+	await anim.animate(_sprite, target_cell, tile_size)
 
 	_animation_playing = false
 	animation_finished.emit()
 
 
+## Animates an actor moving to an adjacent cell. [param target_cell] is relative
+## to the actor's initial origin cell before moving to the new cell.
+func move_step(target_cell: Vector2i) -> void:
+	await play_animation(target_cell, anim_move)
+
+
+## If the actor is playing an animation, waits for the animation to finish.
 func wait_for_animation() -> void:
 	if animation_playing:
 		await animation_finished
