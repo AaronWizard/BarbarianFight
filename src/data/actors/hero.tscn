@@ -14,7 +14,7 @@ name = "Hero"
 stats_file = "res://assets/data/actor_stats.csv"
 stats_name = "hero"
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_jskeg"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_xipor"]
 resource_local_to_scene = true
 shader = ExtResource("3_yrqlt")
 shader_parameter/dissolve = 0.0
@@ -26,8 +26,8 @@ player_controlled = true
 faction = 1
 abilities = Array[ExtResource("3_ydc34")]([ExtResource("3_vnywx"), ExtResource("4_63tb4")])
 
-[node name="Sprite" parent="ActorSprite/SpriteOrigin/SpritePivot" index="0"]
-material = SubResource("ShaderMaterial_jskeg")
+[node name="Sprite" parent="ActorSprite/SpriteOrigin" index="0"]
+material = SubResource("ShaderMaterial_xipor")
 texture = ExtResource("2_gsry7")
 
 [editable path="ActorSprite"]

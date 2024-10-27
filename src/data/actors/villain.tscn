@@ -11,7 +11,7 @@ name = "Villain"
 stats_file = "res://assets/data/actor_stats.csv"
 stats_name = "villain"
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_s6qbj"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_65gi6"]
 resource_local_to_scene = true
 shader = ExtResource("4_rftw8")
 shader_parameter/dissolve = 0.0
@@ -21,7 +21,7 @@ actor_name = "Thargor"
 definition = SubResource("Resource_3b2c0")
 ai_scene = ExtResource("3_yjkef")
 
-[node name="Sprite" parent="ActorSprite/SpriteOrigin/SpritePivot" index="0"]
-material = SubResource("ShaderMaterial_s6qbj")
+[node name="Sprite" parent="ActorSprite/SpriteOrigin" index="0"]
+material = SubResource("ShaderMaterial_65gi6")
 
 [editable path="ActorSprite"]

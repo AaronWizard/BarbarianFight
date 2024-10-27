@@ -3,8 +3,8 @@ extends AbilityEffect
 
 ## Moves the source actor to the target cell.
 
-## Speed in tiles per second
-@export var speed := 8.0
+## The animation the source actor's sprite plays for the dash.
+@export var move_animation: ActorSpriteAnimation
 
 
 func apply(target: Vector2i, _source: Rect2i, source_actor: Actor) -> void:
@@ -13,20 +13,7 @@ func apply(target: Vector2i, _source: Rect2i, source_actor: Actor) -> void:
 				% [source_actor, target])
 		return
 
-	var diff := source_actor.origin_cell - target
-	var distance := diff.length()
+	var diff := target - source_actor.origin_cell
 
 	source_actor.origin_cell = target
-	source_actor.sprite.sprite_offset_dir = diff
-	source_actor.sprite.sprite_offset_distance = distance
-
-	var tween := source_actor.sprite.create_tween()
-	@warning_ignore("return_value_discarded")
-	tween.set_ease(Tween.EASE_OUT)
-	@warning_ignore("return_value_discarded")
-	tween.set_trans(Tween.TRANS_QUAD)
-	@warning_ignore("return_value_discarded")
-	tween.tween_property(source_actor.sprite, "sprite_offset_distance", 0,
-			distance / speed)
-	if tween.is_running():
-		await tween.finished
+	await source_actor.sprite.play_animation(diff, move_animation)

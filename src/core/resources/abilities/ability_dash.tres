@@ -1,12 +1,38 @@
-[gd_resource type="Resource" script_class="Ability" load_steps=6 format=3 uid="uid://daoqfsm7y6lck"]
+[gd_resource type="Resource" script_class="Ability" load_steps=11 format=3 uid="uid://daoqfsm7y6lck"]
 
 [ext_resource type="Script" path="res://src/core/abilities/abilityeffect/move_source_actor_to_target_effect.gd" id="1_8sbro"]
+[ext_resource type="Script" path="res://src/core/actor/sprite/actor_sprite_animation.gd" id="1_fgmxa"]
 [ext_resource type="Script" path="res://src/core/abilities/ability.gd" id="1_gomvm"]
+[ext_resource type="Script" path="res://src/core/actor/sprite/actor_sprite_animation_step.gd" id="2_dhy46"]
 [ext_resource type="Script" path="res://src/core/abilities/targetrange/area_target_range.gd" id="2_ffjsm"]
+
+[sub_resource type="Resource" id="Resource_egx4j"]
+script = ExtResource("2_dhy46")
+step_name = ""
+interpolated_distance = -1.0
+cell_distance = 0.0
+speed_or_duration = 0.0
+time_type = 1
+trans_type = 0
+ease_type = 2
+
+[sub_resource type="Resource" id="Resource_1p75n"]
+script = ExtResource("2_dhy46")
+step_name = ""
+interpolated_distance = 0.0
+cell_distance = 0.0
+speed_or_duration = 8.0
+time_type = 0
+trans_type = 4
+ease_type = 1
+
+[sub_resource type="Resource" id="Resource_8bd5n"]
+script = ExtResource("1_fgmxa")
+steps = Array[ExtResource("2_dhy46")]([SubResource("Resource_egx4j"), SubResource("Resource_1p75n")])
 
 [sub_resource type="Resource" id="Resource_hma5d"]
 script = ExtResource("1_8sbro")
-speed = 8.0
+move_animation = SubResource("Resource_8bd5n")
 
 [sub_resource type="Resource" id="Resource_08u2x"]
 script = ExtResource("2_ffjsm")

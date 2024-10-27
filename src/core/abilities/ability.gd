@@ -31,5 +31,4 @@ func perform(target: Vector2i, source_actor: Actor) -> void:
 	@warning_ignore("redundant_await")
 	await effect.apply(target, source_actor.rect, source_actor)
 
-	if source_actor.sprite.animation_playing:
-		await source_actor.sprite.animation_finished
+	await source_actor.sprite.wait_for_animation()

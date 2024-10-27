@@ -40,15 +40,13 @@ func run() -> void:
 
 		hit_actor.stamina.current_stamina -= _target_actor.definition.attack
 		if hit_actor.stamina.is_alive:
-			hit_actor.sprite.hit(direction)
-			await hit_actor.sprite.animation_finished
+			await hit_actor.sprite.hit(direction)
 		else:
 			hit_actor.sprite.die(direction)
 			await hit_actor.sprite.animation_finished
 			hit_actor.map.remove_actor(hit_actor)
 
-		if _target_actor.sprite.animation_playing:
-			await _target_actor.sprite.animation_finished
+		await _target_actor.sprite.wait_for_animation()
 
 
 static func is_possible(target_actor: Actor, target_cell: Vector2i) -> bool:
