@@ -21,7 +21,7 @@ enum TimeType {
 	DURATION
 }
 
-## The name of the step. This is the return value of [method animate].
+## The name of the step.
 @export var step_name: String
 
 ## Positions the sprite at the interpolated point between the actor's origin
@@ -54,11 +54,11 @@ enum TimeType {
 @export var ease_type := Tween.EASE_IN_OUT
 
 
-## Animates an actor's sprite. Returns [member step_name] when finished.[br]
-## [param target_vector] is relative to the actor's origin cell. [param tile_size]
-## is in pixels.
+## Animates an actor's sprite.[br]
+## [param target_vector] is relative to the actor's origin cell.
+## [param tile_size] is in pixels.
 func animate(sprite: Sprite2D, target_vector: Vector2, tile_size: Vector2i) \
-		-> String:
+		-> void:
 	var final_cell_position := _get_final_cell_position(target_vector)
 	var final_pixel_position := final_cell_position * Vector2(tile_size)
 
@@ -80,8 +80,6 @@ func animate(sprite: Sprite2D, target_vector: Vector2, tile_size: Vector2i) \
 
 		if tween.is_running():
 			await tween.finished
-
-	return step_name
 
 
 func _get_final_cell_position(target_vector: Vector2) -> Vector2:

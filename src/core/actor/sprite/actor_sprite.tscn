@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3 uid="uid://c5r8su0ki15l8"]
+[gd_scene load_steps=9 format=3 uid="uid://c5r8su0ki15l8"]
 
 [ext_resource type="Script" path="res://src/core/actor/sprite/actor_sprite.gd" id="1_yow33"]
 [ext_resource type="Resource" uid="uid://dam8k6v3x01qj" path="res://src/core/resources/actorspriteanims/actor_anim_move.tres" id="2_7bvns"]
@@ -7,11 +7,13 @@
 [ext_resource type="Resource" uid="uid://cvhl2dgih1bqd" path="res://src/core/resources/actorspriteanims/actor_anim_attack.tres" id="3_q8n65"]
 [ext_resource type="Resource" uid="uid://dcudtw352s8vb" path="res://src/core/resources/actorspriteanims/actor_anim_hit.tres" id="4_jdgnq"]
 [ext_resource type="Resource" uid="uid://cwavf031lqbb3" path="res://src/core/resources/actorspriteanims/actor_anim_death.tres" id="5_ivtuu"]
+[ext_resource type="Script" path="res://src/core/actor/sprite/actor_sprite_animation_player.gd" id="8_6tdw4"]
 
 [node name="ActorSprite" type="Node2D"]
 script = ExtResource("1_yow33")
 anim_move = ExtResource("2_7bvns")
 anim_attack = ExtResource("3_q8n65")
+anim_attack_hit_step_name = "attack_hit"
 anim_hit = ExtResource("4_jdgnq")
 anim_death = ExtResource("5_ivtuu")
 metadata/_edit_lock_ = true
@@ -27,3 +29,8 @@ metadata/_edit_lock_ = true
 
 [node name="RemoteTransform2D" type="RemoteTransform2D" parent="SpriteOrigin/Sprite"]
 metadata/_edit_lock_ = true
+
+[node name="ActorSpriteAnimationPlayer" type="Node" parent="."]
+script = ExtResource("8_6tdw4")
+
+[connection signal="named_step_finished" from="ActorSpriteAnimationPlayer" to="." method="_on_actor_sprite_animation_player_named_step_finished"]
