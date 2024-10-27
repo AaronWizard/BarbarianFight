@@ -28,14 +28,16 @@ func apply(target: Vector2i, _source: Rect2i, source_actor: Actor) -> void:
 			source_actor.rect, target)
 
 	var shove_cell := _shove_destination(target_actor, direction)
-	var diff := shove_cell - target_actor.origin_cell
-
-	target_actor.origin_cell = shove_cell
-
-	if diff.length_squared() < (max_distance * max_distance):
-		pass
+	if shove_cell == target_actor.origin_cell:
+		await target_actor.sprite.hit(direction)
 	else:
-		await target_actor.sprite.play_animation(diff, anim_shove_no_collision)
+		var diff := shove_cell - target_actor.origin_cell
+		target_actor.origin_cell = shove_cell
+		if diff.length_squared() < (max_distance * max_distance):
+			await target_actor.sprite.play_animation(diff, anim_shove_collision)
+		else:
+			await target_actor.sprite.play_animation(
+					diff, anim_shove_no_collision)
 
 	await source_actor.get_tree().create_timer(_END_TIME).timeout
 

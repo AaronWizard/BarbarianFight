@@ -1,10 +1,44 @@
-[gd_resource type="Resource" script_class="Ability" load_steps=11 format=3 uid="uid://c88rjluqia4f8"]
+[gd_resource type="Resource" script_class="Ability" load_steps=15 format=3 uid="uid://c88rjluqia4f8"]
 
 [ext_resource type="Script" path="res://src/core/actor/sprite/actor_sprite_animation.gd" id="1_ka5mg"]
 [ext_resource type="Script" path="res://src/core/abilities/abilityeffect/shove_target_actor_effect.gd" id="1_pjawo"]
 [ext_resource type="Script" path="res://src/core/abilities/ability.gd" id="1_robij"]
 [ext_resource type="Script" path="res://src/core/abilities/targetrange/area_target_range.gd" id="2_4tele"]
 [ext_resource type="Script" path="res://src/core/actor/sprite/actor_sprite_animation_step.gd" id="2_hk5wb"]
+
+[sub_resource type="Resource" id="Resource_fr586"]
+script = ExtResource("2_hk5wb")
+step_name = "shove_collision_0"
+interpolated_distance = -1.0
+cell_distance = 0.0
+speed_or_duration = 0.0
+time_type = 1
+trans_type = 0
+ease_type = 2
+
+[sub_resource type="Resource" id="Resource_yku2x"]
+script = ExtResource("2_hk5wb")
+step_name = "shove_collision_1"
+interpolated_distance = 0.0
+cell_distance = 0.5
+speed_or_duration = 8.0
+time_type = 0
+trans_type = 4
+ease_type = 1
+
+[sub_resource type="Resource" id="Resource_c3o1m"]
+script = ExtResource("2_hk5wb")
+step_name = "shove_collision_2"
+interpolated_distance = 0.0
+cell_distance = 0.0
+speed_or_duration = 0.1
+time_type = 1
+trans_type = 0
+ease_type = 1
+
+[sub_resource type="Resource" id="Resource_y305w"]
+script = ExtResource("1_ka5mg")
+steps = Array[ExtResource("2_hk5wb")]([SubResource("Resource_fr586"), SubResource("Resource_yku2x"), SubResource("Resource_c3o1m")])
 
 [sub_resource type="Resource" id="Resource_05otb"]
 script = ExtResource("2_hk5wb")
@@ -34,6 +68,7 @@ steps = Array[ExtResource("2_hk5wb")]([SubResource("Resource_05otb"), SubResourc
 script = ExtResource("1_pjawo")
 max_distance = 1
 anim_shove_no_collision = SubResource("Resource_hkg8j")
+anim_shove_collision = SubResource("Resource_y305w")
 
 [sub_resource type="Resource" id="Resource_28nt6"]
 script = ExtResource("2_4tele")
