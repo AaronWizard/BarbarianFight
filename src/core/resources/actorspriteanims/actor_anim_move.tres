@@ -1,7 +1,7 @@
 [gd_resource type="Resource" script_class="ActorSpriteAnimation" load_steps=5 format=3 uid="uid://dam8k6v3x01qj"]
 
-[ext_resource type="Script" path="res://src/core/actor/actor_sprite_animation.gd" id="1_7lhel"]
-[ext_resource type="Script" path="res://src/core/actor/actor_sprite_animation_step.gd" id="2_ui0na"]
+[ext_resource type="Script" path="res://src/core/actor/sprite/actor_sprite_animation.gd" id="1_7lhel"]
+[ext_resource type="Script" path="res://src/core/actor/sprite/actor_sprite_animation_step.gd" id="2_ui0na"]
 
 [sub_resource type="Resource" id="Resource_a8o7k"]
 script = ExtResource("2_ui0na")

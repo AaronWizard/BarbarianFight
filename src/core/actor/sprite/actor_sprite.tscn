@@ -1,6 +1,6 @@
 [gd_scene load_steps=8 format=3 uid="uid://c5r8su0ki15l8"]
 
-[ext_resource type="Script" path="res://src/core/actor/actor_sprite.gd" id="1_yow33"]
+[ext_resource type="Script" path="res://src/core/actor/sprite/actor_sprite.gd" id="1_yow33"]
 [ext_resource type="Resource" uid="uid://dam8k6v3x01qj" path="res://src/core/resources/actorspriteanims/actor_anim_move.tres" id="2_7bvns"]
 [ext_resource type="Material" uid="uid://cw10xhc1nbh0" path="res://src/core/shaders/material_actor_sprite.tres" id="2_aphjf"]
 [ext_resource type="Texture2D" uid="uid://cmfwm1033edy1" path="res://assets/graphics/actors/villain.png" id="2_m070q"]

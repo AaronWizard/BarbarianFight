@@ -1,7 +1,7 @@
 [gd_scene load_steps=7 format=3 uid="uid://dg6ygq33001cu"]
 
 [ext_resource type="Script" path="res://src/core/actor/actor.gd" id="1_vwlen"]
-[ext_resource type="PackedScene" uid="uid://c5r8su0ki15l8" path="res://src/core/actor/actor_sprite.tscn" id="2_shvgh"]
+[ext_resource type="PackedScene" uid="uid://c5r8su0ki15l8" path="res://src/core/actor/sprite/actor_sprite.tscn" id="2_shvgh"]
 [ext_resource type="Script" path="res://src/core/timing/turn_taker.gd" id="3_8plh3"]
 [ext_resource type="Shader" path="res://src/core/shaders/sprite_dissolve.gdshader" id="3_51ydw"]
 [ext_resource type="Script" path="res://src/core/actor/stats/stamina.gd" id="4_fsdcd"]
@@ -16,7 +16,6 @@ position = Vector2(0, 16)
 script = ExtResource("1_vwlen")
 
 [node name="ActorSprite" parent="." instance=ExtResource("2_shvgh")]
-metadata/_edit_lock_ = true
 
 [node name="Sprite" parent="ActorSprite/SpriteOrigin" index="0"]
 material = SubResource("ShaderMaterial_k6arh")
