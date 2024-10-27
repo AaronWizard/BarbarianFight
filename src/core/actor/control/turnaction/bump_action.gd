@@ -40,9 +40,7 @@ func run() -> void:
 
 		hit_actor.stamina.current_stamina -= _target_actor.definition.attack
 		if hit_actor.stamina.is_alive:
-			pass
-			#hit_actor.sprite.hit(direction)
-			#await hit_actor.sprite.animation_finished
+			await hit_actor.sprite.hit(direction)
 		else:
 			#hit_actor.sprite.die(direction)
 			#await hit_actor.sprite.animation_finished

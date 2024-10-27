@@ -39,8 +39,12 @@ signal attack_anim_hit
 ## The name of the attack hit step in the attack animation.
 @export var anim_attack_hit_step_name := ""
 
-## The animation for getting hit.
+## The animation for getting hit from a direction.
 @export var anim_hit: ActorSpriteAnimation
+
+## The animation for getting hit without a source direction.[br]a
+## Uses Vector2i.RIGHT for the target vector.
+@export var anim_hit_no_direction: ActorSpriteAnimation
 
 ## The animation for dying.
 @export var anim_death: ActorSpriteAnimation
@@ -88,10 +92,18 @@ func move_step(target_vector: Vector2i) -> void:
 	await play_animation(target_vector, anim_move)
 
 
-## Animates an actor attacking in the given target.[br]
-## [param target] is in tiles and is relative to the actor's cell.
-func attack(target: Vector2i) -> void:
-	await play_animation(target, anim_attack)
+## Animates an actor attacking the given target_cell.[br]
+## [param target_cell] is relative to the actor's cell.
+func attack(target_cell: Vector2i) -> void:
+	await play_animation(target_cell, anim_attack)
+
+
+## Animates an actor getting hit from [param direction].
+func hit(direction := Vector2i.ZERO) -> void:
+	if direction != Vector2i.ZERO:
+		await play_animation(direction, anim_hit)
+	else:
+		await play_animation(Vector2i.RIGHT, anim_hit_no_direction)
 
 
 ## If the actor is playing an animation, waits for the animation to finish.
