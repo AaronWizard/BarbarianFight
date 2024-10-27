@@ -16,6 +16,8 @@ signal animation_finished
 ## The sprite's attack animation has reached its hit frame.
 signal attack_anim_hit
 
+const _DEATH_DURATION := 0.2
+
 
 ## The size in pixels of the grid cells the tile object aligns itself with.
 @export var tile_size := Vector2i(16, 16):
@@ -86,6 +88,12 @@ func play_animation(target_vector: Vector2i, anim: ActorSpriteAnimation) \
 	animation_finished.emit()
 
 
+## If the actor is playing an animation, waits for the animation to finish.
+func wait_for_animation() -> void:
+	if animation_playing:
+		await animation_finished
+
+
 ## Animates an actor moving to an adjacent cell. [param target_vector] is
 ## relative to the actor's initial origin cell before moving to the new cell.
 func move_step(target_vector: Vector2i) -> void:
@@ -106,10 +114,18 @@ func hit(direction := Vector2i.ZERO) -> void:
 		await play_animation(Vector2i.RIGHT, anim_hit_no_direction)
 
 
-## If the actor is playing an animation, waits for the animation to finish.
-func wait_for_animation() -> void:
-	if animation_playing:
-		await animation_finished
+## Animates the actor dying after being hit from the given direction.[br]
+## [param direction] is normalized.
+func die(direction := Vector2i.ZERO) -> void:
+	var tween := create_tween()
+	@warning_ignore("return_value_discarded")
+	tween.tween_property(
+			_sprite.material, "shader_parameter/dissolve", 1, _DEATH_DURATION)
+
+	await play_animation(direction, anim_death)
+
+	if tween.is_running():
+		await tween.finished
 
 
 func _tile_size_changed(_old_size: Vector2i) -> void:
