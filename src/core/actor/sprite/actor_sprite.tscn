@@ -1,15 +1,103 @@
-[gd_scene load_steps=15 format=3 uid="uid://c5r8su0ki15l8"]
+[gd_scene load_steps=23 format=3 uid="uid://c5r8su0ki15l8"]
 
 [ext_resource type="Script" path="res://src/core/actor/sprite/actor_sprite.gd" id="1_yow33"]
-[ext_resource type="Resource" uid="uid://dam8k6v3x01qj" path="res://src/core/resources/actorspriteanims/actor_anim_move.tres" id="2_7bvns"]
 [ext_resource type="Material" uid="uid://cw10xhc1nbh0" path="res://src/core/shaders/material_actor_sprite.tres" id="2_aphjf"]
 [ext_resource type="Texture2D" uid="uid://cmfwm1033edy1" path="res://assets/graphics/actors/villain.png" id="2_m070q"]
-[ext_resource type="Resource" uid="uid://cvhl2dgih1bqd" path="res://src/core/resources/actorspriteanims/actor_anim_attack.tres" id="3_q8n65"]
-[ext_resource type="Resource" uid="uid://dcudtw352s8vb" path="res://src/core/resources/actorspriteanims/actor_anim_hit.tres" id="4_jdgnq"]
 [ext_resource type="Script" path="res://src/core/actor/sprite/actor_sprite_animation.gd" id="5_757ke"]
-[ext_resource type="Resource" uid="uid://cwavf031lqbb3" path="res://src/core/resources/actorspriteanims/actor_anim_death.tres" id="5_ivtuu"]
 [ext_resource type="Script" path="res://src/core/actor/sprite/actor_sprite_animation_step.gd" id="6_ix5ow"]
 [ext_resource type="Script" path="res://src/core/actor/sprite/actor_sprite_animation_player.gd" id="8_6tdw4"]
+
+[sub_resource type="Resource" id="Resource_a8o7k"]
+script = ExtResource("6_ix5ow")
+step_name = ""
+interpolated_distance = -1.0
+cell_distance = 0.0
+speed_or_duration = 0.0
+time_type = 1
+trans_type = 0
+ease_type = 2
+
+[sub_resource type="Resource" id="Resource_d3sek"]
+script = ExtResource("6_ix5ow")
+step_name = ""
+interpolated_distance = 0.0
+cell_distance = 0.0
+speed_or_duration = 0.2
+time_type = 1
+trans_type = 3
+ease_type = 1
+
+[sub_resource type="Resource" id="Resource_w8k7l"]
+script = ExtResource("5_757ke")
+steps = Array[ExtResource("6_ix5ow")]([SubResource("Resource_a8o7k"), SubResource("Resource_d3sek")])
+
+[sub_resource type="Resource" id="Resource_x3xwq"]
+script = ExtResource("6_ix5ow")
+step_name = ""
+interpolated_distance = 0.0
+cell_distance = -0.5
+speed_or_duration = 0.1
+time_type = 1
+trans_type = 7
+ease_type = 1
+
+[sub_resource type="Resource" id="Resource_i2b4j"]
+script = ExtResource("6_ix5ow")
+step_name = "attack_hit"
+interpolated_distance = 0.5
+cell_distance = 0.0
+speed_or_duration = 0.15
+time_type = 1
+trans_type = 7
+ease_type = 2
+
+[sub_resource type="Resource" id="Resource_6witm"]
+script = ExtResource("6_ix5ow")
+step_name = ""
+interpolated_distance = 0.1
+cell_distance = 0.0
+speed_or_duration = 0.05
+time_type = 1
+trans_type = 0
+ease_type = 2
+
+[sub_resource type="Resource" id="Resource_kutg8"]
+script = ExtResource("6_ix5ow")
+step_name = ""
+interpolated_distance = 0.0
+cell_distance = 0.0
+speed_or_duration = 0.1
+time_type = 1
+trans_type = 4
+ease_type = 1
+
+[sub_resource type="Resource" id="Resource_1uecw"]
+script = ExtResource("5_757ke")
+steps = Array[ExtResource("6_ix5ow")]([SubResource("Resource_x3xwq"), SubResource("Resource_i2b4j"), SubResource("Resource_6witm"), SubResource("Resource_kutg8")])
+
+[sub_resource type="Resource" id="Resource_rlfwr"]
+script = ExtResource("6_ix5ow")
+step_name = ""
+interpolated_distance = 0.0
+cell_distance = 0.5
+speed_or_duration = 0.1
+time_type = 1
+trans_type = 3
+ease_type = 1
+
+[sub_resource type="Resource" id="Resource_wyc7w"]
+script = ExtResource("6_ix5ow")
+step_name = ""
+interpolated_distance = 0.0
+cell_distance = 0.0
+speed_or_duration = 0.1
+time_type = 1
+trans_type = 0
+ease_type = 2
+
+[sub_resource type="Resource" id="Resource_4bkdp"]
+script = ExtResource("5_757ke")
+steps = Array[ExtResource("6_ix5ow")]([SubResource("Resource_rlfwr"), SubResource("Resource_wyc7w")])
 
 [sub_resource type="Resource" id="Resource_vtgfw"]
 script = ExtResource("6_ix5ow")
@@ -45,14 +133,18 @@ ease_type = 2
 script = ExtResource("5_757ke")
 steps = Array[ExtResource("6_ix5ow")]([SubResource("Resource_vtgfw"), SubResource("Resource_sjd7h"), SubResource("Resource_oodwa")])
 
+[sub_resource type="Resource" id="Resource_8r2to"]
+script = ExtResource("5_757ke")
+steps = Array[ExtResource("6_ix5ow")]([])
+
 [node name="ActorSprite" type="Node2D"]
 script = ExtResource("1_yow33")
-anim_move = ExtResource("2_7bvns")
-anim_attack = ExtResource("3_q8n65")
+anim_move = SubResource("Resource_w8k7l")
+anim_attack = SubResource("Resource_1uecw")
 anim_attack_hit_step_name = "attack_hit"
-anim_hit = ExtResource("4_jdgnq")
+anim_hit = SubResource("Resource_4bkdp")
 anim_hit_no_direction = SubResource("Resource_i6opi")
-anim_death = ExtResource("5_ivtuu")
+anim_death = SubResource("Resource_8r2to")
 metadata/_edit_lock_ = true
 
 [node name="SpriteOrigin" type="Node2D" parent="."]
