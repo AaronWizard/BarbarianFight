@@ -1,8 +1,17 @@
-[gd_resource type="Resource" script_class="ActorSpriteAnimation" load_steps=3 format=3 uid="uid://dam8k6v3x01qj"]
+[gd_resource type="Resource" script_class="ActorSpriteAnimation" load_steps=4 format=3 uid="uid://dam8k6v3x01qj"]
 
 [ext_resource type="Script" path="res://src/core/actor/actor_sprite_animation.gd" id="1_7lhel"]
 [ext_resource type="Script" path="res://src/core/actor/actor_sprite_animation_step.gd" id="2_ui0na"]
 
+[sub_resource type="Resource" id="Resource_a8o7k"]
+script = ExtResource("2_ui0na")
+interpolated_distance = 0.0
+cell_distance = -1.0
+time = 0.2
+time_type = 1
+trans_type = 4
+ease_type = 1
+
 [resource]
 script = ExtResource("1_7lhel")
-steps = Array[ExtResource("2_ui0na")]([])
+steps = Array[ExtResource("2_ui0na")]([SubResource("Resource_a8o7k")])

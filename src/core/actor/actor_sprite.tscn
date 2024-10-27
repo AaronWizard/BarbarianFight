@@ -19,10 +19,8 @@ anim_death = ExtResource("5_ivtuu")
 position = Vector2(8, -8)
 metadata/_edit_lock_ = true
 
-[node name="SpritePivot" type="Node2D" parent="SpriteOrigin"]
-
-[node name="Sprite" type="Sprite2D" parent="SpriteOrigin/SpritePivot"]
+[node name="Sprite" type="Sprite2D" parent="SpriteOrigin"]
 material = ExtResource("2_aphjf")
 texture = ExtResource("2_m070q")
 
-[node name="RemoteTransform2D" type="RemoteTransform2D" parent="SpriteOrigin/SpritePivot/Sprite"]
+[node name="RemoteTransform2D" type="RemoteTransform2D" parent="SpriteOrigin/Sprite"]

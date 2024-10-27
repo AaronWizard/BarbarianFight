@@ -35,9 +35,9 @@ enum TimeType {
 @export var cell_distance := 0.0
 
 ## The amount of time it takes to move the sprite from its current position to
-## the step's new position. If this is zero, the sprite's position is updated
-## instantly.
-@export var time := 0.0
+## the step's new position.[br]
+## If this is zero, the sprite's position is updated instantly.
+@export var speed_or_duration := 0.0
 
 ## Sets whether the sprite moves at a constant speed or if the animation runs
 ## for a constant duration.
@@ -48,3 +48,51 @@ enum TimeType {
 
 ## The animation's easing type.
 @export var ease_type := Tween.EASE_IN_OUT
+
+
+## Animates an actor's sprite.[br]
+## [param target_cell] is relative to the actor's origin cell. [param tile_size]
+## is in pixels.
+func animate(sprite: Sprite2D, target_cell: Vector2, tile_size: Vector2i) \
+		-> void:
+	var final_cell_position := _get_final_cell_position(target_cell)
+	var final_pixel_position := final_cell_position * Vector2(tile_size)
+
+	var final_duration := _get_final_duration(
+			final_cell_position, sprite.position, tile_size)
+
+	if final_duration == 0.0:
+		sprite.position = final_pixel_position
+	else:
+		var tween := sprite.create_tween()
+
+		@warning_ignore("return_value_discarded")
+		tween.set_trans(trans_type)
+		@warning_ignore("return_value_discarded")
+		tween.set_ease(ease_type)
+		@warning_ignore("return_value_discarded")
+		tween.tween_property(
+				sprite, "position", final_pixel_position, final_duration)
+
+		if tween.is_running():
+			await tween.finished
+
+
+func _get_final_cell_position(target_cell: Vector2) -> Vector2:
+	var interpolated_position := target_cell * interpolated_distance
+	var cell_position := target_cell.normalized() * cell_distance
+	return interpolated_position + cell_position
+
+
+func _get_final_duration(final_cell_position: Vector2, sprite_position: Vector2,
+		tile_size: Vector2) -> float:
+	var result := speed_or_duration
+
+	if (speed_or_duration > 0) and (time_type == TimeType.SPEED):
+		var sprite_cell_position := sprite_position / tile_size
+		var dist := (final_cell_position - sprite_cell_position).length()
+		result = dist / speed_or_duration
+		if absf(result) <= 0.01:
+			result = 0.0
+
+	return result

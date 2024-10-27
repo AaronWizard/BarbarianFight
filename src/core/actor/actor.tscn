@@ -6,7 +6,7 @@
 [ext_resource type="Shader" path="res://src/core/shaders/sprite_dissolve.gdshader" id="3_51ydw"]
 [ext_resource type="Script" path="res://src/core/actor/stats/stamina.gd" id="4_fsdcd"]
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_oc5qq"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_k6arh"]
 resource_local_to_scene = true
 shader = ExtResource("3_51ydw")
 shader_parameter/dissolve = 0.0
@@ -18,8 +18,8 @@ script = ExtResource("1_vwlen")
 [node name="ActorSprite" parent="." instance=ExtResource("2_shvgh")]
 metadata/_edit_lock_ = true
 
-[node name="Sprite" parent="ActorSprite/SpriteOrigin/SpritePivot" index="0"]
-material = SubResource("ShaderMaterial_oc5qq")
+[node name="Sprite" parent="ActorSprite/SpriteOrigin" index="0"]
+material = SubResource("ShaderMaterial_k6arh")
 
 [node name="TurnTaker" type="Node" parent="."]
 script = ExtResource("3_8plh3")

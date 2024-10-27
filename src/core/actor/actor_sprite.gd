@@ -44,20 +44,34 @@ signal animation_finished
 ## A [RemoteTransform2D] attached to the sprite.
 var remote_transform: RemoteTransform2D:
 	get:
-		return $SpriteOrigin/SpritePivot/Sprite/RemoteTransform2D \
-				as RemoteTransform2D
+		return $SpriteOrigin/Sprite/RemoteTransform2D as RemoteTransform2D
 
 
 ## True if an animation is playing, false otherwise.
 var animation_playing: bool:
 	get:
-		return false
+		return _animation_playing
+
+
+var _animation_playing := false
 
 
 # Keep the sprite's origin at the center of the parent actor.
 @onready var _sprite_origin := $SpriteOrigin as Node2D
-# Position the sprite itself.
-#@onready var _sprite_pivot := $SpriteOrigin/SpritePivot as Node2D
+
+@onready var _sprite := $SpriteOrigin/Sprite as Sprite2D
+
+
+## Animate the sprite. [param target_cell] is relative to the actor's origin
+## cell.
+func play_animation(target_cell: Vector2i, anim: ActorSpriteAnimation) -> void:
+	_animation_playing = true
+	animation_started.emit()
+
+	anim.animate(_sprite, target_cell, tile_size)
+
+	_animation_playing = false
+	animation_finished.emit()
 
 
 func wait_for_animation() -> void:

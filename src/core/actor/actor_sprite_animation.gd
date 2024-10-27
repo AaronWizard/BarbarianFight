@@ -9,3 +9,14 @@ extends Resource
 ## cell.
 
 @export var steps: Array[ActorSpriteAnimationStep]
+
+
+## Animates an actor's sprite. After the animation, the sprite's position is
+## reset to zero.[br]
+## [param target_cell] is relative to the actor's origin cell. [param tile_size]
+## is in pixels.
+func animate(sprite: Sprite2D, target_cell: Vector2, tile_size: Vector2i) \
+		-> void:
+	for step in steps:
+		await step.animate(sprite, target_cell, tile_size)
+	sprite.position = Vector2.ZERO
