@@ -1,3 +1,4 @@
+@icon("res://assets/editor/icons/actor_definition.png")
 class_name ActorDefinition
 extends Resource
 

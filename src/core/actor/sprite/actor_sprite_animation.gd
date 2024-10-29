@@ -1,3 +1,4 @@
+@icon("res://assets/editor/icons/actor_sprite_animation.png")
 class_name ActorSpriteAnimation
 extends Resource
 

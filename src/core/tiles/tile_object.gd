@@ -1,4 +1,5 @@
 @tool
+@icon("res://assets/editor/icons/tile_object.png")
 class_name TileObject
 extends Node2D
 

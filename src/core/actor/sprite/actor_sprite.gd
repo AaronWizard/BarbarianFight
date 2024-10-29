@@ -1,4 +1,5 @@
 @tool
+@icon("res://assets/editor/icons/actor_sprite.png")
 class_name ActorSprite
 extends Node2D
 

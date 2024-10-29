@@ -1,3 +1,4 @@
+@icon("res://assets/editor/icons/map.png")
 class_name Map
 extends Node2D
 
