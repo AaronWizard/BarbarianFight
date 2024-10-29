@@ -53,8 +53,7 @@ func _init_player() -> void:
 
 	_boss_tracker.player = _player_actor
 
-	_player_actor.sprite.remote_transform.remote_path \
-			= _player_camera.get_path()
+	_player_actor.sprite.follow_with_camera(_player_camera)
 
 
 func _load_initial_map() -> void:

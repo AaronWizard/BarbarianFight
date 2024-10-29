@@ -8,4 +8,9 @@ extends Resource
 ## positioning during its animation is relative to its origin cell and a target
 ## cell.
 
+## The steps of the animation
 @export var steps: Array[ActorSpriteAnimationStep]
+
+## If this is true and the camera is following the actor sprite, the camera
+## follows the sprite itself instead of the actor sprite's cell.
+@export var camera_follow_sprite := false

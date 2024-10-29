@@ -30,6 +30,7 @@ ease_type = 1
 [sub_resource type="Resource" id="Resource_w8k7l"]
 script = ExtResource("5_757ke")
 steps = Array[ExtResource("6_ix5ow")]([SubResource("Resource_a8o7k"), SubResource("Resource_d3sek")])
+camera_follow_sprite = true
 
 [sub_resource type="Resource" id="Resource_x3xwq"]
 script = ExtResource("6_ix5ow")
@@ -74,6 +75,7 @@ ease_type = 1
 [sub_resource type="Resource" id="Resource_1uecw"]
 script = ExtResource("5_757ke")
 steps = Array[ExtResource("6_ix5ow")]([SubResource("Resource_x3xwq"), SubResource("Resource_i2b4j"), SubResource("Resource_6witm"), SubResource("Resource_kutg8")])
+camera_follow_sprite = false
 
 [sub_resource type="Resource" id="Resource_rlfwr"]
 script = ExtResource("6_ix5ow")
@@ -98,6 +100,7 @@ ease_type = 2
 [sub_resource type="Resource" id="Resource_4bkdp"]
 script = ExtResource("5_757ke")
 steps = Array[ExtResource("6_ix5ow")]([SubResource("Resource_rlfwr"), SubResource("Resource_wyc7w")])
+camera_follow_sprite = false
 
 [sub_resource type="Resource" id="Resource_vtgfw"]
 script = ExtResource("6_ix5ow")
@@ -132,6 +135,7 @@ ease_type = 2
 [sub_resource type="Resource" id="Resource_i6opi"]
 script = ExtResource("5_757ke")
 steps = Array[ExtResource("6_ix5ow")]([SubResource("Resource_vtgfw"), SubResource("Resource_sjd7h"), SubResource("Resource_oodwa")])
+camera_follow_sprite = false
 
 [sub_resource type="Resource" id="Resource_pt0t1"]
 script = ExtResource("6_ix5ow")
@@ -146,6 +150,7 @@ ease_type = 1
 [sub_resource type="Resource" id="Resource_8r2to"]
 script = ExtResource("5_757ke")
 steps = Array[ExtResource("6_ix5ow")]([SubResource("Resource_pt0t1")])
+camera_follow_sprite = false
 
 [node name="ActorSprite" type="Node2D"]
 script = ExtResource("1_yow33")
@@ -166,7 +171,9 @@ material = ExtResource("2_aphjf")
 texture = ExtResource("2_m070q")
 metadata/_edit_lock_ = true
 
-[node name="RemoteTransform2D" type="RemoteTransform2D" parent="SpriteOrigin/Sprite"]
+[node name="SpriteTransform" type="RemoteTransform2D" parent="SpriteOrigin/Sprite"]
+
+[node name="CameraTransform" type="RemoteTransform2D" parent="SpriteOrigin"]
 metadata/_edit_lock_ = true
 
 [node name="ActorSpriteAnimationPlayer" type="Node" parent="."]

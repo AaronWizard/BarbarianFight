@@ -52,16 +52,15 @@ const _DEATH_DURATION := 0.2
 @export var anim_death: ActorSpriteAnimation
 
 
-## A [RemoteTransform2D] attached to the sprite.
-var remote_transform: RemoteTransform2D:
-	get:
-		return $SpriteOrigin/Sprite/RemoteTransform2D as RemoteTransform2D
-
-
 ## True if an animation is playing, false otherwise.
 var animation_playing: bool:
 	get:
 		return _animation_playing
+
+
+var _camera_transform: RemoteTransform2D:
+	get:
+		return $SpriteOrigin/CameraTransform as RemoteTransform2D
 
 
 var _animation_playing := false
@@ -71,8 +70,15 @@ var _animation_playing := false
 @onready var _sprite_origin := $SpriteOrigin as Node2D
 
 @onready var _sprite := $SpriteOrigin/Sprite as Sprite2D
+@onready var _sprite_transform \
+		:= $SpriteOrigin/Sprite/SpriteTransform as RemoteTransform2D
 @onready var _sprite_anim_player \
 		:= $ActorSpriteAnimationPlayer as ActorSpriteAnimationPlayer
+
+
+## Make [param camera] follow this sprite.
+func follow_with_camera(camera: Camera2D) -> void:
+	_camera_transform.remote_path = camera.get_path()
 
 
 ## Animate the sprite. [param target_vector] is relative to the actor's origin
@@ -81,9 +87,12 @@ func play_animation(target_vector: Vector2i, anim: ActorSpriteAnimation) \
 		-> void:
 	_animation_playing = true
 	animation_started.emit()
+	if anim.camera_follow_sprite:
+		_sprite_transform.remote_path = _camera_transform.get_path()
 
 	await _sprite_anim_player.animate(anim, _sprite, target_vector, tile_size)
 
+	_sprite_transform.remote_path = ""
 	_animation_playing = false
 	animation_finished.emit()
 
