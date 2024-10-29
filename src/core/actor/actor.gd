@@ -1,4 +1,5 @@
 @tool
+@icon("res://assets/editor/icons/actor.png")
 class_name Actor
 extends TileObject
 

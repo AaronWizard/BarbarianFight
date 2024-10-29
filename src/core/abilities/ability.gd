@@ -1,3 +1,4 @@
+@icon("res://assets/editor/icons/ability.png")
 class_name Ability
 extends Resource
 

@@ -1,3 +1,4 @@
+@icon("res://assets/editor/icons/target_range.png")
 class_name TargetRange
 extends Resource
 

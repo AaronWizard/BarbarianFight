@@ -39,6 +39,7 @@ ease_type = 1
 [sub_resource type="Resource" id="Resource_y305w"]
 script = ExtResource("1_ka5mg")
 steps = Array[ExtResource("2_hk5wb")]([SubResource("Resource_fr586"), SubResource("Resource_yku2x"), SubResource("Resource_c3o1m")])
+camera_follow_sprite = false
 
 [sub_resource type="Resource" id="Resource_05otb"]
 script = ExtResource("2_hk5wb")
@@ -63,6 +64,7 @@ ease_type = 1
 [sub_resource type="Resource" id="Resource_hkg8j"]
 script = ExtResource("1_ka5mg")
 steps = Array[ExtResource("2_hk5wb")]([SubResource("Resource_05otb"), SubResource("Resource_hx13t")])
+camera_follow_sprite = false
 
 [sub_resource type="Resource" id="Resource_0ntoq"]
 script = ExtResource("1_pjawo")
