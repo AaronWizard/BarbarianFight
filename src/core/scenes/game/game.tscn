@@ -46,6 +46,11 @@ script = ExtResource("12_awymb")
 script = ExtResource("10_2nvou")
 action_state = NodePath("../PlayerActionState")
 target_state = NodePath("../PlayerTargetState")
+action_combos = {
+"dash": 0,
+"debug_teleport": 2,
+"shove": 1
+}
 
 [node name="PlayerTargetState" type="Node" parent="PlayerStateMachine" node_paths=PackedStringArray("action_state", "movement_state", "target_display")]
 script = ExtResource("11_nrae6")
