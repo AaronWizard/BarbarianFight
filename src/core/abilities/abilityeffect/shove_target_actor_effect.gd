@@ -23,7 +23,14 @@ const _END_TIME := 0.2
 
 func apply(target: Vector2i, _source: Rect2i, source_actor: Actor) -> void:
 	var target_actor := source_actor.map.actor_map.get_actor_on_cell(target)
-	assert(target_actor != source_actor)
+
+	if not target_actor:
+		push_error("No actor to push")
+		return
+	if target_actor == source_actor:
+		push_error("Actor '%s' can't push itself" % source_actor)
+		return
+
 	var direction := TileGeometry.cardinal_dir_from_rect_to_cell(
 			source_actor.rect, target)
 
