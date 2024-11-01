@@ -33,6 +33,14 @@ func remove_turn_taker(turn_taker: TurnTaker) -> void:
 			_turn_index -= 1
 
 
+func make_turn_taker_go_first(turn_taker: TurnTaker) -> void:
+	if not turn_taker in _turn_takers:
+		push_error("TurnTaker '%s' not in TurnClock" % turn_taker)
+	else:
+		_turn_takers.erase(turn_taker)
+		_turn_takers.push_front(turn_taker)
+
+
 func run() -> void:
 	running = true
 

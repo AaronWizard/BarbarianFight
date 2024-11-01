@@ -112,6 +112,14 @@ func set_turn_clock(clock: TurnClock) -> void:
 		_turn_clock.add_turn_taker(_turn_taker)
 
 
+## Makes this actor go first in the turn order.
+func make_go_first() -> void:
+	if _turn_clock:
+		_turn_clock.make_turn_taker_go_first(_turn_taker)
+	else:
+		push_warning("No turn clock is set")
+
+
 ## Returns true if [param other_actor] is hostile to this actor, false
 ## otherwise.
 func is_hostile(other_actor: Actor) -> bool:
