@@ -3,16 +3,16 @@
 class_name TileObject
 extends Node2D
 
-## A node that aligns itself along a grid.
+## A node that is positioned on a grid.
 ##
-## A node that aligns itself along a grid.
+## A node that is positioned on a grid.
 ## [br][br]
-## Tile objects have an origin cell for positioning using tile coordinates.
+## Tile objects have an origin cell for positioning using grid coordinates. Tile
+## objects also have a cell size, allowing a tile object to cover multiple cells
+## in a square. If a tile object is larger than one cell, its origin cell is its
+## [b]top left[/b] cell.[br]
 ## A tile object's actual pixel position is its [b]bottom left[/b] corner for
-## the sake of y-sorting.[br]
-## Tile objects also have a cell size, allowing a tile object to cover multiple
-## cells in a square. If a tile object is larger than one cell, its origin cell
-## is its [b]top left[/b] cell.
+## y-sorting.
 
 
 ## The size in pixels of the grid cells the tile object aligns itself with.
@@ -95,7 +95,7 @@ var covered_cells: Array[Vector2i]:
 ## A [Rect2i] matching the position and size in cells of the tile object.
 var rect: Rect2i:
 	get:
-		return TileObject.object_rect(origin_cell, cell_size)
+		return rect_at_cell(origin_cell)
 
 
 func _draw() -> void:
@@ -118,28 +118,22 @@ func _draw() -> void:
 		draw_rect(origin_rect, origin_colour, false, 1)
 
 
-## Gets the rectangle that covers a tile object whose origin is
-## [param tile_object_origin_cell] and cell size is
-## [param tile_object_cell_size].
-static func object_rect( \
-		tile_object_origin_cell: Vector2i,
-		tile_object_cell_size: int) -> Rect2i:
-	return Rect2i(
-		tile_object_origin_cell,
-		Vector2i(tile_object_cell_size, tile_object_cell_size)
-	)
-
-
 ## Returns true if the tile object covers [param cell], false otherwise.
 func covers_cell(cell: Vector2i) -> bool:
 	return rect.has_point(cell)
 
 
-## The cells the tile object would cover if its origin_cell was [param cell].
+## The cells the tile object would cover if its origin cell was [param cell].
 func covered_cells_at_cell(cell: Vector2i) -> Array[Vector2i]:
 	return TileGeometry.cells_in_rect(
-		TileObject.object_rect(cell, cell_size)
+		rect_at_cell(cell)
 	)
+
+
+## A [Rect2i] matching the position and size in cells of the tile object if its
+## origin cell was at [param cell].
+func rect_at_cell(cell: Vector2i) -> Rect2i:
+	return Rect2i(cell, Vector2i.ONE * cell_size)
 
 
 func _set_position(new_origin_cell: Vector2i) -> void:
