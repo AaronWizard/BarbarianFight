@@ -3,7 +3,8 @@ extends AbilityEffect
 
 ## Moves the source actor to the target cell.
 
-## The animation the source actor's sprite plays for the dash.
+## The animation the source actor's sprite plays for the dash.[br]
+## The animation is run [i]after[/i] the actor's origin cell is updated.
 @export var move_animation: ActorSpriteAnimation
 
 

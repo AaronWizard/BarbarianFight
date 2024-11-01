@@ -13,11 +13,13 @@ const _END_TIME := 0.2
 @export_range(1, 1, 1, "or_greater") var max_distance := 1
 
 ## The animation the shoved actor's sprite plays when the actor is shoved
-## without hitting anything.
+## without hitting anything.[br]
+## The animation is run [i]after[/i] the actor's origin cell is updated.
 @export var anim_shove_no_collision: ActorSpriteAnimation
 
 ## The animation the shoved actor's sprite plays when the actor is shoved
-## into an obstacle.
+## into an obstacle.[br]
+## The animation is run [i]after[/i] the actor's origin cell is updated.
 @export var anim_shove_collision: ActorSpriteAnimation
 
 
