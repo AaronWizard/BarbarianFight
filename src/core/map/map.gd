@@ -110,13 +110,20 @@ func _on_animations_finished() -> void:
 	animations_finished.emit()
 
 
+func _on_actor_moved(old_cell: Vector2i, actor: Actor) -> void:
+	print("%s moved from %v to %v" % [actor.name, old_cell, actor.origin_cell])
+
+
 func _init_actor(actor: Actor) -> void:
 	actor.set_map(self)
 	actor.set_turn_clock(_turn_clock)
 	_anim_tracker.observe_actor(actor)
+	@warning_ignore("return_value_discarded")
+	actor.moved.connect(_on_actor_moved.bind(actor))
 
 
 func _uninit_actor(actor: Actor) -> void:
 	actor.set_map(null)
 	actor.set_turn_clock(null)
 	_anim_tracker.unobserve_actor(actor)
+	actor.moved.disconnect(_on_actor_moved)
