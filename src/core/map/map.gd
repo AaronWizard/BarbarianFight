@@ -53,6 +53,7 @@ var pixel_rect: Rect2i:
 var _terrain: Terrain
 var _turn_clock: TurnClock
 var _anim_tracker: MapAnimTracker
+var _pathfinder: Pathfinder
 
 @onready var _terrain_tilemap := $Terrain as TileMapLayer
 
@@ -62,6 +63,10 @@ func _ready() -> void:
 	_anim_tracker = MapAnimTracker.new()
 	@warning_ignore("return_value_discarded")
 	_anim_tracker.animations_finished.connect(_on_animations_finished)
+
+	_pathfinder = Pathfinder.new(_terrain_tilemap.get_used_rect())
+	for wall in _terrain.all_blocking_cells():
+		_pathfinder.set_cell_solid(wall, true)
 
 	for a in actor_map.actors:
 		_init_actor(a)
@@ -106,12 +111,21 @@ func actor_can_enter_cell(actor: Actor, cell: Vector2i) -> bool:
 			and actor_map.rect_is_clear(actor_rect, [actor])
 
 
+## Finds the shortest path from [param start_cell] to any cell adjacent to
+## [param end_rect], using an actor whose size is [param actor_size]. If no
+## valid path exists the result is empty.
+func find_path(start_cell: Vector2i, end_rect: Rect2i, actor_size: Vector2i) \
+		-> Array[Vector2i]:
+	return _pathfinder.find_path(start_cell, end_rect, actor_size)
+
+
 func _on_animations_finished() -> void:
 	animations_finished.emit()
 
 
 func _on_actor_moved(old_cell: Vector2i, actor: Actor) -> void:
-	print("%s moved from %v to %v" % [actor.name, old_cell, actor.origin_cell])
+	_pathfinder.set_rect_solid(actor.rect_at_cell(old_cell), false)
+	_pathfinder.set_rect_solid(actor.rect, true)
 
 
 func _init_actor(actor: Actor) -> void:
@@ -121,8 +135,15 @@ func _init_actor(actor: Actor) -> void:
 	@warning_ignore("return_value_discarded")
 	actor.moved.connect(_on_actor_moved.bind(actor))
 
+	_pathfinder.init_grid_for_actor_size(
+		Vector2i(actor.cell_size, actor.cell_size)
+	)
+	_pathfinder.set_rect_solid(actor.rect, true)
+
 
 func _uninit_actor(actor: Actor) -> void:
+	_pathfinder.set_rect_solid(actor.rect, false)
+
 	actor.set_map(null)
 	actor.set_turn_clock(null)
 	_anim_tracker.unobserve_actor(actor)

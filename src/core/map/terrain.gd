@@ -40,6 +40,15 @@ func rect_allows_movement(rect: Rect2i) -> bool:
 	return result
 
 
+## Return a list of all cells that block movement.
+func all_blocking_cells() -> Array[Vector2i]:
+	var result: Array[Vector2i] = []
+	for cell in _tilemap.get_used_cells():
+		if blocks_move(cell):
+			result.append(cell)
+	return result
+
+
 func _get_bool_property(cell: Vector2i, property: String,
 		value_if_outside_map: bool) -> bool:
 	var result := false
