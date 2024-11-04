@@ -111,13 +111,11 @@ func actor_can_enter_cell(actor: Actor, cell: Vector2i) -> bool:
 			and actor_map.rect_is_clear(actor_rect, [actor])
 
 
-## Finds the shortest path from [param start_cell] to any cell adjacent to
-## [param end_rect], using an actor whose size is [param actor_size]. If no
-## valid path exists the result is empty.
-func find_path_to_rect_adjacent_cell(start_cell: Vector2i, end_rect: Rect2i,
-		actor_size: Vector2i) -> Array[Vector2i]:
-	return _pathfinder.find_path_to_rect_adjacent_cell(
-			start_cell, end_rect, actor_size)
+## Finds a path that would move [param start_rect] to a position adjacent to
+## [param end_rect]. If no valid path exists the result is empty.
+func find_path_between_rects(start_rect: Rect2i, end_rect: Rect2i) \
+		-> Array[Vector2i]:
+	return _pathfinder.find_path_between_rects(start_rect, end_rect)
 
 
 func _on_animations_finished() -> void:

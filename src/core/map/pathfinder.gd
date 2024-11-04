@@ -50,22 +50,26 @@ func set_rect_solid(rect: Rect2i, solid: bool) -> void:
 			_clear_rect(rect, other_grid, actor_size)
 
 
-## Finds the shortest path from [param start_cell] to any cell adjacent to
-## [param end_rect], using an actor whose size is [param actor_size]. If no
-## valid path exists the result is empty.
-func find_path_to_rect_adjacent_cell(start_cell: Vector2i, end_rect: Rect2i,
-		actor_size: Vector2i) -> Array[Vector2i]:
+## Finds a path that would move [param start_rect] to a position adjacent to
+## [param end_rect]. If no valid path exists the result is empty.
+func find_path_between_rects(start_rect: Rect2i, end_rect: Rect2i) \
+		-> Array[Vector2i]:
 	var result: Array[Vector2i] = []
 
-	var grid := _get_grid(actor_size)
+	# Prevent getting blocked by anything in start_rect itself.
+	var start_solid_status := _get_rect_solid_status(start_rect)
+	set_rect_solid(start_rect, false)
 
-	var end_cells := Pathfinder._end_cells(end_rect, actor_size, grid)
+	var grid := _get_grid(start_rect.size)
+	var end_cells := Pathfinder._end_cells(end_rect, start_rect.size, grid)
 	for end_cell in end_cells:
-		var path := grid.get_id_path(start_cell, end_cell)
+		var path := grid.get_id_path(start_rect.position, end_cell)
 		if not path.is_empty() \
 				and (result.is_empty() or (path.size() < result.size())):
 			assert(not path.is_empty())
 			result = path
+
+	_set_rect_solid_status(start_solid_status)
 
 	return result
 
@@ -132,3 +136,25 @@ func _get_grid(actor_size: Vector2i) -> AStarGrid2D:
 	else:
 		result = _grids[actor_size]
 	return result
+
+
+func _get_rect_solid_status(rect: Rect2i) -> Dictionary:
+	var result := {}
+
+	for x in range(rect.position.x, rect.end.x):
+		for y in range(rect.position.y, rect.end.y):
+			var cell := Vector2i(x, y)
+			var is_solid := _base_grid.is_point_solid(cell)
+			result[cell] = is_solid
+
+	return result
+
+
+func _set_rect_solid_status(status: Dictionary) -> void:
+	@warning_ignore("untyped_declaration")
+	for k in status.keys():
+		@warning_ignore("unsafe_cast")
+		var cell := k as Vector2i
+		@warning_ignore("unsafe_cast")
+		var is_solid := status[cell] as bool
+		set_cell_solid(cell, is_solid)

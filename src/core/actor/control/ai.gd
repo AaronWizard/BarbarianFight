@@ -27,9 +27,8 @@ func get_action() -> TurnAction:
 func _try_attack() -> TurnAction:
 	var result: TurnAction = null
 
-	@warning_ignore("untyped_declaration")
-	for d in [Vector2i.UP, Vector2i.RIGHT, Vector2i.DOWN, Vector2i.LEFT]:
-		@warning_ignore("unsafe_cast")
+	var adj := TileGeometry.cells_in_range(_actor.rect, 1, 0)
+	for d in adj:
 		var next_cell := _actor.origin_cell + (d as Vector2i)
 		var other_actor := _actor.map.actor_map.get_actor_on_cell(next_cell)
 		if other_actor and other_actor.is_hostile(_actor):
@@ -46,8 +45,8 @@ func _find_step_to_enemy() -> TurnAction:
 	var path: Array[Vector2i] = []
 	for actor in _actor.map.actor_map.actors:
 		if actor.is_hostile(_actor):
-			var new_path := _actor.map.find_path_to_rect_adjacent_cell(
-					_actor.origin_cell, actor.rect, _actor.rect.size)
+			var new_path := _actor.map.find_path_between_rects(
+					_actor.rect, actor.rect)
 			if not new_path.is_empty() \
 					and (path.is_empty() or (new_path.size() < path.size())):
 				path = new_path
