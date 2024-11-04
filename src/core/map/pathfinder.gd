@@ -57,11 +57,7 @@ func find_path_to_rect_adjacent_cell(start_cell: Vector2i, end_rect: Rect2i,
 		actor_size: Vector2i) -> Array[Vector2i]:
 	var result: Array[Vector2i] = []
 
-	var grid: AStarGrid2D
-	if actor_size == Vector2i.ONE:
-		grid = _base_grid
-	else:
-		grid = _grids[actor_size]
+	var grid := _get_grid(actor_size)
 
 	var end_cells := Pathfinder._end_cells(end_rect, actor_size, grid)
 	for end_cell in end_cells:
@@ -126,4 +122,13 @@ func _create_grid() -> AStarGrid2D:
 	result.default_compute_heuristic = AStarGrid2D.HEURISTIC_MANHATTAN
 	result.default_estimate_heuristic = AStarGrid2D.HEURISTIC_MANHATTAN
 	result.update()
+	return result
+
+
+func _get_grid(actor_size: Vector2i) -> AStarGrid2D:
+	var result: AStarGrid2D = null
+	if actor_size == Vector2i.ONE:
+		result = _base_grid
+	else:
+		result = _grids[actor_size]
 	return result
