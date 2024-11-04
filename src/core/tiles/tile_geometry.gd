@@ -121,6 +121,28 @@ static func rect_center_cell_closest_to_target(rect: Rect2i, target: Vector2i) \
 	return result
 
 
+## Get the list of positions a rectangle with a size of [param adj_rect_size]
+## can have to be adjacent to [param center_rect].
+static func adjacent_rect_positions(center_rect: Rect2i,
+		adj_rect_size: Vector2i) -> Array[Vector2i]:
+	var result: Array[Vector2i] = []
+
+	var min_corner := center_rect.position - adj_rect_size
+	var max_corner := center_rect.end
+
+	# North and south
+	for x in range(min_corner.x + 1, max_corner.x):
+		result.append(Vector2i(x, min_corner.y))
+		result.append(Vector2i(x, max_corner.y))
+
+	# East and west
+	for y in range(min_corner.y + 1, max_corner.y):
+		result.append(Vector2i(min_corner.x, y))
+		result.append(Vector2i(max_corner.x, y))
+
+	return result
+
+
 ## Get the closest cardinal direction vector (up, down, left, or right) from
 ## [param start] to [param target].[br]
 ## If [param start] and [param target] are equal, the direction is zero.
