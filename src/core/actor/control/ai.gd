@@ -28,8 +28,7 @@ func _try_attack() -> TurnAction:
 	var result: TurnAction = null
 
 	var adj := TileGeometry.cells_in_range(_actor.rect, 1, 0)
-	for d in adj:
-		var next_cell := _actor.origin_cell + (d as Vector2i)
+	for next_cell in adj:
 		var other_actor := _actor.map.actor_map.get_actor_on_cell(next_cell)
 		if other_actor and other_actor.is_hostile(_actor):
 			assert(BumpAction.is_possible(_actor, next_cell))
