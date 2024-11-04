@@ -94,7 +94,7 @@ static func _end_cells(end_rect: Rect2i, actor_size: Vector2i,
 	var cells := TileGeometry.adjacent_rect_positions(
 			end_rect, actor_size)
 	for c in cells:
-		if not grid.is_point_solid(c):
+		if grid.is_in_boundsv(c) and not grid.is_point_solid(c):
 			result.append(c)
 
 	return result
@@ -109,7 +109,8 @@ func _clear_rect(rect: Rect2i, grid: AStarGrid2D, actor_size: Vector2i) -> void:
 	for x in range(rect_to_update.position.x, rect_to_update.end.x):
 		for y in range(rect_to_update.position.y, rect_to_update.end.y):
 			var cell := Vector2i(x, y)
-			if _base_grid.is_point_solid(cell):
+			if _base_grid.is_in_boundsv(cell) \
+					and _base_grid.is_point_solid(cell):
 				still_blocked.append(cell)
 
 	for cell in still_blocked:
