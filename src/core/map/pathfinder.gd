@@ -53,17 +53,25 @@ func set_rect_solid(rect: Rect2i, solid: bool) -> void:
 ## Finds the shortest path from [param start_cell] to any cell adjacent to
 ## [param end_rect], using an actor whose size is [param actor_size]. If no
 ## valid path exists the result is empty.
-func find_path(start_cell: Vector2i, end_rect: Rect2i, actor_size: Vector2i) \
-		-> Array[Vector2i]:
+func find_path_to_rect_adjacent_cell(start_cell: Vector2i, end_rect: Rect2i,
+		actor_size: Vector2i) -> Array[Vector2i]:
+	var result: Array[Vector2i] = []
+
 	var grid: AStarGrid2D
 	if actor_size == Vector2i.ONE:
 		grid = _base_grid
 	else:
 		grid = _grids[actor_size]
 
-	var end_cell := end_rect.position
+	var end_cells := Pathfinder._end_cells(end_rect, actor_size, grid)
+	for end_cell in end_cells:
+		var path := grid.get_id_path(start_cell, end_cell)
+		if not path.is_empty() \
+				and (result.is_empty() or (path.size() < result.size())):
+			assert(not path.is_empty())
+			result = path
 
-	return grid.get_id_path(start_cell, end_cell)
+	return result
 
 
 static func _rect_to_update(rect: Rect2i, actor_size: Vector2i) -> Rect2i:
@@ -77,6 +85,19 @@ static func _block_rect(rect: Rect2i, grid: AStarGrid2D, actor_size: Vector2i) \
 		-> void:
 	var rect_to_update := Pathfinder._rect_to_update(rect, actor_size)
 	grid.fill_solid_region(rect_to_update, true)
+
+
+static func _end_cells(end_rect: Rect2i, actor_size: Vector2i,
+		grid: AStarGrid2D) -> Array[Vector2i]:
+	var result: Array[Vector2i] = []
+
+	var cells := TileGeometry.adjacent_rect_positions(
+			end_rect, actor_size)
+	for c in cells:
+		if not grid.is_point_solid(c):
+			result.append(c)
+
+	return result
 
 
 func _clear_rect(rect: Rect2i, grid: AStarGrid2D, actor_size: Vector2i) -> void:

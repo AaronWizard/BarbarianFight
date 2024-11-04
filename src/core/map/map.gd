@@ -114,9 +114,10 @@ func actor_can_enter_cell(actor: Actor, cell: Vector2i) -> bool:
 ## Finds the shortest path from [param start_cell] to any cell adjacent to
 ## [param end_rect], using an actor whose size is [param actor_size]. If no
 ## valid path exists the result is empty.
-func find_path(start_cell: Vector2i, end_rect: Rect2i, actor_size: Vector2i) \
-		-> Array[Vector2i]:
-	return _pathfinder.find_path(start_cell, end_rect, actor_size)
+func find_path_to_rect_adjacent_cell(start_cell: Vector2i, end_rect: Rect2i,
+		actor_size: Vector2i) -> Array[Vector2i]:
+	return _pathfinder.find_path_to_rect_adjacent_cell(
+			start_cell, end_rect, actor_size)
 
 
 func _on_animations_finished() -> void:
