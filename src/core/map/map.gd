@@ -107,7 +107,7 @@ func remove_actor(actor: Actor) -> void:
 ## false otherwise. Checks both terrain and other actors.
 func actor_can_enter_cell(actor: Actor, cell: Vector2i) -> bool:
 	var actor_rect := actor.rect_at_cell(cell)
-	return terrain.rect_allows_movement(actor.rect_at_cell(cell)) \
+	return terrain.rect_allows_movement(actor_rect) \
 			and actor_map.rect_is_clear(actor_rect, [actor])
 
 
