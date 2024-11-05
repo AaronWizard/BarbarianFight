@@ -18,6 +18,7 @@ func _init(map_region: Rect2i) -> void:
 	_base_grid = _create_grid()
 
 
+## Initializes pathfinding for actors with the given size.
 func init_grid_for_actor_size(actor_size: Vector2i) -> void:
 	if (actor_size != Vector2i.ONE) and not _grids.has(actor_size):
 		var new_grid := _create_grid()
