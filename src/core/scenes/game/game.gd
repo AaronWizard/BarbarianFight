@@ -71,6 +71,7 @@ func _load_map(map: Map, start_cell: Vector2i) -> void:
 
 	_current_map.set_turn_clock(_turn_clock)
 	_current_map.add_actor(_player_actor, start_cell)
+	_player_actor.make_go_first()
 
 	_player_camera.set_bounds(_current_map.pixel_rect)
 

@@ -17,26 +17,40 @@ func set_actor(actor: Actor) -> void:
 func get_action() -> TurnAction:
 	var result: TurnAction = null
 
-	var enemy := _find_enemy()
-	if enemy:
-		var delta := enemy.origin_cell - _actor.origin_cell
-		delta = delta.sign()
-		if delta.length_squared() > 1:
-			if delta.x > delta.y:
-				delta.x = 0
-			else:
-				delta.y = 0
-		var next_cell := _actor.origin_cell + delta
-		if BumpAction.is_possible(_actor, next_cell):
-			result = BumpAction.new(_actor, next_cell)
+	result = _try_attack()
+	if not result:
+		result = _find_step_to_enemy()
 
 	return result
 
 
-func _find_enemy() -> Actor:
-	var result: Actor = null
+func _try_attack() -> TurnAction:
+	var result: TurnAction = null
+
+	var adj := TileGeometry.cells_in_range(_actor.rect, 1, 0)
+	for next_cell in adj:
+		var other_actor := _actor.map.actor_map.get_actor_on_cell(next_cell)
+		if other_actor and other_actor.is_hostile(_actor):
+			assert(BumpAction.is_possible(_actor, next_cell))
+			result = BumpAction.new(_actor, next_cell)
+			break
+
+	return result
+
+
+func _find_step_to_enemy() -> TurnAction:
+	var result: TurnAction = null
+
+	var path: Array[Vector2i] = []
 	for actor in _actor.map.actor_map.actors:
 		if actor.is_hostile(_actor):
-			result = actor
-			break
+			var new_path := _actor.map.find_path_between_rects(
+					_actor.rect, actor.rect)
+			if not new_path.is_empty() \
+					and (path.is_empty() or (new_path.size() < path.size())):
+				path = new_path
+	if not path.is_empty():
+		assert(path.size() > 1)
+		result = MoveAction.new(_actor, path[1])
+
 	return result

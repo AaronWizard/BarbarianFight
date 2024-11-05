@@ -13,17 +13,26 @@ const _END_TIME := 0.2
 @export_range(1, 1, 1, "or_greater") var max_distance := 1
 
 ## The animation the shoved actor's sprite plays when the actor is shoved
-## without hitting anything.
+## without hitting anything.[br]
+## The animation is run [i]after[/i] the actor's origin cell is updated.
 @export var anim_shove_no_collision: ActorSpriteAnimation
 
 ## The animation the shoved actor's sprite plays when the actor is shoved
-## into an obstacle.
+## into an obstacle.[br]
+## The animation is run [i]after[/i] the actor's origin cell is updated.
 @export var anim_shove_collision: ActorSpriteAnimation
 
 
 func apply(target: Vector2i, _source: Rect2i, source_actor: Actor) -> void:
 	var target_actor := source_actor.map.actor_map.get_actor_on_cell(target)
-	assert(target_actor != source_actor)
+
+	if not target_actor:
+		push_error("No actor to push")
+		return
+	if target_actor == source_actor:
+		push_error("Actor '%s' can't push itself" % source_actor)
+		return
+
 	var direction := TileGeometry.cardinal_dir_from_rect_to_cell(
 			source_actor.rect, target)
 

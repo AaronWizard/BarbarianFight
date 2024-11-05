@@ -4,8 +4,8 @@ extends State
 @export var action_state: PlayerActionState
 @export var target_state: PlayerTargetState
 
-@export var ability_index_dash := 0
-@export var ability_index_shove := 1
+## Key is string, value is int
+@export var action_combos: Dictionary
 
 var _player: Actor
 
@@ -17,14 +17,23 @@ func enter(data := {}) -> void:
 func handle_input(_event: InputEvent) -> void:
 	if Input.is_action_just_released("wait"):
 		_end_turn(null)
-	elif Input.is_action_just_pressed("dash"):
-		_start_ability_targeting(ability_index_dash, "dash")
-	elif Input.is_action_just_pressed("shove"):
-		_start_ability_targeting(ability_index_shove, "shove")
 	else:
-		var action := _try_bump()
-		if action:
-			_end_turn(action)
+		var ability_action_input: String = ""
+		@warning_ignore("untyped_declaration")
+		for a in action_combos.keys():
+			@warning_ignore("unsafe_cast")
+			var action := a as String
+			if Input.is_action_just_pressed(action):
+				ability_action_input = action
+				break
+		if ability_action_input and not ability_action_input.is_empty():
+			@warning_ignore("unsafe_call_argument")
+			_start_ability_targeting(
+					action_combos[ability_action_input], ability_action_input)
+		else:
+			var action := _try_bump()
+			if action:
+				_end_turn(action)
 
 
 func _try_bump() -> TurnAction:

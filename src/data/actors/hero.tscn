@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://doaykluv6j0vh"]
+[gd_scene load_steps=11 format=3 uid="uid://doaykluv6j0vh"]
 
 [ext_resource type="PackedScene" uid="uid://dg6ygq33001cu" path="res://src/core/actor/actor.tscn" id="1_23n8s"]
 [ext_resource type="Texture2D" uid="uid://bxl8chpxykku5" path="res://assets/graphics/actors/hero.png" id="2_gsry7"]
@@ -7,6 +7,7 @@
 [ext_resource type="Script" path="res://src/core/abilities/ability.gd" id="3_ydc34"]
 [ext_resource type="Shader" path="res://src/core/shaders/sprite_dissolve.gdshader" id="3_yrqlt"]
 [ext_resource type="Resource" uid="uid://c88rjluqia4f8" path="res://src/core/resources/abilities/ability_shove.tres" id="4_63tb4"]
+[ext_resource type="Resource" uid="uid://dllnu6d3ki184" path="res://src/core/resources/abilities/ability_debug_teleport.tres" id="6_7j7vd"]
 
 [sub_resource type="Resource" id="Resource_l2s4l"]
 script = ExtResource("3_aik13")
@@ -24,7 +25,7 @@ actor_name = "Cohen"
 definition = SubResource("Resource_l2s4l")
 player_controlled = true
 faction = 1
-abilities = Array[ExtResource("3_ydc34")]([ExtResource("3_vnywx"), ExtResource("4_63tb4")])
+abilities = Array[ExtResource("3_ydc34")]([ExtResource("3_vnywx"), ExtResource("4_63tb4"), ExtResource("6_7j7vd")])
 
 [node name="Sprite" parent="ActorSprite/SpriteOrigin" index="0"]
 material = SubResource("ShaderMaterial_xipor")

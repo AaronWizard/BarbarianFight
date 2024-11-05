@@ -13,6 +13,9 @@ signal added_to_new_map
 ## Emitted when the actor is removed from its map.
 signal removed_from_map
 
+## Emitted when the actor's origin cell has changed.
+signal moved(old_cell: Vector2i)
+
 ## Emitted when the actor's turn has started and the actor is set to be player
 ## controlled.
 signal player_turn_started
@@ -112,6 +115,14 @@ func set_turn_clock(clock: TurnClock) -> void:
 		_turn_clock.add_turn_taker(_turn_taker)
 
 
+## Makes this actor go first in the turn order.
+func make_go_first() -> void:
+	if _turn_clock:
+		_turn_clock.make_turn_taker_go_first(_turn_taker)
+	else:
+		push_warning("No turn clock is set")
+
+
 ## Returns true if [param other_actor] is hostile to this actor, false
 ## otherwise.
 func is_hostile(other_actor: Actor) -> bool:
@@ -141,6 +152,10 @@ func move_step(target_cell: Vector2i) -> void:
 
 func _tile_size_changed(_old_size: Vector2i) -> void:
 	sprite.tile_size = tile_size
+
+
+func _origin_cell_changed(old_cell: Vector2i) -> void:
+	moved.emit(old_cell)
 
 
 func _cell_size_changed(_old_size: int) -> void:

@@ -35,14 +35,14 @@ func get_actor_on_cell(cell: Vector2i) -> Actor:
 	return result
 
 
-## True if [param actor] can have its origin_cell property set to
-## [param cell] without overlapping other actors, false otherwise.
-func actor_can_enter_cell(actor: Actor, cell: Vector2i) -> bool:
+## True if [param rect] does not overlap with any actors in the actor map other
+## than the ones in [param actors_to_ignore], false otherwise.
+func rect_is_clear(rect: Rect2i, actors_to_ignore: Array[Actor]) -> bool:
 	var result := true
 
-	for covered in actor.covered_cells_at_cell(cell):
+	for covered in TileGeometry.cells_in_rect(rect):
 		var other_actor := get_actor_on_cell(covered)
-		if other_actor and (other_actor != actor):
+		if other_actor and other_actor not in actors_to_ignore:
 			result = false
 			break
 

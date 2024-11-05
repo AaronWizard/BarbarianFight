@@ -3,7 +3,8 @@ extends AbilityEffect
 
 ## Moves the source actor to the target cell.
 
-## The animation the source actor's sprite plays for the dash.
+## The animation the source actor's sprite plays for the dash.[br]
+## The animation is run [i]after[/i] the actor's origin cell is updated.
 @export var move_animation: ActorSpriteAnimation
 
 
@@ -16,4 +17,5 @@ func apply(target: Vector2i, _source: Rect2i, source_actor: Actor) -> void:
 	var diff := target - source_actor.origin_cell
 
 	source_actor.origin_cell = target
-	await source_actor.sprite.play_animation(diff, move_animation)
+	if move_animation:
+		await source_actor.sprite.play_animation(diff, move_animation)

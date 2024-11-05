@@ -18,10 +18,6 @@ var turn_running: bool:
 		return _turn_running
 
 
-## An arbitrary value used for breaking ties between turn takers when
-## determining their order.
-var rank := 1
-
 ## True if the turn taker is for a player controlled entity, false
 ## otherwise.[br]
 ## All else being equal, player controlled entities go before other entities.

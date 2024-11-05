@@ -63,14 +63,17 @@ func _init(new_visible_range: Array[Vector2i], new_targets: Array[Rect2i]) \
 	_visible_range = new_visible_range
 
 	_targets_by_selectable_cell = {}
+
+	for target in new_targets:
+		if target.position in _visible_range:
+			assert(not _targets_by_selectable_cell.has(target.position))
+			_targets_by_selectable_cell[target.position] = target
 	for target in new_targets:
 		var target_cells := TileGeometry.cells_in_rect(target)
 		for cell in target_cells:
-			if cell in _visible_range:
+			if (cell != target.position) and (cell in _visible_range) \
+					and not _targets_by_selectable_cell.has(cell):
 				_targets_by_selectable_cell[cell] = target
-		# Prioritize target origin cells
-		if target.position in _visible_range:
-			_targets_by_selectable_cell[target.position] = target
 
 
 ## The target at the selected cell.
