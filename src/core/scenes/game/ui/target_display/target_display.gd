@@ -1,6 +1,8 @@
 class_name TargetDisplay
 extends Node2D
 
+## Displays the target range and currently selected target for a player ability.
+
 @onready var _map_target_range := $MapTargetRange as MapTargetRange
 @onready var _target := $TargetCell as TargetCell
 
