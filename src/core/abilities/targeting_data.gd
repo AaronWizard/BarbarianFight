@@ -22,6 +22,12 @@ class_name TargetingData
 ## a target. These are based on the cells covered by the target rectangles.
 
 
+## True if valid targets exist.
+var has_targets: bool:
+	get:
+		return not _targets_by_selectable_cell.is_empty()
+
+
 ## The true target squares within the target/AOE range.
 var targets: Array[Rect2i]:
 	get:
@@ -74,6 +80,11 @@ func _init(new_visible_range: Array[Vector2i], new_targets: Array[Rect2i]) \
 			if (cell != target.position) and (cell in _visible_range) \
 					and not _targets_by_selectable_cell.has(cell):
 				_targets_by_selectable_cell[cell] = target
+
+
+## Returns true if [param selected_cell] has a corresponding target.
+func has_target_for_cell(selected_cell: Vector2i) -> bool:
+	return _targets_by_selectable_cell.has(selected_cell)
 
 
 ## The target at the selected cell.
