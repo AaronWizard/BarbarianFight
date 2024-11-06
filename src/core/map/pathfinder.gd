@@ -49,7 +49,7 @@ func find_path_between_rects(start_rect: Rect2i, end_rect: Rect2i) \
 	set_rect_solid(start_rect, false)
 
 	var grid := _get_grid(start_rect.size)
-	var end_cells := Pathfinder._end_cells(end_rect, start_rect.size, grid)
+	var end_cells := _end_cells(end_rect, start_rect.size, grid)
 	for end_cell in end_cells:
 		var path := grid.get_id_path(start_rect.position, end_cell)
 		if not path.is_empty() \

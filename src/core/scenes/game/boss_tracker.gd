@@ -59,7 +59,7 @@ func check_for_visible_boss() -> void:
 
 func _check_if_boss_still_visible() -> void:
 	if _current_boss:
-		if BossTracker._player_can_see_boss(player, _current_boss):
+		if _player_can_see_boss(player, _current_boss):
 			_boss_hidden_turns = 0
 		else:
 			assert(_boss_hidden_turns < _BOSS_HIDDEN_TURNS_MAX)
@@ -73,7 +73,7 @@ func _find_new_visible_boss() -> void:
 
 	for actor in player.map.actor_map.actors:
 		if (actor != player) and actor.is_boss \
-				and BossTracker._player_can_see_boss(player, actor):
+				and _player_can_see_boss(player, actor):
 			_set_boss(actor)
 			boss_tracked.emit(_current_boss)
 			break

@@ -15,20 +15,20 @@ var _target_cell: Vector2i
 func _init(target_actor: Actor, target_cell: Vector2i) -> void:
 	_target_actor = target_actor
 	_target_cell = target_cell
-	assert(BumpAction.is_possible(_target_actor, _target_cell))
+	assert(is_possible(_target_actor, _target_cell))
 
 
 func wait_for_map_anims() -> bool:
 	var result := true
-	if BumpAction._bump_will_be_move(_target_actor, _target_cell):
+	if _bump_will_be_move(_target_actor, _target_cell):
 		result = false
 	return result
 
 
 func run() -> void:
-	if BumpAction._bump_will_be_move(_target_actor, _target_cell):
+	if _bump_will_be_move(_target_actor, _target_cell):
 		_target_actor.move_step(_target_cell)
-	elif BumpAction._bump_will_be_attack(_target_actor, _target_cell):
+	elif _bump_will_be_attack(_target_actor, _target_cell):
 		var hit_actor := _target_actor.map.actor_map.get_actor_on_cell(
 				_target_cell)
 
