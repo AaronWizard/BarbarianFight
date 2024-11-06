@@ -1,6 +1,11 @@
 class_name PlayerMovementState
 extends State
 
+## Player control state where the player can move or wait.
+##
+## Player control state where the player can move or wait. Can enter targetting
+## state from here.
+
 @export var action_state: PlayerActionState
 @export var target_state: PlayerTargetState
 
