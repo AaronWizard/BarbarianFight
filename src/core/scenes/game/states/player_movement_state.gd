@@ -44,7 +44,13 @@ func handle_input(_event: InputEvent) -> void:
 
 
 func _map_clicked(cell: Vector2i) -> void:
-	print(cell, " clicked")
+	if TileGeometry.cell_is_adjacent_to_rect(_player.rect, cell):
+		var direction := TileGeometry.cardinal_dir_from_rect_to_cell(
+				_player.rect, cell)
+		var next_cell := _player.origin_cell + direction
+		if _player.map.actor_can_enter_cell(_player, next_cell):
+			var action := MoveAction.new(_player, next_cell)
+			_end_turn(action)
 
 
 func _try_bump() -> TurnAction:
