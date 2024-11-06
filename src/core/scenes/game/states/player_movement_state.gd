@@ -12,6 +12,13 @@ var _player: Actor
 
 func enter(data := {}) -> void:
 	_player = data.player
+	@warning_ignore("return_value_discarded")
+	_player.map.mouse_clicked.connect(_map_clicked)
+
+
+func exit() -> void:
+	_player.map.mouse_clicked.disconnect(_map_clicked)
+	_player = null
 
 
 func handle_input(_event: InputEvent) -> void:
@@ -34,6 +41,10 @@ func handle_input(_event: InputEvent) -> void:
 			var action := _try_bump()
 			if action:
 				_end_turn(action)
+
+
+func _map_clicked(cell: Vector2i) -> void:
+	print(cell, " clicked")
 
 
 func _try_bump() -> TurnAction:
