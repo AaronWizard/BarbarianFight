@@ -35,7 +35,7 @@ func handle_input(_event: InputEvent) -> void:
 		for a in action_combos.keys():
 			@warning_ignore("unsafe_cast")
 			var action := a as String
-			if Input.is_action_just_pressed(action):
+			if Input.is_action_just_released(action):
 				ability_action_input = action
 				break
 		if ability_action_input and not ability_action_input.is_empty():
