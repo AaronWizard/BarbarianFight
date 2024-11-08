@@ -1,27 +1,24 @@
-class_name PlayerTargetTracker
+class_name PlayerTargetKeyboardMover
 
-## Class for keeping track of player's target range and current target
-## selection.
-##
-## When in targeting mode for a player's ability, keeps track of the targets
-## within the ability's range and the currently selected target. The player can
-## move this target using directional inputs.
+## Class for moving the player's target with the keyboard when targetting an
+## ability.
 
 
-var has_targets: bool:
-	get:
-		return not _targets.is_empty()
-
-
+## The current target.
 var target: Rect2i:
 	get:
 		return _targets[_current_target_index]
+	set(value):
+		var index := _targets.find(value)
+		if index > -1:
+			_current_target_index = index
 
 
 var _targets: Array[Rect2i] = []
 var _current_target_index := -1
 
 
+## Set the targets.
 func set_targets(new_targets: Array[Rect2i]) -> void:
 	clear()
 
@@ -30,6 +27,7 @@ func set_targets(new_targets: Array[Rect2i]) -> void:
 		_current_target_index = 0
 
 
+## Moves the target in the given direction.
 func move_target(direction: Vector2i) -> void:
 	var new_target_index := -1
 	var min_dist_sqr := -1
@@ -50,6 +48,7 @@ func move_target(direction: Vector2i) -> void:
 	_current_target_index = new_target_index
 
 
+## Clears the targets.
 func clear() -> void:
 	_targets.clear()
 	_current_target_index = -1

@@ -1,6 +1,11 @@
 class_name PlayerMovementState
 extends State
 
+## Player control state where the player can move or wait.
+##
+## Player control state where the player can move or wait. Can enter targetting
+## state from here.
+
 @export var action_state: PlayerActionState
 @export var target_state: PlayerTargetState
 
@@ -12,6 +17,13 @@ var _player: Actor
 
 func enter(data := {}) -> void:
 	_player = data.player
+	@warning_ignore("return_value_discarded")
+	_player.map.mouse_clicked.connect(_map_clicked)
+
+
+func exit() -> void:
+	_player.map.mouse_clicked.disconnect(_map_clicked)
+	_player = null
 
 
 func handle_input(_event: InputEvent) -> void:
@@ -34,6 +46,16 @@ func handle_input(_event: InputEvent) -> void:
 			var action := _try_bump()
 			if action:
 				_end_turn(action)
+
+
+func _map_clicked(cell: Vector2i) -> void:
+	if TileGeometry.cell_is_adjacent_to_rect(_player.rect, cell):
+		var direction := TileGeometry.cardinal_dir_from_rect_to_cell(
+				_player.rect, cell)
+		var next_cell := _player.origin_cell + direction
+		if _player.map.actor_can_enter_cell(_player, next_cell):
+			var action := MoveAction.new(_player, next_cell)
+			_end_turn(action)
 
 
 func _try_bump() -> TurnAction:

@@ -121,6 +121,18 @@ static func rect_center_cell_closest_to_target(rect: Rect2i, target: Vector2i) \
 	return result
 
 
+## Check if [param cell] is adjacent to [param rect].
+static func cell_is_adjacent_to_rect(rect: Rect2i, cell: Vector2i) -> bool:
+	var result := false
+
+	if (cell.x >= rect.position.x) and (cell.x < rect.end.x):
+		result = (cell.y == (rect.position.y - 1)) or (cell.y == rect.end.y)
+	elif (cell.y >= rect.position.y) and (cell.y < rect.end.y):
+		result = (cell.x == (rect.position.x - 1)) or (cell.x == rect.end.x)
+
+	return result
+
+
 ## Get the list of positions a rectangle with a size of [param adj_rect_size]
 ## can have to be adjacent to [param center_rect].
 static func adjacent_rect_positions(center_rect: Rect2i,
