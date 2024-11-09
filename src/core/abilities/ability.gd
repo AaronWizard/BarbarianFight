@@ -15,8 +15,8 @@ extends Resource
 @export var use_attack_anim := true
 
 
-func get_target_range(source_actor: Actor) -> TargetingData:
-	return target_range.get_target_range(source_actor)
+func get_target_data(source_actor: Actor) -> TargetingData:
+	return target_range.get_target_data(source_actor)
 
 
 ## Performs the ability at [param target] for [param source_actor].[br]

@@ -9,7 +9,7 @@ extends Resource
 
 
 ## Gets the targets for an abilith whose source is [param source_actor].
-func get_target_range(source_actor: Actor) -> TargetingData:
+func get_target_data(source_actor: Actor) -> TargetingData:
 	var target_range := _get_target_range(source_actor)
 	var targets := _get_targets(target_range, source_actor)
 	_range_post_processing(target_range, source_actor)

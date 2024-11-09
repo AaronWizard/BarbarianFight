@@ -28,7 +28,9 @@ var has_targets: bool:
 		return not _targets.is_empty()
 
 
-## The true target squares within the target/AOE range.
+## The true target squares within the target/AOE range.[br]
+## Only the rectangle positions are necessary for running abilities.
+## The rectangle sizes are for display to the player.
 var targets: Array[Rect2i]:
 	get:
 		return _targets

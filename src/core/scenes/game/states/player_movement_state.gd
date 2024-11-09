@@ -77,7 +77,7 @@ func _get_direction_input() -> Vector2i:
 
 func _start_ability_targeting(ability_index: int, input_code: String) -> void:
 	var ability := _player.abilities[ability_index]
-	var targeting_data := ability.get_target_range(_player)
+	var targeting_data := ability.get_target_data(_player)
 
 	var data := {
 		player = _player,
