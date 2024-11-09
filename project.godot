@@ -33,6 +33,10 @@ window/size/window_height_override=720
 window/stretch/mode="viewport"
 window/stretch/aspect="expand"
 
+[editor]
+
+script/templates_search_path="res://src/editor/script_templates"
+
 [gui]
 
 theme/custom="res://src/core/ui/resources/gui_theme.tres"
