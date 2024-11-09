@@ -23,6 +23,7 @@ func get_action() -> TurnAction:
 
 	return result
 
+
 func _try_ability() -> TurnAction:
 	var result: TurnAction = null
 
@@ -45,6 +46,7 @@ func _try_ability() -> TurnAction:
 		result = AbilityAction.new(_actor, target.position, ability)
 
 	return result
+
 
 func _find_step_to_enemy() -> TurnAction:
 	var result: TurnAction = null

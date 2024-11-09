@@ -4,6 +4,7 @@ extends AbilityEffect
 ## Damages the target actor based on the source actor's stats and the direction
 ## from the source rectangle.
 
+
 func apply(target: Vector2i, source: Rect2i, source_actor: Actor) -> void:
 	var target_actor := source_actor.map.actor_map.get_actor_on_cell(target)
 
