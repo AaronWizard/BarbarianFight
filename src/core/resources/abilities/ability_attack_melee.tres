@@ -1,0 +1,26 @@
+[gd_resource type="Resource" script_class="Ability" load_steps=6 format=3 uid="uid://c4wncvip71jux"]
+
+[ext_resource type="Script" path="res://src/core/abilities/ability.gd" id="1_boobp"]
+[ext_resource type="Script" path="res://src/core/abilities/abilityeffect/attack_target_actor_effect.gd" id="1_lcbre"]
+[ext_resource type="Script" path="res://src/core/abilities/targetrange/area_target_range.gd" id="2_i0rbt"]
+
+[sub_resource type="Resource" id="Resource_ryepy"]
+script = ExtResource("1_lcbre")
+
+[sub_resource type="Resource" id="Resource_23gsw"]
+script = ExtResource("2_i0rbt")
+range_start_dist = 1
+range_extend = 0
+use_source_size = true
+scale_extend = true
+target_type = 2
+movement_blocking_los = false
+actor_blocking = 0
+ignore_range_blocking = false
+
+[resource]
+script = ExtResource("1_boobp")
+name = "Attack"
+target_range = SubResource("Resource_23gsw")
+effect = SubResource("Resource_ryepy")
+use_attack_anim = true
