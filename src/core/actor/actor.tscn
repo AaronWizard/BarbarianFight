@@ -1,6 +1,7 @@
-[gd_scene load_steps=7 format=3 uid="uid://dg6ygq33001cu"]
+[gd_scene load_steps=8 format=3 uid="uid://dg6ygq33001cu"]
 
 [ext_resource type="Script" path="res://src/core/actor/actor.gd" id="1_vwlen"]
+[ext_resource type="Resource" uid="uid://c4wncvip71jux" path="res://src/core/resources/abilities/ability_attack_melee.tres" id="2_32fuy"]
 [ext_resource type="PackedScene" uid="uid://c5r8su0ki15l8" path="res://src/core/actor/sprite/actor_sprite.tscn" id="2_shvgh"]
 [ext_resource type="Script" path="res://src/core/timing/turn_taker.gd" id="3_8plh3"]
 [ext_resource type="Shader" path="res://src/core/shaders/sprite_dissolve.gdshader" id="3_51ydw"]
@@ -14,6 +15,7 @@ shader_parameter/dissolve = 0.0
 [node name="Actor" type="Node2D"]
 position = Vector2(0, 16)
 script = ExtResource("1_vwlen")
+attack_ability = ExtResource("2_32fuy")
 
 [node name="ActorSprite" parent="." instance=ExtResource("2_shvgh")]
 

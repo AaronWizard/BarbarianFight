@@ -37,8 +37,12 @@ signal player_turn_started
 ## false otherwise.
 @export var is_boss := false
 
-## The actor's abilities
+## The actor's standard attack.
+@export var attack_ability: Ability
+
+## The actor's abilities.
 @export var abilities: Array[Ability] = []
+
 
 ## The actor's current map.
 var map: Map:
@@ -56,6 +60,16 @@ var sprite: ActorSprite:
 var stamina: Stamina:
 	get:
 		return $Stamina as Stamina
+
+
+## All of the actor's abilities, including its standard attack ability.
+var all_abilities: Array[Ability]:
+	get:
+		var result: Array[Ability] = []
+		if attack_ability:
+			result.append(attack_ability)
+		result.append_array(abilities)
+		return result
 
 
 @onready var _turn_taker := $TurnTaker as TurnTaker
