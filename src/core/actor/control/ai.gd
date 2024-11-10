@@ -41,9 +41,9 @@ func _try_ability() -> TurnAction:
 		var target_data := possible_abilities[ability] as TargetingData
 
 		@warning_ignore("unsafe_cast")
-		var target := target_data.targets.pick_random() as Rect2i
+		var target := target_data.targets.pick_random() as Vector2i
 
-		result = AbilityAction.new(_actor, target.position, ability)
+		result = AbilityAction.new(_actor, target, ability)
 
 	return result
 

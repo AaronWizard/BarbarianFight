@@ -4,8 +4,8 @@ class_name PlayerTargetKeyboardMover
 ## ability.
 
 
-## The current target.
-var target: Rect2i:
+## The current target rectangle.
+var target: Vector2i:
 	get:
 		return _targets[_current_target_index]
 	set(value):
@@ -14,12 +14,12 @@ var target: Rect2i:
 			_current_target_index = index
 
 
-var _targets: Array[Rect2i] = []
+var _targets: Array[Vector2i] = []
 var _current_target_index := -1
 
 
-## Set the targets.
-func set_targets(new_targets: Array[Rect2i]) -> void:
+## Set the target rectangles.
+func set_targets(new_targets: Array[Vector2i]) -> void:
 	clear()
 
 	_targets.assign(new_targets)
@@ -37,7 +37,7 @@ func move_target(direction: Vector2i) -> void:
 
 	for i in range(_targets.size()):
 		var other_target := _targets[i]
-		var diff := other_target.position - target.position
+		var diff := other_target - target
 		if (moving_horizontal and (signi(diff.x) == signi(direction.x))) \
 				or (moving_vertical and (signi(diff.y) == signi(direction.y))):
 			if (min_dist_sqr < 0) \

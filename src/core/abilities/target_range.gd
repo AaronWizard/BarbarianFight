@@ -25,6 +25,8 @@ func _get_target_range(_source_actor: Actor) -> Array[Vector2i]:
 
 
 ## Get the set of targets within [param target_range].[br]
+## These are represented by [Rect2i] objects. The position is used for ability
+## effect targeting, while the size is used for displaying to the player.[br]
 ## Can be overriden.
 func _get_targets(_target_range: Array[Vector2i], _source_actor: Actor) \
 		-> Array[Rect2i]:

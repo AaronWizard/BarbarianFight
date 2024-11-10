@@ -48,7 +48,7 @@ func handle_input(_event: InputEvent) -> void:
 		request_state_change(movement_state, { player = _player })
 	elif _targetting_data.has_targets:
 		if Input.is_action_just_released("wait"):
-			_end_turn(_target_keyboard_mover.target.position)
+			_end_turn(_target_keyboard_mover.target)
 		else:
 			_try_move_target()
 
@@ -57,18 +57,22 @@ func _map_clicked(cell: Vector2i) -> void:
 	if _targetting_data.has_target_for_cell(cell):
 		var target := _targetting_data.target_at_selected_cell(cell)
 		if target == _target_keyboard_mover.target:
-			_end_turn(target.position)
+			_end_turn(target)
 		else:
 			_target_keyboard_mover.target = target
 			assert(_target_keyboard_mover.target == target)
-			target_display.set_target(target)
+			target_display.set_target(
+					target, _targetting_data.get_target_size(target))
 
 
 func _try_move_target() -> void:
 	var direction := _get_direction_input()
 	if direction.length_squared() == 1:
 		_target_keyboard_mover.move_target(direction)
-		target_display.set_target(_target_keyboard_mover.target)
+		target_display.set_target(
+			_target_keyboard_mover.target,
+			_targetting_data.get_target_size(_target_keyboard_mover.target)
+		)
 
 
 func _get_direction_input() -> Vector2i:

@@ -2,24 +2,14 @@ class_name TargetingData
 
 ## A class representing the valid targets of an actor's ability.
 ##
-## A class representing the valid targets of an actor's ability. These may be
-## either the valid targets returned by a [TargetRange] where one may be
-## selected for an ability, or they may be the targets returned by an
-## [AreaOfEffect] where they will all be affected by the ability.[br][br]
+## A class representing the valid targets of an actor's ability. Each target is
+## associated with a size, for displaying a target rectangle to the player. e.g.
+## If the ability targets actors, a target is an actor's origin cell while its
+## size is the size of the actor. All cells covered by such a target rectangle
+## are considered "selectable cells" that are mapped to the target cell.[br][br]
 ##
-## Each target is represented by a [Rect2i]. Only the position of a target
-## rectangle is needed to use as an ability or AOE target. The size is meant for
-## display to the player. For example, for an ability that targets actors a
-## target rectangle's position would be an actor's origin cell while the size
-## would be the actor's size. Here the target rectangle's position is used for
-## the ability itself while its size is used for sizing the target graphic when
-## an actor is selected as a target. All cells covered by a target rectangle
-## map to the rectangle's position for the purposes of ability or AOE
-## targetting.[br][br]
-##
-## TargetingData also has the cells representing the target/AOE range shown to
-## the player. Within this range is a set of selectable cells, which each map to
-## a target. These are based on the cells covered by the target rectangles.
+## TargetingData also has the cells representing the full visible target/AOE
+## range shown to the player.
 
 
 ## True if valid targets exist.
@@ -28,10 +18,8 @@ var has_targets: bool:
 		return not _targets.is_empty()
 
 
-## The true target squares within the target/AOE range.[br]
-## Only the rectangle positions are necessary for running abilities.
-## The rectangle sizes are for display to the player.
-var targets: Array[Rect2i]:
+## The target cells within the target/AOE range.
+var targets: Array[Vector2i]:
 	get:
 		return _targets
 
@@ -51,36 +39,48 @@ var selectable_cells: Array[Vector2i]:
 
 
 # The targets.
-var _targets: Array[Rect2i]
+var _targets: Array[Vector2i]
 
 # The cells highlighted for the player representing the target/AOE range.
 var _visible_range: Array[Vector2i]
+
+# A dictionary of (Vector2i: Vector2i) pairs. The keys are the target positions
+# and the values are the target rectangle sizes.
+var _target_sizes: Dictionary
 
 # A dictionary of (Vector2i: int) pairs. The keys are cells the player may
 # select, while the values are indices in _targets.
 var _targets_by_selectable_cell: Dictionary
 
 
-func _init(new_visible_range: Array[Vector2i], new_targets: Array[Rect2i]) \
-		-> void:
-	_targets = new_targets
+func _init(new_visible_range: Array[Vector2i],
+		new_target_rects: Array[Rect2i]) -> void:
 	_visible_range = new_visible_range
 
+	_targets = []
+	_target_sizes = {}
 	_targets_by_selectable_cell = {}
 
+	for i in range(0, new_target_rects.size()):
+		var target_rect := new_target_rects[i]
+
+		_targets.append(target_rect.position)
+		_target_sizes[target_rect.position] = target_rect.size
+
+		if target_rect.position in _visible_range:
+			assert(not _targets_by_selectable_cell.has(target_rect.position))
+			_targets_by_selectable_cell[target_rect.position] = i
+
+	assert(_targets.size() == new_target_rects.size())
 	for i in range(0, _targets.size()):
-		var target := _targets[i]
+		var t_pos := _targets[i]
+		@warning_ignore("unsafe_cast")
+		var t_size := _target_sizes[t_pos] as Vector2i
+		var t_rect := Rect2i(t_pos, t_size)
 
-		if target.position in _visible_range:
-			assert(not _targets_by_selectable_cell.has(target.position))
-			_targets_by_selectable_cell[target.position] = i
-
-	for i in range(0, _targets.size()):
-		var target := _targets[i]
-
-		var target_cells := TileGeometry.cells_in_rect(target)
+		var target_cells := TileGeometry.cells_in_rect(t_rect)
 		for cell in target_cells:
-			if (cell != target.position) and (cell in _visible_range) \
+			if (cell != t_pos) and (cell in _visible_range) \
 					and not _targets_by_selectable_cell.has(cell):
 				_targets_by_selectable_cell[cell] = i
 
@@ -91,7 +91,14 @@ func has_target_for_cell(selected_cell: Vector2i) -> bool:
 
 
 ## The target at the selected cell.
-func target_at_selected_cell(selected_cell: Vector2i) -> Rect2i:
+func target_at_selected_cell(selected_cell: Vector2i) -> Vector2i:
 	@warning_ignore("unsafe_cast")
 	var target_index := _targets_by_selectable_cell[selected_cell] as int
 	return _targets[target_index]
+
+
+## The size of the target rectangle for the given target.
+func get_target_size(target: Vector2i) -> Vector2i:
+	@warning_ignore("unsafe_cast")
+	var result := _target_sizes[target] as Vector2i
+	return result
