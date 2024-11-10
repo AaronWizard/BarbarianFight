@@ -13,6 +13,7 @@ extends State
 @export var action_combos: Dictionary
 
 var _player: Actor
+var _attack_targeting_data: TargetingData
 
 
 func enter(data := {}) -> void:
@@ -20,10 +21,14 @@ func enter(data := {}) -> void:
 	@warning_ignore("return_value_discarded")
 	_player.map.mouse_clicked.connect(_map_clicked)
 
+	if _player.attack_ability:
+		_attack_targeting_data = _player.attack_ability.get_target_data(_player)
+
 
 func exit() -> void:
 	_player.map.mouse_clicked.disconnect(_map_clicked)
 	_player = null
+	_attack_targeting_data = null
 
 
 func handle_input(_event: InputEvent) -> void:
@@ -49,7 +54,13 @@ func handle_input(_event: InputEvent) -> void:
 
 
 func _map_clicked(cell: Vector2i) -> void:
-	if TileGeometry.cell_is_adjacent_to_rect(_player.rect, cell):
+	if _player.rect.has_point(cell):
+		_end_turn(null)
+	elif cell in _attack_targeting_data.targets:
+		assert(_player.attack_ability)
+		var action := AbilityAction.new(_player, cell, _player.attack_ability)
+		_end_turn(action)
+	elif TileGeometry.cell_is_adjacent_to_rect(_player.rect, cell):
 		var direction := TileGeometry.cardinal_dir_from_rect_to_cell(
 				_player.rect, cell)
 		var next_cell := _player.origin_cell + direction
