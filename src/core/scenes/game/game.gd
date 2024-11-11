@@ -27,7 +27,6 @@ var _current_map: Map:
 
 @onready var _player_stamina := $UI/PlayerStamina as PlayerStamina
 
-@onready var _boss_tracker := $BossTracker as BossTracker
 @onready var _boss_stamina := $UI/BossStamina as BossStamina
 
 @onready var _state_machine := $PlayerStateMachine as StateMachine
@@ -53,7 +52,7 @@ func _init_player() -> void:
 	@warning_ignore("return_value_discarded")
 	_player_actor.stamina.died.connect(_on_player_died)
 
-	_boss_tracker.player = _player_actor
+	_boss_stamina.player = _player_actor
 
 	_player_actor.sprite.follow_with_camera(_player_camera)
 
@@ -89,7 +88,7 @@ func _unload_map() -> void:
 
 
 func _on_player_actor_turn_started() -> void:
-	_boss_tracker.check_for_visible_boss()
+	_boss_stamina.check_for_visible_boss()
 
 	if _current_map.animations_playing:
 		await _current_map.animations_finished
@@ -111,12 +110,3 @@ func _on_player_died() -> void:
 	await _screen_fade.fade_out()
 
 	switch_scene(game_over_scene_path)
-
-
-func _on_boss_tracker_boss_tracked(boss: Actor) -> void:
-	_boss_stamina.show_boss(boss)
-	_boss_stamina.visible = true
-
-
-func _on_boss_tracker_boss_untracked() -> void:
-	_boss_stamina.visible = false
