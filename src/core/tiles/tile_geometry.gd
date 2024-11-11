@@ -198,6 +198,32 @@ static func cardinal_dir_from_rect_to_cell(rect: Rect2i, target: Vector2i) \
 	return result
 
 
+## Get the cells adjacent to one side of [param rect] at the given direction.
+## [br]
+## [param direction] must be one of the four cardinal directions.
+static func adjacent_edge_cells(rect: Rect2i, direction: Vector2i) \
+		-> Array[Vector2i]:
+	var edge_rect := Rect2i(rect.position, Vector2i.ONE)
+	match direction:
+		Vector2i.UP:
+			edge_rect.position.y -= 1
+			edge_rect.size.x = rect.size.x
+		Vector2i.RIGHT:
+			edge_rect.position.x += rect.size.x
+			edge_rect.size.y = rect.size.y
+		Vector2i.DOWN:
+			edge_rect.position.y += rect.size.y
+			edge_rect.size.x = rect.size.x
+		Vector2i.LEFT:
+			edge_rect.position.x -= 1
+			edge_rect.size.y = rect.size.y
+		_:
+			push_error("%v is not a cardinal direction" % direction)
+			return []
+
+	return cells_in_rect(edge_rect)
+
+
 ## Get the cells surrounding [param source_rect] where each cell is between
 ## [param range_start_dist]
 ## and ([param range_start_dist] + [param range_extend]) cells in manhattan

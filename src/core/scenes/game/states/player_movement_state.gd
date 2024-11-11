@@ -44,13 +44,18 @@ func handle_input(_event: InputEvent) -> void:
 				ability_action_input = action
 				break
 		if ability_action_input and not ability_action_input.is_empty():
-			@warning_ignore("unsafe_call_argument")
+			@warning_ignore("unsafe_cast")
+			var ability_index := action_combos[ability_action_input] as int
+			var ability := _player.abilities[ability_index]
+			var targeting_data := ability.get_target_data(_player)
 			_start_ability_targeting(
-					action_combos[ability_action_input], ability_action_input)
+				ability,
+				targeting_data,
+				targeting_data.targets[0],
+				ability_action_input
+			)
 		else:
-			var action := _try_bump()
-			if action:
-				_end_turn(action)
+			_try_bump()
 
 
 func _map_clicked(cell: Vector2i) -> void:
@@ -69,19 +74,39 @@ func _map_clicked(cell: Vector2i) -> void:
 			_end_turn(action)
 
 
-func _try_bump() -> TurnAction:
-	var result: TurnAction = null
-
+func _try_bump() -> void:
 	var direction := _get_direction_input()
 	if direction.length_squared() == 1:
-		var target_cell := _player.origin_cell + direction
+		var move_action := _try_keyboard_move(direction)
+		if move_action:
+			_end_turn(move_action)
+		else:
+			_try_keyboard_attack(direction)
 
-		if _player.map.actor_can_enter_cell(_player, target_cell):
-			result = MoveAction.new(_player, target_cell)
-		elif BumpAction.is_possible(_player, target_cell):
-			result = BumpAction.new(_player, target_cell)
 
+func _try_keyboard_move(direction: Vector2i) -> TurnAction:
+	var result: TurnAction = null
+	var target_cell := _player.origin_cell + direction
+	if _player.map.actor_can_enter_cell(_player, target_cell):
+		result = MoveAction.new(_player, target_cell)
 	return result
+
+
+func _try_keyboard_attack(direction: Vector2i) -> void:
+	var edge_cells := TileGeometry.adjacent_edge_cells(
+			_player.rect, direction)
+	var targets: Array[Vector2i] = []
+	for cell in edge_cells:
+		if cell in _attack_targeting_data.targets:
+			targets.append(cell)
+
+	if targets.size() == 1:
+		var action := AbilityAction.new(
+				_player, targets[0], _player.attack_ability)
+		_end_turn(action)
+	elif targets.size() > 1:
+		_start_ability_targeting(
+				_player.attack_ability, _attack_targeting_data, targets[0])
 
 
 func _get_direction_input() -> Vector2i:
@@ -89,16 +114,16 @@ func _get_direction_input() -> Vector2i:
 			"step_west", "step_east", "step_north", "step_south"))
 
 
-func _start_ability_targeting(ability_index: int, input_code: String) -> void:
-	var ability := _player.abilities[ability_index]
-	var targeting_data := ability.get_target_data(_player)
-
+func _start_ability_targeting(ability: Ability, targeting_data: TargetingData,
+		initial_target: Vector2i, input_code := "") -> void:
 	var data := {
 		player = _player,
 		ability = ability,
 		targeting_data = targeting_data,
-		input_code = input_code
+		initial_target = initial_target
 	}
+	if not input_code.is_empty():
+		data.input_code = input_code
 
 	request_state_change(target_state, data)
 

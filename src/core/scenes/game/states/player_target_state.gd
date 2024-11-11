@@ -22,11 +22,14 @@ func enter(data := {}) -> void:
 	_player = data.player
 	_ability = data.ability
 	_targetting_data = data.targeting_data
-	_input_code = data.input_code
 
-	var initial_target := _targetting_data.targets[0]
-	if data.has("initial_target"):
-		initial_target = data.initial_target
+	if data.has("input_code"):
+		_input_code = data.input_code
+	else:
+		_input_code = ""
+
+	@warning_ignore("unsafe_cast")
+	var initial_target := data.initial_target as Vector2i
 
 	_target_keyboard_mover.set_targets(_targetting_data.targets, initial_target)
 	target_display.show_range(_targetting_data, initial_target)
@@ -48,7 +51,10 @@ func exit() -> void:
 
 
 func handle_input(_event: InputEvent) -> void:
-	if Input.is_action_just_released(_input_code):
+	if Input.is_action_just_released("targeting_cancel") or (
+		not _input_code.is_empty()
+		and Input.is_action_just_released(_input_code)
+	):
 		request_state_change(movement_state, { player = _player })
 	elif _targetting_data.has_targets:
 		if Input.is_action_just_released("wait"):
