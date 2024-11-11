@@ -1,8 +1,9 @@
-[gd_scene load_steps=4 format=3 uid="uid://bmtw6f2mimcy3"]
+[gd_scene load_steps=5 format=3 uid="uid://bmtw6f2mimcy3"]
 
 [ext_resource type="Script" path="res://src/core/scenes/game/ui/game_gui.gd" id="1_750xt"]
 [ext_resource type="PackedScene" uid="uid://cn0u6gdopw7sw" path="res://src/core/scenes/game/ui/player_stamina.tscn" id="2_ijckc"]
 [ext_resource type="PackedScene" uid="uid://dp10plw6af2i1" path="res://src/core/scenes/game/ui/boss_stamina.tscn" id="3_krq3i"]
+[ext_resource type="PackedScene" uid="uid://dceanwqn4fxa7" path="res://src/core/scenes/game/ui/ability_display.tscn" id="4_kqpkf"]
 
 [node name="GameGUI" type="CanvasLayer"]
 script = ExtResource("1_750xt")
@@ -17,6 +18,20 @@ offset_right = 63.0
 offset_bottom = -2.0
 grow_vertical = 0
 
+[node name="AbilityDisplay" parent="." instance=ExtResource("4_kqpkf")]
+visible = false
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -39.0
+offset_top = -20.0
+offset_right = -2.0
+offset_bottom = -2.0
+grow_horizontal = 0
+grow_vertical = 0
+
 [node name="BossStamina" parent="." instance=ExtResource("3_krq3i")]
 visible = false
 anchors_preset = 5
@@ -27,3 +42,5 @@ offset_top = 2.0
 offset_right = 83.0
 offset_bottom = 19.0
 grow_horizontal = 2
+
+[connection signal="cancelled" from="AbilityDisplay" to="." method="_on_ability_display_cancelled"]

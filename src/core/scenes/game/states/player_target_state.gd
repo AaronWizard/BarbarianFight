@@ -7,6 +7,7 @@ extends State
 @export var movement_state: PlayerMovementState
 
 @export var target_display: TargetDisplay
+@export var game_gui: GameGUI
 
 # Also used to keep track of the currently selected target.
 var _target_keyboard_mover := PlayerTargetKeyboardMover.new()
@@ -16,6 +17,11 @@ var _ability: Ability
 var _targetting_data: TargetingData
 
 var _input_code: String
+
+
+func _ready() -> void:
+	@warning_ignore("return_value_discarded")
+	game_gui.ability_cancelled.connect(_on_ability_cancelled)
 
 
 func enter(data := {}) -> void:
@@ -37,6 +43,8 @@ func enter(data := {}) -> void:
 	@warning_ignore("return_value_discarded")
 	_player.map.mouse_clicked.connect(_map_clicked)
 
+	game_gui.show_ability(_ability.name)
+
 
 func exit() -> void:
 	target_display.clear()
@@ -49,18 +57,24 @@ func exit() -> void:
 	_targetting_data = null
 	_input_code = ""
 
+	game_gui.hide_ability()
+
 
 func handle_input(_event: InputEvent) -> void:
 	if Input.is_action_just_released("targeting_cancel") or (
 		not _input_code.is_empty()
 		and Input.is_action_just_released(_input_code)
 	):
-		request_state_change(movement_state, { player = _player })
+		_cancel_targeting()
 	elif _targetting_data.has_targets:
 		if Input.is_action_just_released("wait"):
 			_end_turn(_target_keyboard_mover.target)
 		else:
 			_try_move_target()
+
+
+func _on_ability_cancelled() -> void:
+	_cancel_targeting()
 
 
 func _map_clicked(cell: Vector2i) -> void:
@@ -88,6 +102,10 @@ func _try_move_target() -> void:
 func _get_direction_input() -> Vector2i:
 	return Vector2i(Input.get_vector(
 			"step_west", "step_east", "step_north", "step_south"))
+
+
+func _cancel_targeting() -> void:
+	request_state_change(movement_state, { player = _player })
 
 
 func _end_turn(target_cell: Vector2i) -> void:

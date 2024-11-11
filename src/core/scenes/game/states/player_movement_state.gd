@@ -48,10 +48,13 @@ func handle_input(_event: InputEvent) -> void:
 			var ability_index := action_combos[ability_action_input] as int
 			var ability := _player.abilities[ability_index]
 			var targeting_data := ability.get_target_data(_player)
+			var initial_target := Vector2i.ZERO
+			if targeting_data.has_targets:
+				initial_target = targeting_data.targets[0]
 			_start_ability_targeting(
 				ability,
 				targeting_data,
-				targeting_data.targets[0],
+				initial_target,
 				ability_action_input
 			)
 		else:

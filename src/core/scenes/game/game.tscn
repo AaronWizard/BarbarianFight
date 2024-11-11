@@ -52,11 +52,12 @@ action_combos = {
 "shove": 1
 }
 
-[node name="PlayerTargetState" type="Node" parent="PlayerStateMachine" node_paths=PackedStringArray("action_state", "movement_state", "target_display")]
+[node name="PlayerTargetState" type="Node" parent="PlayerStateMachine" node_paths=PackedStringArray("action_state", "movement_state", "target_display", "game_gui")]
 script = ExtResource("11_nrae6")
 action_state = NodePath("../PlayerActionState")
 movement_state = NodePath("../PlayerMovementState")
 target_display = NodePath("../../TargetDisplay")
+game_gui = NodePath("../../GameGUI")
 
 [node name="PlayerActionState" type="Node" parent="PlayerStateMachine" node_paths=PackedStringArray("wait_state")]
 script = ExtResource("12_0vv7w")
