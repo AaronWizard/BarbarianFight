@@ -11,7 +11,12 @@ offset_bottom = 16.0
 theme_override_constants/separation = 0
 script = ExtResource("1_dvtoe")
 
-[node name="BossName" type="Label" parent="."]
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 2
+theme_override_constants/margin_left = 1
+theme_override_constants/margin_top = 1
+
+[node name="BossName" type="Label" parent="MarginContainer"]
 layout_mode = 2
 size_flags_horizontal = 4
 text = "Boss Name"

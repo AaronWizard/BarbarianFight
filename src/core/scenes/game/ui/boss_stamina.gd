@@ -1,7 +1,7 @@
 class_name BossStamina
 extends VBoxContainer
 
-@onready var _boss_name := $BossName as Label
+@onready var _boss_name := $MarginContainer/BossName as Label
 @onready var _stamina_bar := $StaminaBar as ActorStamina
 
 
