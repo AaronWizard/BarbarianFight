@@ -7,7 +7,7 @@ extends State
 @export var movement_state: PlayerMovementState
 
 @export var target_display: TargetDisplay
-@export var game_gui: GameGUI
+@export var ability_display: AbilityDisplay
 
 # Also used to keep track of the currently selected target.
 var _target_keyboard_mover := PlayerTargetKeyboardMover.new()
@@ -21,7 +21,7 @@ var _input_code: String
 
 func _ready() -> void:
 	@warning_ignore("return_value_discarded")
-	game_gui.ability_cancelled.connect(_on_ability_cancelled)
+	ability_display.cancelled.connect(_on_ability_cancelled)
 
 
 func enter(data := {}) -> void:
@@ -43,7 +43,8 @@ func enter(data := {}) -> void:
 	@warning_ignore("return_value_discarded")
 	_player.map.mouse_clicked.connect(_map_clicked)
 
-	game_gui.show_ability(_ability.name)
+	ability_display.set_ability_name(_ability.name)
+	ability_display.visible = true
 
 
 func exit() -> void:
@@ -57,7 +58,7 @@ func exit() -> void:
 	_targetting_data = null
 	_input_code = ""
 
-	game_gui.hide_ability()
+	ability_display.visible = false
 
 
 func handle_input(_event: InputEvent) -> void:

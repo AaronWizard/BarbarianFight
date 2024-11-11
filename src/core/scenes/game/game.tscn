@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=3 uid="uid://cvi0bb84c7308"]
+[gd_scene load_steps=17 format=3 uid="uid://cvi0bb84c7308"]
 
 [ext_resource type="Script" path="res://src/core/scenes/game/game.gd" id="1_soc31"]
 [ext_resource type="PackedScene" uid="uid://c0c5o4j30lwif" path="res://src/data/maps/arena.tscn" id="2_4vijj"]
@@ -7,13 +7,15 @@
 [ext_resource type="Script" path="res://src/core/timing/turn_clock.gd" id="4_17ngi"]
 [ext_resource type="PackedScene" uid="uid://ctkvdtlq3eakq" path="res://src/core/scenes/game/ui/target_display/target_display.tscn" id="4_l1y87"]
 [ext_resource type="Script" path="res://src/core/scenes/game/boss_tracker.gd" id="6_gmxci"]
-[ext_resource type="PackedScene" uid="uid://bmtw6f2mimcy3" path="res://src/core/scenes/game/ui/game_gui.tscn" id="6_w1kkj"]
 [ext_resource type="Script" path="res://src/core/statemachine/state_machine.gd" id="8_42v0b"]
 [ext_resource type="PackedScene" uid="uid://dkntd5g7ap0xd" path="res://src/core/ui/screen_fade.tscn" id="9_gd7wy"]
 [ext_resource type="Script" path="res://src/core/scenes/game/states/player_movement_state.gd" id="10_2nvou"]
 [ext_resource type="Script" path="res://src/core/scenes/game/states/player_target_state.gd" id="11_nrae6"]
 [ext_resource type="Script" path="res://src/core/scenes/game/states/player_action_state.gd" id="12_0vv7w"]
 [ext_resource type="Script" path="res://src/core/statemachine/state.gd" id="12_awymb"]
+[ext_resource type="PackedScene" uid="uid://cn0u6gdopw7sw" path="res://src/core/scenes/game/ui/player_stamina.tscn" id="13_7vvkx"]
+[ext_resource type="PackedScene" uid="uid://dceanwqn4fxa7" path="res://src/core/scenes/game/ui/ability_display.tscn" id="14_fdce5"]
+[ext_resource type="PackedScene" uid="uid://dp10plw6af2i1" path="res://src/core/scenes/game/ui/boss_stamina.tscn" id="15_r5gp6"]
 
 [node name="Game" type="Node"]
 script = ExtResource("1_soc31")
@@ -52,18 +54,53 @@ action_combos = {
 "shove": 1
 }
 
-[node name="PlayerTargetState" type="Node" parent="PlayerStateMachine" node_paths=PackedStringArray("action_state", "movement_state", "target_display", "game_gui")]
+[node name="PlayerTargetState" type="Node" parent="PlayerStateMachine" node_paths=PackedStringArray("action_state", "movement_state", "target_display", "ability_display")]
 script = ExtResource("11_nrae6")
 action_state = NodePath("../PlayerActionState")
 movement_state = NodePath("../PlayerMovementState")
 target_display = NodePath("../../TargetDisplay")
-game_gui = NodePath("../../GameGUI")
+ability_display = NodePath("../../UI/AbilityDisplay")
 
 [node name="PlayerActionState" type="Node" parent="PlayerStateMachine" node_paths=PackedStringArray("wait_state")]
 script = ExtResource("12_0vv7w")
 wait_state = NodePath("../Wait")
 
-[node name="GameGUI" parent="." instance=ExtResource("6_w1kkj")]
+[node name="UI" type="CanvasLayer" parent="."]
+
+[node name="PlayerStamina" parent="UI" instance=ExtResource("13_7vvkx")]
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 2.0
+offset_top = -18.0
+offset_right = 63.0
+offset_bottom = -2.0
+grow_vertical = 0
+
+[node name="AbilityDisplay" parent="UI" instance=ExtResource("14_fdce5")]
+visible = false
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -39.0
+offset_top = -20.0
+offset_right = -2.0
+offset_bottom = -2.0
+grow_horizontal = 0
+grow_vertical = 0
+
+[node name="BossStamina" parent="UI" instance=ExtResource("15_r5gp6")]
+visible = false
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -83.0
+offset_top = 2.0
+offset_right = 83.0
+offset_bottom = 19.0
+grow_horizontal = 2
 
 [node name="ScreenFade" parent="." instance=ExtResource("9_gd7wy")]
 

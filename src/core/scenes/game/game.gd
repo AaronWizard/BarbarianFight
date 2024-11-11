@@ -24,13 +24,15 @@ var _current_map: Map:
 @onready var _turn_clock := $TurnClock as TurnClock
 
 @onready var _player_camera := $PlayerCamera as PlayerCamera
-@onready var _game_gui := $GameGUI as GameGUI
+
+@onready var _player_stamina := $UI/PlayerStamina as PlayerStamina
+
 @onready var _boss_tracker := $BossTracker as BossTracker
+@onready var _boss_stamina := $UI/BossStamina as BossStamina
 
 @onready var _state_machine := $PlayerStateMachine as StateMachine
 @onready var _player_movement_state := $PlayerStateMachine/PlayerMovementState \
 		as PlayerMovementState
-
 
 @onready var _screen_fade := $ScreenFade as ScreenFade
 
@@ -62,7 +64,7 @@ func _load_initial_map() -> void:
 
 	_load_map(map, start_cell)
 	# Player node needs to be child of other node for this to work.
-	_game_gui.set_player_actor(_player_actor)
+	_player_stamina.set_player(_player_actor)
 
 
 func _load_map(map: Map, start_cell: Vector2i) -> void:
@@ -112,8 +114,9 @@ func _on_player_died() -> void:
 
 
 func _on_boss_tracker_boss_tracked(boss: Actor) -> void:
-	_game_gui.show_boss_bar(boss)
+	_boss_stamina.show_boss(boss)
+	_boss_stamina.visible = true
 
 
 func _on_boss_tracker_boss_untracked() -> void:
-	_game_gui.hide_boss_bar()
+	_boss_stamina.visible = false
