@@ -17,10 +17,6 @@ func apply(target: Vector2i, source: Rect2i, source_actor: Actor) -> void:
 
 	var direction := TileGeometry.cardinal_dir_from_rect_to_cell(
 			source, target)
+	var damage := source_actor.definition.attack
 
-	target_actor.stamina.current_stamina -= source_actor.definition.attack
-	if target_actor.stamina.is_alive:
-		await target_actor.sprite.hit(direction)
-	else:
-		await target_actor.sprite.die(direction)
-		target_actor.map.remove_actor(target_actor)
+	await target_actor.take_damage(damage, direction)
