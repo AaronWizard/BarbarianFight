@@ -4,7 +4,10 @@ extends Resource
 
 ## Class for an active ability an actor can perform.
 
+## The ability's name.
 @export var name := ""
+## The ability's icon.
+@export var icon: Texture
 
 ## The ability's target range.
 @export var target_range: TargetRange
@@ -15,6 +18,8 @@ extends Resource
 @export var use_attack_anim := true
 
 
+## Get the ability's targeting data for [param source_actor]. This gets the
+## target range and valid targets currently available to [param source_actor].
 func get_target_data(source_actor: Actor) -> TargetingData:
 	return target_range.get_target_data(source_actor)
 
