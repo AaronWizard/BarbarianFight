@@ -127,15 +127,16 @@ func hit(direction := Vector2i.ZERO) -> void:
 ## Animates the actor dying after being hit from the given direction.[br]
 ## [param direction] is normalized.
 func die(direction := Vector2i.ZERO) -> void:
-	var tween := create_tween()
+	var dissolve_tween := create_tween()
 	@warning_ignore("return_value_discarded")
-	tween.tween_property(
+	dissolve_tween.tween_property(
 			_sprite.material, "shader_parameter/dissolve", 1, _DEATH_DURATION)
 
-	await play_animation(direction, anim_death)
+	if direction != Vector2i.ZERO:
+		await play_animation(direction, anim_death)
 
-	if tween.is_running():
-		await tween.finished
+	if dissolve_tween.is_running():
+		await dissolve_tween.finished
 
 
 func _tile_size_changed(_old_size: Vector2i) -> void:
