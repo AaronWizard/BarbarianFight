@@ -24,6 +24,7 @@ const _DEATH_DURATION := 0.2
 @export var tile_size := Vector2i(16, 16):
 	set(value):
 		tile_size = value
+		anim_player.tile_size = value
 		_update_sprite_origin()
 
 
@@ -53,10 +54,16 @@ const _DEATH_DURATION := 0.2
 @export var anim_death: ActorSpriteAnimation
 
 
+## The sprite's animation player.
+var anim_player: ActorSpriteAnimationPlayer:
+	get:
+		return $ActorSpriteAnimationPlayer
+
+
 ## True if an animation is playing, false otherwise.
 var animation_playing: bool:
 	get:
-		return _animation_playing
+		return _animations_remaining > 0
 
 
 var _camera_transform: RemoteTransform2D:
@@ -64,38 +71,23 @@ var _camera_transform: RemoteTransform2D:
 		return $SpriteOrigin/CameraTransform as RemoteTransform2D
 
 
-var _animation_playing := false
+# Either anim_player animation or dissolve animation.
+var _animations_remaining := 0
 
 
 # Keep the sprite's origin at the center of the parent actor.
 @onready var _sprite_origin := $SpriteOrigin as Node2D
 
 @onready var _sprite := $SpriteOrigin/Sprite as Sprite2D
-@onready var _sprite_transform \
-		:= $SpriteOrigin/Sprite/SpriteTransform as RemoteTransform2D
-@onready var _sprite_anim_player \
-		:= $ActorSpriteAnimationPlayer as ActorSpriteAnimationPlayer
+
+
+func _ready() -> void:
+	tile_size = tile_size
 
 
 ## Make [param camera] follow this sprite.
 func follow_with_camera(camera: Camera2D) -> void:
 	_camera_transform.remote_path = camera.get_path()
-
-
-## Animate the sprite. [param target_vector] is relative to the actor's origin
-## cell.
-func play_animation(target_vector: Vector2i, anim: ActorSpriteAnimation) \
-		-> void:
-	_animation_playing = true
-	animation_started.emit()
-	if anim.camera_follow_sprite:
-		_sprite_transform.remote_path = _camera_transform.get_path()
-
-	await _sprite_anim_player.animate(anim, _sprite, target_vector, tile_size)
-
-	_sprite_transform.remote_path = ""
-	_animation_playing = false
-	animation_finished.emit()
 
 
 ## If the actor is playing an animation, waits for the animation to finish.
@@ -107,33 +99,30 @@ func wait_for_animation() -> void:
 ## Animates an actor moving to an adjacent cell. [param target_vector] is
 ## relative to the actor's initial origin cell before moving to the new cell.
 func move_step(target_vector: Vector2i) -> void:
-	await play_animation(target_vector, anim_move)
+	await anim_player.animate(anim_move, target_vector)
 
 
 ## Animates an actor attacking the given target_cell.[br]
 ## [param target_cell] is relative to the actor's cell.
 func attack(target_cell: Vector2i) -> void:
-	await play_animation(target_cell, anim_attack)
+	await anim_player.animate(anim_attack, target_cell)
 
 
 ## Animates an actor getting hit from [param direction].
 func hit(direction := Vector2i.ZERO) -> void:
 	if direction != Vector2i.ZERO:
-		await play_animation(direction, anim_hit)
+		await anim_player.animate(anim_hit, direction)
 	else:
-		await play_animation(Vector2i.RIGHT, anim_hit_no_direction)
+		await anim_player.animate(anim_hit_no_direction, Vector2i.RIGHT)
 
 
 ## Animates the actor dying after being hit from the given direction.[br]
 ## [param direction] is normalized.
 func die(direction := Vector2i.ZERO) -> void:
-	var dissolve_tween := create_tween()
-	@warning_ignore("return_value_discarded")
-	dissolve_tween.tween_property(
-			_sprite.material, "shader_parameter/dissolve", 1, _DEATH_DURATION)
+	var dissolve_tween := _start_dissolving()
 
 	if direction != Vector2i.ZERO:
-		await play_animation(direction, anim_death)
+		await anim_player.animate(anim_death, direction)
 
 	if dissolve_tween.is_running():
 		await dissolve_tween.finished
@@ -154,7 +143,42 @@ func _update_sprite_origin() -> void:
 		_sprite_origin.position = center
 
 
+func _start_dissolving() -> Tween:
+	_start_animation()
+
+	var result := create_tween()
+	@warning_ignore("return_value_discarded")
+	result.tween_property(
+			_sprite.material, "shader_parameter/dissolve", 1, _DEATH_DURATION)
+	@warning_ignore("return_value_discarded")
+	result.tween_callback(_finish_animation).set_delay(_DEATH_DURATION)
+
+	return result
+
+
+func _on_actor_sprite_animation_player_started() -> void:
+	_start_animation()
+
+
+func _on_actor_sprite_animation_player_finished() -> void:
+	_finish_animation()
+
+
 func _on_actor_sprite_animation_player_named_step_finished(
 		animation: ActorSpriteAnimation, step_name: String) -> void:
 	if (animation == anim_attack) and (step_name == anim_attack_hit_step_name):
 		attack_anim_hit.emit()
+
+
+func _start_animation() -> void:
+	var starting := _animations_remaining == 0
+	_animations_remaining += 1
+	if starting:
+		animation_started.emit()
+
+
+func _finish_animation() -> void:
+	_animations_remaining -= 1
+	assert(_animations_remaining >= 0)
+	if _animations_remaining == 0:
+		animation_finished.emit()

@@ -18,4 +18,4 @@ func apply(target: Vector2i, _source: Rect2i, source_actor: Actor) -> void:
 
 	source_actor.origin_cell = target
 	if move_animation:
-		await source_actor.sprite.play_animation(diff, move_animation)
+		await source_actor.sprite.anim_player.animate(move_animation, diff)

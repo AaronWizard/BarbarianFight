@@ -176,7 +176,12 @@ metadata/_edit_lock_ = true
 [node name="CameraTransform" type="RemoteTransform2D" parent="SpriteOrigin"]
 metadata/_edit_lock_ = true
 
-[node name="ActorSpriteAnimationPlayer" type="Node" parent="."]
+[node name="ActorSpriteAnimationPlayer" type="Node" parent="." node_paths=PackedStringArray("sprite", "sprite_transform", "camera_transform")]
 script = ExtResource("8_6tdw4")
+sprite = NodePath("../SpriteOrigin/Sprite")
+sprite_transform = NodePath("../SpriteOrigin/Sprite/SpriteTransform")
+camera_transform = NodePath("../SpriteOrigin/CameraTransform")
 
+[connection signal="finished" from="ActorSpriteAnimationPlayer" to="." method="_on_actor_sprite_animation_player_finished"]
 [connection signal="named_step_finished" from="ActorSpriteAnimationPlayer" to="." method="_on_actor_sprite_animation_player_named_step_finished"]
+[connection signal="started" from="ActorSpriteAnimationPlayer" to="." method="_on_actor_sprite_animation_player_started"]
