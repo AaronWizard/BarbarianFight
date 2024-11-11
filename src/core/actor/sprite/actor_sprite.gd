@@ -98,19 +98,19 @@ func wait_for_animation() -> void:
 
 ## Animates an actor moving to an adjacent cell. [param target_vector] is
 ## relative to the actor's initial origin cell before moving to the new cell.
-func move_step(target_vector: Vector2i) -> void:
+func move_step(target_vector: Vector2) -> void:
 	await anim_player.animate(anim_move, target_vector)
 
 
 ## Animates an actor attacking the given target_cell.[br]
 ## [param target_cell] is relative to the actor's cell.
-func attack(target_cell: Vector2i) -> void:
+func attack(target_cell: Vector2) -> void:
 	await anim_player.animate(anim_attack, target_cell)
 
 
 ## Animates an actor getting hit from [param direction].
-func hit(direction := Vector2i.ZERO) -> void:
-	if direction != Vector2i.ZERO:
+func hit(direction := Vector2.ZERO) -> void:
+	if direction.length_squared() > 0.01:
 		await anim_player.animate(anim_hit, direction)
 	else:
 		await anim_player.animate(anim_hit_no_direction, Vector2i.RIGHT)
@@ -118,10 +118,10 @@ func hit(direction := Vector2i.ZERO) -> void:
 
 ## Animates the actor dying after being hit from the given direction.[br]
 ## [param direction] is normalized.
-func die(direction := Vector2i.ZERO) -> void:
+func die(direction := Vector2.ZERO) -> void:
 	var dissolve_tween := _start_dissolving()
 
-	if direction != Vector2i.ZERO:
+	if direction.length_squared() > 0.01:
 		await anim_player.animate(anim_death, direction)
 
 	if dissolve_tween.is_running():
