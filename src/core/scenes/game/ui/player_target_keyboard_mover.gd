@@ -19,12 +19,13 @@ var _current_target_index := -1
 
 
 ## Set the target rectangles.
-func set_targets(new_targets: Array[Vector2i]) -> void:
+func set_targets(new_targets: Array[Vector2i], initial_target: Vector2i) \
+		-> void:
 	clear()
 
 	_targets.assign(new_targets)
 	if not _targets.is_empty():
-		_current_target_index = 0
+		target = initial_target
 
 
 ## Moves the target in the given direction.

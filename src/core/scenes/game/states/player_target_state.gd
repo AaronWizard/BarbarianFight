@@ -24,8 +24,12 @@ func enter(data := {}) -> void:
 	_targetting_data = data.targeting_data
 	_input_code = data.input_code
 
-	_target_keyboard_mover.set_targets(_targetting_data.targets)
-	target_display.show_range(_targetting_data)
+	var initial_target := _targetting_data.targets[0]
+	if data.has("initial_target"):
+		initial_target = data.initial_target
+
+	_target_keyboard_mover.set_targets(_targetting_data.targets, initial_target)
+	target_display.show_range(_targetting_data, initial_target)
 
 	@warning_ignore("return_value_discarded")
 	_player.map.mouse_clicked.connect(_map_clicked)
