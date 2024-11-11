@@ -75,7 +75,10 @@ func _try_bump() -> TurnAction:
 	var direction := _get_direction_input()
 	if direction.length_squared() == 1:
 		var target_cell := _player.origin_cell + direction
-		if BumpAction.is_possible(_player, target_cell):
+
+		if _player.map.actor_can_enter_cell(_player, target_cell):
+			result = MoveAction.new(_player, target_cell)
+		elif BumpAction.is_possible(_player, target_cell):
 			result = BumpAction.new(_player, target_cell)
 
 	return result
@@ -98,6 +101,11 @@ func _start_ability_targeting(ability_index: int, input_code: String) -> void:
 	}
 
 	request_state_change(target_state, data)
+
+
+func _end_turn_move(next_cell: Vector2i) -> void:
+		var action := MoveAction.new(_player, next_cell)
+		_end_turn(action)
 
 
 func _end_turn(action: TurnAction) -> void:
