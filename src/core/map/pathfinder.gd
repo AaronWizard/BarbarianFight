@@ -66,7 +66,7 @@ static func _end_cells(end_rect: Rect2i, actor_size: Vector2i,
 		grid: AStarGrid2D) -> Array[Vector2i]:
 	var result: Array[Vector2i] = []
 
-	var cells := TileGeometry.adjacent_rect_positions(
+	var cells := TileGeometry.adjacent_rect_cells(
 			end_rect, actor_size)
 	for c in cells:
 		if grid.is_in_boundsv(c) and not grid.is_point_solid(c):

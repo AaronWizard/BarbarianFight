@@ -133,9 +133,9 @@ static func cell_is_adjacent_to_rect(rect: Rect2i, cell: Vector2i) -> bool:
 	return result
 
 
-## Get the list of positions a rectangle with a size of [param adj_rect_size]
-## can have to be adjacent to [param center_rect].
-static func adjacent_rect_positions(center_rect: Rect2i,
+## Get the list of cells a rectangle with a size of [param adj_rect_size]
+## can have as its position to be adjacent to [param center_rect].
+static func adjacent_rect_cells(center_rect: Rect2i,
 		adj_rect_size: Vector2i) -> Array[Vector2i]:
 	var result: Array[Vector2i] = []
 
