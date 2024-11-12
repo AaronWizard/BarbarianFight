@@ -5,7 +5,7 @@
 [ext_resource type="PackedScene" uid="uid://c0t20wws7j4nl" path="res://src/data/ai_default.tscn" id="3_yjkef"]
 [ext_resource type="Script" path="res://src/core/abilities/ability.gd" id="4_5em6y"]
 [ext_resource type="Shader" path="res://src/core/shaders/sprite_dissolve.gdshader" id="4_rftw8"]
-[ext_resource type="Resource" uid="uid://c88rjluqia4f8" path="res://src/core/resources/abilities/ability_shove.tres" id="5_6ujeo"]
+[ext_resource type="Resource" uid="uid://c88rjluqia4f8" path="res://src/core/resources/abilities/ability_kick.tres" id="5_6ujeo"]
 
 [sub_resource type="Resource" id="Resource_3b2c0"]
 script = ExtResource("3_66sex")

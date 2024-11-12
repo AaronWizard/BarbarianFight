@@ -6,7 +6,7 @@
 [ext_resource type="Resource" uid="uid://daoqfsm7y6lck" path="res://src/core/resources/abilities/ability_dash.tres" id="3_vnywx"]
 [ext_resource type="Script" path="res://src/core/abilities/ability.gd" id="3_ydc34"]
 [ext_resource type="Shader" path="res://src/core/shaders/sprite_dissolve.gdshader" id="3_yrqlt"]
-[ext_resource type="Resource" uid="uid://c88rjluqia4f8" path="res://src/core/resources/abilities/ability_shove.tres" id="4_63tb4"]
+[ext_resource type="Resource" uid="uid://c88rjluqia4f8" path="res://src/core/resources/abilities/ability_kick.tres" id="4_63tb4"]
 [ext_resource type="Resource" uid="uid://dllnu6d3ki184" path="res://src/core/resources/abilities/ability_debug_teleport.tres" id="6_7j7vd"]
 
 [sub_resource type="Resource" id="Resource_l2s4l"]

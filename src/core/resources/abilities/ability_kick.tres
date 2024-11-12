@@ -86,7 +86,7 @@ ignore_range_blocking = false
 
 [resource]
 script = ExtResource("1_robij")
-name = "Shove"
+name = "Kick"
 target_range = SubResource("Resource_28nt6")
 effect = SubResource("Resource_0ntoq")
 use_attack_anim = true
