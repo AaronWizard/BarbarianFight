@@ -3,10 +3,10 @@
 [ext_resource type="PackedScene" uid="uid://dg6ygq33001cu" path="res://src/core/actor/actor.tscn" id="1_23n8s"]
 [ext_resource type="Texture2D" uid="uid://bxl8chpxykku5" path="res://assets/graphics/actors/hero.png" id="2_gsry7"]
 [ext_resource type="Script" path="res://src/core/actor/actor_definition.gd" id="3_aik13"]
-[ext_resource type="Resource" uid="uid://daoqfsm7y6lck" path="res://src/core/resources/abilities/ability_dash.tres" id="3_vnywx"]
+[ext_resource type="Resource" uid="uid://daoqfsm7y6lck" path="res://src/data/abilities/ability_dash.tres" id="3_vnywx"]
 [ext_resource type="Script" path="res://src/core/abilities/ability.gd" id="3_ydc34"]
 [ext_resource type="Shader" path="res://src/core/shaders/sprite_dissolve.gdshader" id="3_yrqlt"]
-[ext_resource type="Resource" uid="uid://c88rjluqia4f8" path="res://src/core/resources/abilities/ability_kick.tres" id="4_63tb4"]
+[ext_resource type="Resource" uid="uid://c88rjluqia4f8" path="res://src/data/abilities/ability_kick.tres" id="4_63tb4"]
 
 [sub_resource type="Resource" id="Resource_l2s4l"]
 script = ExtResource("3_aik13")
