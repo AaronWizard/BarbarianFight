@@ -8,7 +8,7 @@
 
 [sub_resource type="Resource" id="Resource_fr586"]
 script = ExtResource("2_hk5wb")
-step_name = "shove_collision_0"
+step_name = ""
 interpolated_distance = -1.0
 cell_distance = 0.0
 speed_or_duration = 0.0
@@ -18,17 +18,17 @@ ease_type = 2
 
 [sub_resource type="Resource" id="Resource_yku2x"]
 script = ExtResource("2_hk5wb")
-step_name = "shove_collision_1"
+step_name = "collide"
 interpolated_distance = 0.0
 cell_distance = 0.5
 speed_or_duration = 8.0
 time_type = 0
-trans_type = 4
-ease_type = 1
+trans_type = 1
+ease_type = 0
 
 [sub_resource type="Resource" id="Resource_c3o1m"]
 script = ExtResource("2_hk5wb")
-step_name = "shove_collision_2"
+step_name = ""
 interpolated_distance = 0.0
 cell_distance = 0.0
 speed_or_duration = 0.1
@@ -71,6 +71,7 @@ script = ExtResource("1_pjawo")
 max_distance = 1
 anim_shove_no_collision = SubResource("Resource_hkg8j")
 anim_shove_collision = SubResource("Resource_y305w")
+collision_frame_name = "collide"
 
 [sub_resource type="Resource" id="Resource_28nt6"]
 script = ExtResource("2_4tele")

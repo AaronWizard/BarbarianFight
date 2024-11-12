@@ -23,7 +23,7 @@ enum TimeType {
 }
 
 ## The name of the step.
-@export var step_name: String
+@export var step_name := ""
 
 ## Positions the sprite at the interpolated point between the actor's origin
 ## cell and the animation's target cell. e.g. If this value is 0.5, the sprite
