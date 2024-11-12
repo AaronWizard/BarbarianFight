@@ -1,10 +1,11 @@
-[gd_resource type="Resource" script_class="Ability" load_steps=15 format=3 uid="uid://c88rjluqia4f8"]
+[gd_resource type="Resource" script_class="Ability" load_steps=16 format=3 uid="uid://c88rjluqia4f8"]
 
 [ext_resource type="Script" path="res://src/core/actor/sprite/actor_sprite_animation.gd" id="1_ka5mg"]
 [ext_resource type="Script" path="res://src/core/abilities/abilityeffect/shove_target_actor_effect.gd" id="1_pjawo"]
 [ext_resource type="Script" path="res://src/core/abilities/ability.gd" id="1_robij"]
 [ext_resource type="Script" path="res://src/core/abilities/targetrange/area_target_range.gd" id="2_4tele"]
 [ext_resource type="Script" path="res://src/core/actor/sprite/actor_sprite_animation_step.gd" id="2_hk5wb"]
+[ext_resource type="Texture2D" uid="uid://w03msrtyvxpo" path="res://assets/graphics/ui/abilities/kick.png" id="4_tjm6u"]
 
 [sub_resource type="Resource" id="Resource_fr586"]
 script = ExtResource("2_hk5wb")
@@ -87,6 +88,7 @@ ignore_range_blocking = false
 [resource]
 script = ExtResource("1_robij")
 name = "Kick"
+icon = ExtResource("4_tjm6u")
 target_range = SubResource("Resource_28nt6")
 effect = SubResource("Resource_0ntoq")
 use_attack_anim = true

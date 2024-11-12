@@ -1,10 +1,11 @@
-[gd_resource type="Resource" script_class="Ability" load_steps=11 format=3 uid="uid://daoqfsm7y6lck"]
+[gd_resource type="Resource" script_class="Ability" load_steps=12 format=3 uid="uid://daoqfsm7y6lck"]
 
 [ext_resource type="Script" path="res://src/core/abilities/abilityeffect/move_source_actor_to_target_effect.gd" id="1_8sbro"]
 [ext_resource type="Script" path="res://src/core/actor/sprite/actor_sprite_animation.gd" id="1_fgmxa"]
 [ext_resource type="Script" path="res://src/core/abilities/ability.gd" id="1_gomvm"]
 [ext_resource type="Script" path="res://src/core/actor/sprite/actor_sprite_animation_step.gd" id="2_dhy46"]
 [ext_resource type="Script" path="res://src/core/abilities/targetrange/area_target_range.gd" id="2_ffjsm"]
+[ext_resource type="Texture2D" uid="uid://rljm4rcv1g3g" path="res://assets/graphics/ui/abilities/dash.png" id="4_ycr6l"]
 
 [sub_resource type="Resource" id="Resource_egx4j"]
 script = ExtResource("2_dhy46")
@@ -49,6 +50,7 @@ ignore_range_blocking = false
 [resource]
 script = ExtResource("1_gomvm")
 name = "Dash"
+icon = ExtResource("4_ycr6l")
 target_range = SubResource("Resource_08u2x")
 effect = SubResource("Resource_hma5d")
 use_attack_anim = false
