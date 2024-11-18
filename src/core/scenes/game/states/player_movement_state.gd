@@ -6,8 +6,13 @@ extends State
 ## Player control state where the player can move or wait. Can enter targetting
 ## state from here.
 
+## The state for doing the selected player action.
 @export var action_state: PlayerActionState
+## The state for targeting an action.
 @export var target_state: PlayerTargetState
+
+## The button to make the player actor wait a turn.
+@export var wait_button: BaseButton
 
 ## Key is string, value is int
 @export var action_combos: Dictionary
@@ -24,11 +29,17 @@ func enter(data := {}) -> void:
 	if _player.attack_ability:
 		_attack_targeting_data = _player.attack_ability.get_target_data(_player)
 
+	wait_button.visible = true
+	@warning_ignore("return_value_discarded")
+	wait_button.pressed.connect(_wait)
+
 
 func exit() -> void:
 	_player.map.mouse_clicked.disconnect(_map_clicked)
 	_player = null
 	_attack_targeting_data = null
+
+	wait_button.pressed.disconnect(_wait)
 
 
 func handle_input(_event: InputEvent) -> void:
@@ -62,9 +73,7 @@ func handle_input(_event: InputEvent) -> void:
 
 
 func _map_clicked(cell: Vector2i) -> void:
-	if _player.rect.has_point(cell):
-		_end_turn(null)
-	elif cell in _attack_targeting_data.targets:
+	if cell in _attack_targeting_data.targets:
 		assert(_player.attack_ability)
 		var action := AbilityAction.new(_player, cell, _player.attack_ability)
 		_end_turn(action)
@@ -129,6 +138,10 @@ func _start_ability_targeting(ability: Ability, targeting_data: TargetingData,
 		data.input_code = input_code
 
 	request_state_change(target_state, data)
+
+
+func _wait() -> void:
+	_end_turn(null)
 
 
 func _end_turn_move(next_cell: Vector2i) -> void:

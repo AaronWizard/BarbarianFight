@@ -3,11 +3,18 @@ extends State
 
 ## Player control state where the player is selecting a target for an ability,
 
+## The state for doing the selected player action.
 @export var action_state: PlayerActionState
+## The state for standard player movement and attacks.
 @export var movement_state: PlayerMovementState
 
+## Displays the target range and current target.
 @export var target_display: TargetDisplay
+
 @export var ability_display: AbilityDisplay
+## The button to make the player actor wait a turn. Will hide this button when
+## targeting.
+@export var wait_button: CanvasItem
 
 # Also used to keep track of the currently selected target.
 var _target_keyboard_mover := PlayerTargetKeyboardMover.new()
@@ -44,7 +51,9 @@ func enter(data := {}) -> void:
 	_player.map.mouse_clicked.connect(_map_clicked)
 
 	ability_display.set_ability_name(_ability.name)
+
 	ability_display.visible = true
+	wait_button.visible = false
 
 
 func exit() -> void:

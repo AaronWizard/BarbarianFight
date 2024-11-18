@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=3 uid="uid://cvi0bb84c7308"]
+[gd_scene load_steps=17 format=3 uid="uid://cvi0bb84c7308"]
 
 [ext_resource type="Script" path="res://src/core/scenes/game/game.gd" id="1_soc31"]
 [ext_resource type="PackedScene" uid="uid://c0c5o4j30lwif" path="res://src/data/maps/arena.tscn" id="2_4vijj"]
@@ -15,6 +15,7 @@
 [ext_resource type="PackedScene" uid="uid://cn0u6gdopw7sw" path="res://src/core/scenes/game/ui/player_stamina.tscn" id="13_7vvkx"]
 [ext_resource type="PackedScene" uid="uid://dceanwqn4fxa7" path="res://src/core/scenes/game/ui/ability_display.tscn" id="14_fdce5"]
 [ext_resource type="PackedScene" uid="uid://dp10plw6af2i1" path="res://src/core/scenes/game/ui/boss_stamina.tscn" id="15_r5gp6"]
+[ext_resource type="Texture2D" uid="uid://cv08valikcfy7" path="res://assets/graphics/ui/hud/wait.png" id="15_rsmhe"]
 
 [node name="Game" type="Node"]
 script = ExtResource("1_soc31")
@@ -40,22 +41,24 @@ start_state = NodePath("Wait")
 [node name="Wait" type="Node" parent="PlayerStateMachine"]
 script = ExtResource("12_awymb")
 
-[node name="PlayerMovementState" type="Node" parent="PlayerStateMachine" node_paths=PackedStringArray("action_state", "target_state")]
+[node name="PlayerMovementState" type="Node" parent="PlayerStateMachine" node_paths=PackedStringArray("action_state", "target_state", "wait_button")]
 script = ExtResource("10_2nvou")
 action_state = NodePath("../PlayerActionState")
 target_state = NodePath("../PlayerTargetState")
+wait_button = NodePath("../../UI/WaitButton")
 action_combos = {
 "dash": 0,
 "debug_teleport": 2,
 "shove": 1
 }
 
-[node name="PlayerTargetState" type="Node" parent="PlayerStateMachine" node_paths=PackedStringArray("action_state", "movement_state", "target_display", "ability_display")]
+[node name="PlayerTargetState" type="Node" parent="PlayerStateMachine" node_paths=PackedStringArray("action_state", "movement_state", "target_display", "ability_display", "wait_button")]
 script = ExtResource("11_nrae6")
 action_state = NodePath("../PlayerActionState")
 movement_state = NodePath("../PlayerMovementState")
 target_display = NodePath("../../TargetDisplay")
 ability_display = NodePath("../../UI/AbilityDisplay")
+wait_button = NodePath("../../UI/WaitButton")
 
 [node name="PlayerActionState" type="Node" parent="PlayerStateMachine" node_paths=PackedStringArray("wait_state")]
 script = ExtResource("12_0vv7w")
@@ -67,10 +70,10 @@ wait_state = NodePath("../Wait")
 anchors_preset = 2
 anchor_top = 1.0
 anchor_bottom = 1.0
-offset_left = 2.0
-offset_top = -18.0
-offset_right = 63.0
-offset_bottom = -2.0
+offset_left = 1.0
+offset_top = -17.0
+offset_right = 62.0
+offset_bottom = -1.0
 grow_vertical = 0
 
 [node name="AbilityDisplay" parent="UI" instance=ExtResource("14_fdce5")]
@@ -80,23 +83,36 @@ anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -39.0
-offset_top = -20.0
-offset_right = -2.0
-offset_bottom = -2.0
+offset_left = -38.0
+offset_top = -19.0
+offset_right = -1.0
+offset_bottom = -1.0
 grow_horizontal = 0
 grow_vertical = 0
 
 [node name="BossStamina" parent="UI" instance=ExtResource("15_r5gp6")]
-visible = false
 anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
 offset_left = -83.0
-offset_top = 2.0
+offset_top = 1.0
 offset_right = 83.0
-offset_bottom = 19.0
+offset_bottom = 18.0
 grow_horizontal = 2
+
+[node name="WaitButton" type="Button" parent="UI"]
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -17.0
+offset_top = -19.0
+offset_right = -1.0
+offset_bottom = -1.0
+grow_horizontal = 0
+grow_vertical = 0
+icon = ExtResource("15_rsmhe")
 
 [node name="ScreenFade" parent="." instance=ExtResource("9_gd7wy")]
 
