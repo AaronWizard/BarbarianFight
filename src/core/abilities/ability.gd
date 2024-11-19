@@ -7,7 +7,7 @@ extends Resource
 ## The ability's name.
 @export var name := ""
 ## The ability's icon.
-@export var icon: Texture
+@export var icon: Texture2D
 
 ## The ability's target range.
 @export var target_range: TargetRange
