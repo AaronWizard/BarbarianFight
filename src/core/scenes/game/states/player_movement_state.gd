@@ -1,21 +1,18 @@
 class_name PlayerMovementState
 extends State
 
-## Player control state where the player can move or wait.
-##
-## Player control state where the player can move or wait. Can enter targetting
-## state from here.
+## Initial player control state where the player can wait, move, make standard
+## attacks, or enter the states for ability selection and targeting.
 
 ## The state for doing the selected player action.
 @export var action_state: PlayerActionState
+## The state for selecting an action.
+@export var select_ability_state: PlayerSelectAbilityState
 ## The state for targeting an action.
 @export var target_state: PlayerTargetState
 
 ## The button to make the player actor wait a turn.
 @export var wait_button: BaseButton
-
-## Key is string, value is int
-@export var action_combos: Dictionary
 
 var _player: Actor
 var _attack_targeting_data: TargetingData
@@ -46,34 +43,13 @@ func handle_input(_event: InputEvent) -> void:
 	if Input.is_action_just_released("wait"):
 		_end_turn(null)
 	else:
-		var ability_action_input: String = ""
-		@warning_ignore("untyped_declaration")
-		for a in action_combos.keys():
-			@warning_ignore("unsafe_cast")
-			var action := a as String
-			if Input.is_action_just_released(action):
-				ability_action_input = action
-				break
-		if ability_action_input and not ability_action_input.is_empty():
-			@warning_ignore("unsafe_cast")
-			var ability_index := action_combos[ability_action_input] as int
-			var ability := _player.abilities[ability_index]
-			var targeting_data := ability.get_target_data(_player)
-			var initial_target := Vector2i.ZERO
-			if targeting_data.has_targets:
-				initial_target = targeting_data.targets[0]
-			_start_ability_targeting(
-				ability,
-				targeting_data,
-				initial_target,
-				ability_action_input
-			)
-		else:
-			_try_bump()
+		_try_bump()
 
 
 func _map_clicked(cell: Vector2i) -> void:
-	if cell in _attack_targeting_data.targets:
+	if cell in _player.covered_cells:
+		request_state_change(select_ability_state, {player = _player})
+	elif cell in _attack_targeting_data.targets:
 		assert(_player.attack_ability)
 		var action := AbilityAction.new(_player, cell, _player.attack_ability)
 		_end_turn(action)

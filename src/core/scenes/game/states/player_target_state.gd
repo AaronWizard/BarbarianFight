@@ -1,7 +1,7 @@
 class_name PlayerTargetState
 extends State
 
-## Player control state where the player is selecting a target for an ability,
+## Player control state where the player is selecting a target for an ability.
 
 ## The state for doing the selected player action.
 @export var action_state: PlayerActionState
