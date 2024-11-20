@@ -83,8 +83,6 @@ var _turn_clock: TurnClock
 
 func _ready() -> void:
 	if not Engine.is_editor_hint():
-		_turn_taker.is_player_controlled = player_controlled
-
 		if definition:
 			stamina.max_stamina = definition.stamina
 			stamina.heal_full()

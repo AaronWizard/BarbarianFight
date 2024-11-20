@@ -13,15 +13,11 @@ signal turn_started
 signal turn_finished
 
 
+## True if the turn taker is still on its current turn.
 var turn_running: bool:
 	get:
 		return _turn_running
 
-
-## True if the turn taker is for a player controlled entity, false
-## otherwise.[br]
-## All else being equal, player controlled entities go before other entities.
-var is_player_controlled := false
 
 var _turn_running := false
 
