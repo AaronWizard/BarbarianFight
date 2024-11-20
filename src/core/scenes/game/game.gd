@@ -106,7 +106,7 @@ func _on_player_died() -> void:
 	if _current_map.animations_playing:
 		await _current_map.animations_finished
 
-	_turn_clock.running = false
+	_turn_clock.stop()
 	await get_tree().create_timer(0.5).timeout # Dramatic pause!
 	await _screen_fade.fade_out()
 

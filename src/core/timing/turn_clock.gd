@@ -6,7 +6,7 @@ extends Node
 ## The game's turn manager. Controls when entities take turns and in what order,
 ## and manages when entities are added to and removed from the turn order.
 
-var running := false
+var _running := false
 
 # The main set of turn takers.
 var _turn_takers: Array[TurnTaker] = []
@@ -33,6 +33,7 @@ func remove_turn_taker(turn_taker: TurnTaker) -> void:
 			_turn_index -= 1
 
 
+## Forces a turn taker to the front of the turn order.
 func make_turn_taker_go_first(turn_taker: TurnTaker) -> void:
 	if not turn_taker in _turn_takers:
 		push_error("TurnTaker '%s' not in TurnClock" % turn_taker)
@@ -41,12 +42,18 @@ func make_turn_taker_go_first(turn_taker: TurnTaker) -> void:
 		_turn_takers.push_front(turn_taker)
 
 
+## Starts the turn loop.
 func run() -> void:
-	running = true
+	_running = true
 
-	while running:
+	while _running:
 		var next_turn := _turn_takers[_turn_index]
 		next_turn.start_turn()
 		if next_turn.turn_running:
 			await next_turn.turn_finished
 		_turn_index = (_turn_index + 1) % _turn_takers.size()
+
+
+## Stops the turn loop.
+func stop() -> void:
+	_running = false
