@@ -53,7 +53,7 @@ func run() -> void:
 
 		@warning_ignore("unsafe_cast")
 		var action := await next_turn.turn_finished as TurnAction
-		_run_action(action)
+		await _run_action(action)
 
 		_turn_index = (_turn_index + 1) % _turn_takers.size()
 
