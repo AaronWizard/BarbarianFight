@@ -70,16 +70,16 @@ func _load_map(map: Map, start_cell: Vector2i) -> void:
 	_unload_map()
 	_map_container.add_child(map)
 
-	_current_map.set_turn_clock(_turn_clock)
+	_turn_clock.set_map(_current_map)
+
 	_current_map.add_actor(_player_actor, start_cell)
-	_player_actor.make_go_first()
+	_player_actor.turn_taker.request_first_turn()
 
 	_player_camera.set_bounds(_current_map.pixel_rect)
 
 
 func _unload_map() -> void:
 	if _current_map:
-		_current_map.set_turn_clock(null)
 		_current_map.remove_actor(_player_actor)
 
 		var old_map := _current_map
@@ -97,9 +97,8 @@ func _on_player_actor_turn_started() -> void:
 			_player_movement_state, {player = _player_actor})
 
 
-func _on_player_action_state_player_action_chosen(turn_action: TurnAction) \
-		-> void:
-	_player_actor.do_turn_action(turn_action)
+func _on_player_action_state_player_action_chosen(action: TurnAction) -> void:
+	_player_actor.turn_taker.end_turn(action)
 
 
 func _on_player_died() -> void:
