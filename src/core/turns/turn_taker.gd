@@ -31,8 +31,7 @@ func start_turn() -> void:
 		turn_started.emit()
 
 
-## Ends the turn taker's turn, reducing its initiative by a value depending on
-## [param action_speed].
+## Ends the turn taker's turn.
 func end_turn() -> void:
 	if not _turn_running:
 		push_error("Turn not running")
