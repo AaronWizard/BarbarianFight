@@ -54,7 +54,6 @@ var pixel_rect: Rect2i:
 
 
 var _terrain: Terrain
-var _turn_clock: TurnClock
 var _anim_tracker: MapAnimTracker
 var _pathfinder: Pathfinder
 
@@ -81,13 +80,6 @@ func _unhandled_input(_event: InputEvent) -> void:
 		var cell := _terrain_tilemap.local_to_map(mouse_pos)
 		if _terrain_tilemap.get_used_rect().has_point(cell):
 			mouse_clicked.emit(cell)
-
-
-## Set the map's TurnClock. The turn clock will be set on the actors on the map.
-func set_turn_clock(clock: TurnClock) -> void:
-	_turn_clock = clock
-	for a in actor_map.actors:
-		a.set_turn_clock(_turn_clock)
 
 
 ## Adds [param actor] to the map at [param cell].[br]
@@ -140,7 +132,6 @@ func _on_actor_moved(old_cell: Vector2i, actor: Actor) -> void:
 
 func _init_actor(actor: Actor) -> void:
 	actor.set_map(self)
-	actor.set_turn_clock(_turn_clock)
 	_anim_tracker.observe_actor(actor)
 	@warning_ignore("return_value_discarded")
 	actor.moved.connect(_on_actor_moved.bind(actor))
@@ -155,6 +146,5 @@ func _uninit_actor(actor: Actor) -> void:
 	_pathfinder.set_rect_solid(actor.rect, false)
 
 	actor.set_map(null)
-	actor.set_turn_clock(null)
 	_anim_tracker.unobserve_actor(actor)
 	actor.moved.disconnect(_on_actor_moved)

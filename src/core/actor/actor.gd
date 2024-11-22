@@ -72,13 +72,13 @@ var all_abilities: Array[Ability]:
 		return result
 
 
-@onready var _turn_taker := $TurnTaker as TurnTaker
+var turn_taker: TurnTaker:
+	get:
+		return $TurnTaker
 
 
 var _map: Map
 var _ai: AI
-
-var _turn_clock: TurnClock
 
 
 func _ready() -> void:
@@ -117,41 +117,10 @@ func set_map(new_map: Map) -> void:
 			removed_from_map.emit()
 
 
-## Sets the actor's turn clock.
-func set_turn_clock(clock: TurnClock) -> void:
-	if _turn_clock and (_turn_clock != clock):
-		_turn_clock.remove_turn_taker(_turn_taker)
-
-	_turn_clock = clock
-	if _turn_clock:
-		_turn_clock.add_turn_taker(_turn_taker)
-
-
-## Makes this actor go first in the turn order.
-func make_go_first() -> void:
-	if _turn_clock:
-		_turn_clock.make_turn_taker_go_first(_turn_taker)
-	else:
-		push_warning("No turn clock is set")
-
-
 ## Returns true if [param other_actor] is hostile to this actor, false
 ## otherwise.
 func is_hostile(other_actor: Actor) -> bool:
 	return (self != other_actor) and (faction != other_actor.faction)
-
-
-## Runs [param action] and ends the actor's turn.
-func do_turn_action(action: TurnAction) -> void:
-	if not _turn_taker.turn_running:
-		push_error("Actor turn not running")
-	else:
-		if action:
-			if action.wait_for_map_anims() and map.animations_playing:
-				await map.animations_finished
-			@warning_ignore("redundant_await")
-			await action.run()
-		_turn_taker.end_turn()
 
 
 ## Move to [param target_cell] with a walk/step animation.[br]
@@ -197,6 +166,6 @@ func _on_turn_taker_turn_started() -> void:
 		player_turn_started.emit()
 	elif _ai:
 		var action := _ai.get_action()
-		await do_turn_action(action)
+		turn_taker.end_turn(action)
 	else:
-		_turn_taker.end_turn()
+		turn_taker.end_turn(null)
