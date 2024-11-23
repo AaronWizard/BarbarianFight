@@ -9,10 +9,9 @@ extends Node
 signal scene_switch_requested(new_scene: Scene)
 
 
-## Switch to the scene whose file is at [param scene_path].
+## Switch to the scene whose file is at [param scene_path].[br]
+## A string path is used to avoid possible circular dependencies between scenes.
 func switch_scene(scene_path: String) -> void:
-	# Use string path instead of scene object to avoid possible circular
-	# dependencies between scenes.
 	var scene_file := load(scene_path) as PackedScene
 	if not scene_file:
 		push_error("'%s' is not a scene path" % scene_file)
