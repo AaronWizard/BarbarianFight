@@ -48,7 +48,7 @@ func _init_player() -> void:
 	_player_actor = player_actor_scene.instantiate() as Actor
 
 	@warning_ignore("return_value_discarded")
-	_player_actor.player_turn_started.connect(_on_player_actor_turn_started)
+	_player_actor.turn_taker.turn_started.connect(_on_player_actor_turn_started)
 	@warning_ignore("return_value_discarded")
 	_player_actor.stamina.died.connect(_on_player_died)
 

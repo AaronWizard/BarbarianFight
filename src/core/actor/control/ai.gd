@@ -12,9 +12,18 @@ func set_actor(actor: Actor) -> void:
 	assert(actor.is_ancestor_of(self))
 	_actor = actor
 
+	@warning_ignore("return_value_discarded")
+	_actor.turn_taker.turn_started.connect(_take_turn)
+
+
+func _take_turn() -> void:
+	await _actor.sprite.wait_for_animation()
+	var action := _get_action()
+	_actor.turn_taker.end_turn(action)
+
 
 ## Gets the AI's next turn action. A return value of null is a wait action.
-func get_action() -> TurnAction:
+func _get_action() -> TurnAction:
 	var result: TurnAction = null
 
 	result = _try_ability()

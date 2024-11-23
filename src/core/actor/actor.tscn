@@ -28,6 +28,4 @@ script = ExtResource("3_8plh3")
 [node name="Stamina" type="Node" parent="."]
 script = ExtResource("4_fsdcd")
 
-[connection signal="turn_started" from="TurnTaker" to="." method="_on_turn_taker_turn_started"]
-
 [editable path="ActorSprite"]

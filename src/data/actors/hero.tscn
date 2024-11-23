@@ -22,7 +22,6 @@ shader_parameter/dissolve = 0.0
 [node name="Hero" instance=ExtResource("1_23n8s")]
 actor_name = "Cohen"
 definition = SubResource("Resource_l2s4l")
-player_controlled = true
 faction = 1
 abilities = Array[ExtResource("3_ydc34")]([ExtResource("3_vnywx"), ExtResource("4_63tb4")])
 

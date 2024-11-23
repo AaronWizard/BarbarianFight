@@ -16,10 +16,6 @@ signal removed_from_map
 ## Emitted when the actor's origin cell has changed.
 signal moved(old_cell: Vector2i)
 
-## Emitted when the actor's turn has started and the actor is set to be player
-## controlled.
-signal player_turn_started
-
 ## The name of the actor that can be displayed to the player.
 @export var actor_name: String
 
@@ -28,8 +24,6 @@ signal player_turn_started
 ## The scene for the actor's [AI].
 @export var ai_scene: PackedScene
 
-## True if the actor is controlled by the player, false otherwise.
-@export var player_controlled := false
 ## The actor's faction ID. Different factions are hostile to each other.
 @export var faction := 0
 
@@ -74,7 +68,7 @@ var all_abilities: Array[Ability]:
 
 var turn_taker: TurnTaker:
 	get:
-		return $TurnTaker
+		return $TurnTaker as TurnTaker
 
 
 var _map: Map
@@ -157,15 +151,3 @@ func _origin_cell_changed(old_cell: Vector2i) -> void:
 
 func _cell_size_changed(_old_size: int) -> void:
 	sprite.cell_size = cell_size
-
-
-func _on_turn_taker_turn_started() -> void:
-	await sprite.wait_for_animation()
-
-	if player_controlled:
-		player_turn_started.emit()
-	elif _ai:
-		var action := _ai.get_action()
-		turn_taker.end_turn(action)
-	else:
-		turn_taker.end_turn(null)
