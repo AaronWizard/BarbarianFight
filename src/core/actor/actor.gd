@@ -96,6 +96,7 @@ func set_map(new_map: Map) -> void:
 			removed_from_map.emit()
 
 
+## Sets the actor's controller.
 func set_controller(controller: ActorController) -> void:
 	if _controller:
 		remove_child(_controller)
