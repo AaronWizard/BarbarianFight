@@ -71,7 +71,8 @@ func _load_initial_map() -> void:
 
 	_load_map(map, start_cell)
 
-	# Player node needs to be child of other node for this to work.
+	# Player's stamina node needs to be loaded first, so we only do this after
+	# the player is added to the map in _load_map.
 	_player_stamina.set_player(_player_actor)
 
 
