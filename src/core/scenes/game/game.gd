@@ -10,6 +10,9 @@ extends Scene
 var _player_actor: Actor
 var _player_controller: PlayerController
 
+var _turn_clock: TurnClock
+
+
 var _current_map: Map:
 	get:
 		var result: Map = null
@@ -20,8 +23,6 @@ var _current_map: Map:
 
 
 @onready var _map_container := $MapContainer
-
-@onready var _turn_clock := $TurnClock as TurnClock
 
 @onready var _player_camera := $PlayerCamera as PlayerCamera
 
@@ -37,6 +38,8 @@ var _current_map: Map:
 
 
 func _ready() -> void:
+	_turn_clock = TurnClock.new()
+
 	_init_player_actor()
 	_init_player_controller()
 

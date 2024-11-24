@@ -1,5 +1,4 @@
 class_name TurnClock
-extends Node
 
 ## The turn manager for a map.
 ##
