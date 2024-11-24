@@ -84,9 +84,9 @@ func _ready() -> void:
 ## Set's the actor's map. Not meant to be used directly. Use Map.add_actor and
 ## Map.remove_actor.
 func set_map(new_map: Map) -> void:
-	if _map and (self in _map.actor_map.actors):
+	if _map and _map.is_ancestor_of(self):
 		push_error("Actor not removed from map using Map.remove_actor")
-	elif new_map and (self not in new_map.actor_map.actors):
+	elif new_map and not new_map.is_ancestor_of(self):
 		push_error("Actor not added to map using Map.add_actor")
 	else:
 		_map = new_map
