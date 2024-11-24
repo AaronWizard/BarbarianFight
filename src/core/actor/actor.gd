@@ -96,6 +96,13 @@ func set_map(new_map: Map) -> void:
 			removed_from_map.emit()
 
 
+func set_controller(controller: ActorController) -> void:
+	if _controller:
+		remove_child(_controller)
+	_controller = controller
+	add_child(_controller)
+
+
 ## Returns true if [param other_actor] is hostile to this actor, false
 ## otherwise.
 func is_hostile(other_actor: Actor) -> bool:

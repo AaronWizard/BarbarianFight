@@ -58,8 +58,7 @@ func _init_player_actor() -> void:
 
 func _init_player_controller() -> void:
 	_player_controller = PlayerController.new()
-	_player_actor.add_child(_player_controller)
-	_player_actor._controller = _player_controller
+	_player_actor.set_controller(_player_controller)
 
 	@warning_ignore("return_value_discarded")
 	_player_controller.player_turn_started.connect(
