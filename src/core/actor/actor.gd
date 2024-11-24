@@ -21,8 +21,6 @@ signal moved(old_cell: Vector2i)
 
 ## The actor's [ActorDefinition].
 @export var definition: ActorDefinition
-## The scene for the actor's [AI].
-@export var ai_scene: PackedScene
 
 ## The actor's faction ID. Different factions are hostile to each other.
 @export var faction := 0
@@ -72,7 +70,8 @@ var turn_taker: TurnTaker:
 
 
 var _map: Map
-var _ai: AI
+
+var _controller: ActorController
 
 
 func _ready() -> void:
@@ -80,20 +79,6 @@ func _ready() -> void:
 		if definition:
 			stamina.max_stamina = definition.stamina
 			stamina.heal_full()
-
-		if ai_scene:
-			var ai := ai_scene.instantiate() as AI
-			set_ai(ai)
-
-
-## Sets the actor's AI. The AI is added to the actor as a child node.
-func set_ai(ai: AI) -> void:
-	if _ai:
-		remove_child(_ai)
-		_ai.free()
-	_ai = ai
-	add_child(_ai)
-	_ai.set_actor(self)
 
 
 ## Set's the actor's map. Not meant to be used directly. Use Map.add_actor and
@@ -151,3 +136,14 @@ func _origin_cell_changed(old_cell: Vector2i) -> void:
 
 func _cell_size_changed(_old_size: int) -> void:
 	sprite.cell_size = cell_size
+
+
+func _on_turn_taker_turn_started() -> void:
+	await sprite.wait_for_animation()
+
+	var action: TurnAction = null
+	if _controller:
+		@warning_ignore("redundant_await")
+		action = await _controller.get_turn_action()
+
+	turn_taker.end_turn(action)

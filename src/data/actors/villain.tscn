@@ -1,8 +1,7 @@
-[gd_scene load_steps=9 format=3 uid="uid://detdx2xagdgeb"]
+[gd_scene load_steps=8 format=3 uid="uid://detdx2xagdgeb"]
 
 [ext_resource type="PackedScene" uid="uid://dg6ygq33001cu" path="res://src/core/actor/actor.tscn" id="1_3db44"]
 [ext_resource type="Script" path="res://src/core/actor/actor_definition.gd" id="3_66sex"]
-[ext_resource type="PackedScene" uid="uid://c0t20wws7j4nl" path="res://src/data/ai_default.tscn" id="3_yjkef"]
 [ext_resource type="Script" path="res://src/core/abilities/ability.gd" id="4_5em6y"]
 [ext_resource type="Shader" path="res://src/core/shaders/sprite_dissolve.gdshader" id="4_rftw8"]
 [ext_resource type="Resource" uid="uid://c88rjluqia4f8" path="res://src/data/abilities/ability_kick.tres" id="5_6ujeo"]
@@ -21,7 +20,6 @@ shader_parameter/dissolve = 0.0
 [node name="Villain" instance=ExtResource("1_3db44")]
 actor_name = "Thargor"
 definition = SubResource("Resource_3b2c0")
-ai_scene = ExtResource("3_yjkef")
 abilities = Array[ExtResource("4_5em6y")]([ExtResource("5_6ujeo")])
 
 [node name="Sprite" parent="ActorSprite/SpriteOrigin" index="0"]
