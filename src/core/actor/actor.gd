@@ -64,6 +64,7 @@ var all_abilities: Array[Ability]:
 		return result
 
 
+## The actor's turn taker. Controls when the actor gets a turn.
 var turn_taker: TurnTaker:
 	get:
 		return $TurnTaker as TurnTaker
@@ -81,8 +82,8 @@ func _ready() -> void:
 			stamina.heal_full()
 
 
-## Set's the actor's map. Not meant to be used directly. Use Map.add_actor and
-## Map.remove_actor.
+## Set's the actor's map. Not meant to be used directly. Use
+## [method Map.add_actor] and [method Map.remove_actor].
 func set_map(new_map: Map) -> void:
 	if _map and _map.is_ancestor_of(self):
 		push_error("Actor not removed from map using Map.remove_actor")
@@ -100,8 +101,17 @@ func set_map(new_map: Map) -> void:
 func set_controller(controller: ActorController) -> void:
 	if _controller:
 		remove_child(_controller)
+		_controller.set_actor(null)
+
 	_controller = controller
-	add_child(_controller)
+
+	if _controller:
+		# Check whether or not controller is already a child due to being added
+		# in the scene editor.
+		if _controller.get_parent() != self:
+			assert(_controller.controlled_actor != self)
+			add_child(_controller)
+		_controller.set_actor(self)
 
 
 ## Returns true if [param other_actor] is hostile to this actor, false
