@@ -82,8 +82,7 @@ func _unhandled_input(_event: InputEvent) -> void:
 			mouse_clicked.emit(cell)
 
 
-## Adds [param actor] to the map at [param cell].[br]
-## The new actor will be given the map's turn clock.
+## Adds [param actor] to the map at [param cell].
 func add_actor(actor: Actor, cell: Vector2i) -> void:
 	assert(actor.get_parent() == null)
 
