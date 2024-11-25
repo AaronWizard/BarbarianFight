@@ -13,3 +13,6 @@ tile_set = ExtResource("1_k6cdp")
 [node name="SelectableTargets" type="TileMapLayer" parent="."]
 use_parent_material = true
 tile_set = ExtResource("1_k6cdp")
+
+[node name="AOE" type="TileMapLayer" parent="."]
+tile_set = ExtResource("1_k6cdp")

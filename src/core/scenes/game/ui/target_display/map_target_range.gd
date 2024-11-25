@@ -3,6 +3,7 @@ extends Node2D
 
 @onready var _target_range_layer := $TargetRange as TileMapLayer
 @onready var _selectable_targets_layer := $SelectableTargets as TileMapLayer
+@onready var _aoe_layer := $AOE as TileMapLayer
 
 const _TARGET_RANGE_TERRAIN_SET := 0
 const _TARGET_RANGE_TERRAIN := 0
@@ -18,9 +19,14 @@ func set_target_range(target_range: Array[Vector2i],
 	_set_selectable_targets(selectable_cells)
 
 
+func set_aoe(_aoe: Array[Vector2i]) -> void:
+	_aoe_layer.clear()
+
+
 func clear() -> void:
 	_target_range_layer.clear()
 	_selectable_targets_layer.clear()
+	_aoe_layer.clear()
 
 
 func _set_target_range(target_range: Array[Vector2i]) -> void:
