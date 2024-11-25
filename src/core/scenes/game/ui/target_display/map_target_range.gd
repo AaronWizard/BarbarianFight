@@ -1,27 +1,37 @@
 class_name MapTargetRange
 extends Node2D
 
-@onready var target_range := $TargetRange as TileMapLayer
-@onready var valid_targets := $ValidTargets as TileMapLayer
+@onready var _target_range_layer := $TargetRange as TileMapLayer
+@onready var _valid_targets_layer := $ValidTargets as TileMapLayer
 
-const _VISIBLE_RANGE_TERRAIN_SET := 0
-const _VISIBLE_RANGE_TERRAIN := 0
+const _TARGET_RANGE_TERRAIN_SET := 0
+const _TARGET_RANGE_TERRAIN := 0
 
-const _SELECTABLE_CELL_SOURCE_ID := 1
-const _SELECTABLE_CELL_ALTAS_COORDS := Vector2i(0, 0)
+const _SELECTABLE_TARGET_CELL_SOURCE_ID := 1
+const _SELECTABLE_TARGET_CELL_ALTAS_COORDS := Vector2i(0, 0)
 
 
-func set_target_range(visible_range: Array[Vector2i],
+func set_target_range(target_range: Array[Vector2i],
 		selectable_cells: Array[Vector2i]) -> void:
 	clear()
-
-	target_range.set_cells_terrain_connect(\
-			visible_range, _VISIBLE_RANGE_TERRAIN_SET, _VISIBLE_RANGE_TERRAIN)
-	for cell in selectable_cells:
-		valid_targets.set_cell(
-				cell, _SELECTABLE_CELL_SOURCE_ID, _SELECTABLE_CELL_ALTAS_COORDS)
+	_set_target_range(target_range)
+	_set_valid_cells(selectable_cells)
 
 
 func clear() -> void:
-	target_range.clear()
-	valid_targets.clear()
+	_target_range_layer.clear()
+	_valid_targets_layer.clear()
+
+
+func _set_target_range(target_range: Array[Vector2i]) -> void:
+	_target_range_layer.set_cells_terrain_connect(\
+			target_range, _TARGET_RANGE_TERRAIN_SET, _TARGET_RANGE_TERRAIN)
+
+
+func _set_valid_cells(cells: Array[Vector2i]) -> void:
+	for cell in cells:
+		_valid_targets_layer.set_cell(
+			cell,
+			_SELECTABLE_TARGET_CELL_SOURCE_ID,
+			_SELECTABLE_TARGET_CELL_ALTAS_COORDS
+		)
