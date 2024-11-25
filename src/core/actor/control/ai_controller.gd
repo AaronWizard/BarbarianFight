@@ -1,29 +1,11 @@
-class_name AI
-extends Node
+@icon("res://assets/editor/icons/ai.png")
+class_name AIController
+extends ActorController
 
-## An AI that picks actions for a parent actor on its turn.
-
-## The AI's actor.
-var _actor: Actor
+## An AI node for controlling NPC actors.
 
 
-## Sets the AI's actor.
-func set_actor(actor: Actor) -> void:
-	assert(actor.is_ancestor_of(self))
-	_actor = actor
-
-	@warning_ignore("return_value_discarded")
-	_actor.turn_taker.turn_started.connect(_take_turn)
-
-
-func _take_turn() -> void:
-	await _actor.sprite.wait_for_animation()
-	var action := _get_action()
-	_actor.turn_taker.end_turn(action)
-
-
-## Gets the AI's next turn action. A return value of null is a wait action.
-func _get_action() -> TurnAction:
+func get_turn_action() -> TurnAction:
 	var result: TurnAction = null
 
 	result = _try_ability()
@@ -38,8 +20,8 @@ func _try_ability() -> TurnAction:
 
 	var possible_abilities := {}
 
-	for ability in _actor.all_abilities:
-		var target_data := ability.get_target_data(_actor)
+	for ability in controlled_actor.all_abilities:
+		var target_data := ability.get_target_data(controlled_actor)
 		if target_data.has_targets:
 			possible_abilities[ability] = target_data
 
@@ -52,7 +34,7 @@ func _try_ability() -> TurnAction:
 		@warning_ignore("unsafe_cast")
 		var target := target_data.targets.pick_random() as Vector2i
 
-		result = AbilityAction.new(_actor, target, ability)
+		result = AbilityAction.new(controlled_actor, target, ability)
 
 	return result
 
@@ -61,15 +43,15 @@ func _find_step_to_enemy() -> TurnAction:
 	var result: TurnAction = null
 
 	var path: Array[Vector2i] = []
-	for actor in _actor.map.actor_map.actors:
-		if actor.is_hostile(_actor):
-			var new_path := _actor.map.find_path_between_rects(
-					_actor.rect, actor.rect)
+	for actor in controlled_actor.map.actor_map.actors:
+		if actor.is_hostile(controlled_actor):
+			var new_path := controlled_actor.map.find_path_between_rects(
+					controlled_actor.rect, actor.rect)
 			if not new_path.is_empty() \
 					and (path.is_empty() or (new_path.size() < path.size())):
 				path = new_path
 	if not path.is_empty():
 		assert(path.size() > 1)
-		result = MoveAction.new(_actor, path[1])
+		result = MoveAction.new(controlled_actor, path[1])
 
 	return result

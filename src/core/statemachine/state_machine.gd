@@ -1,3 +1,4 @@
+@icon("res://assets/editor/icons/state_machine.png")
 class_name StateMachine
 extends Node
 

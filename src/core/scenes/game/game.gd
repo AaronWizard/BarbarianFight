@@ -8,6 +8,9 @@ extends Scene
 @export_file("*.tscn") var game_over_scene_path: String
 
 var _player_actor: Actor
+var _player_controller: PlayerController
+
+var _turn_clock: TurnClock
 
 
 var _current_map: Map:
@@ -20,8 +23,6 @@ var _current_map: Map:
 
 
 @onready var _map_container := $MapContainer
-
-@onready var _turn_clock := $TurnClock as TurnClock
 
 @onready var _player_camera := $PlayerCamera as PlayerCamera
 
@@ -37,24 +38,34 @@ var _current_map: Map:
 
 
 func _ready() -> void:
-	_init_player()
+	_turn_clock = TurnClock.new()
+
+	_init_player_actor()
+	_init_player_controller()
+
 	_load_initial_map()
 
 	await _screen_fade.fade_in()
 	_turn_clock.run()
 
 
-func _init_player() -> void:
+func _init_player_actor() -> void:
 	_player_actor = player_actor_scene.instantiate() as Actor
 
-	@warning_ignore("return_value_discarded")
-	_player_actor.turn_taker.turn_started.connect(_on_player_actor_turn_started)
+	_boss_stamina.player = _player_actor
+	_player_actor.sprite.follow_with_camera(_player_camera)
+
 	@warning_ignore("return_value_discarded")
 	_player_actor.stamina.died.connect(_on_player_died)
 
-	_boss_stamina.player = _player_actor
 
-	_player_actor.sprite.follow_with_camera(_player_camera)
+func _init_player_controller() -> void:
+	_player_controller = PlayerController.new()
+	_player_actor.set_controller(_player_controller)
+
+	@warning_ignore("return_value_discarded")
+	_player_controller.player_turn_started.connect(
+			_on_player_actor_turn_started)
 
 
 func _load_initial_map() -> void:
@@ -62,7 +73,9 @@ func _load_initial_map() -> void:
 	var start_cell := map.markers.get_marker(player_start_marker).origin_cell
 
 	_load_map(map, start_cell)
-	# Player node needs to be child of other node for this to work.
+
+	# Player's stamina node needs to be loaded first, so we only do this after
+	# the player is added to the map in _load_map.
 	_player_stamina.set_player(_player_actor)
 
 
@@ -98,7 +111,7 @@ func _on_player_actor_turn_started() -> void:
 
 
 func _on_player_action_state_player_action_chosen(action: TurnAction) -> void:
-	_player_actor.turn_taker.end_turn(action)
+	_player_controller.do_player_action(action)
 
 
 func _on_player_died() -> void:

@@ -21,8 +21,6 @@ signal moved(old_cell: Vector2i)
 
 ## The actor's [ActorDefinition].
 @export var definition: ActorDefinition
-## The scene for the actor's [AI].
-@export var ai_scene: PackedScene
 
 ## The actor's faction ID. Different factions are hostile to each other.
 @export var faction := 0
@@ -66,13 +64,15 @@ var all_abilities: Array[Ability]:
 		return result
 
 
+## The actor's turn taker. Controls when the actor gets a turn.
 var turn_taker: TurnTaker:
 	get:
 		return $TurnTaker as TurnTaker
 
 
 var _map: Map
-var _ai: AI
+
+var _controller: ActorController
 
 
 func _ready() -> void:
@@ -81,27 +81,13 @@ func _ready() -> void:
 			stamina.max_stamina = definition.stamina
 			stamina.heal_full()
 
-		if ai_scene:
-			var ai := ai_scene.instantiate() as AI
-			set_ai(ai)
 
-
-## Sets the actor's AI. The AI is added to the actor as a child node.
-func set_ai(ai: AI) -> void:
-	if _ai:
-		remove_child(_ai)
-		_ai.free()
-	_ai = ai
-	add_child(_ai)
-	_ai.set_actor(self)
-
-
-## Set's the actor's map. Not meant to be used directly. Use Map.add_actor and
-## Map.remove_actor.
+## Set's the actor's map. Not meant to be used directly. Use
+## [method Map.add_actor] and [method Map.remove_actor].
 func set_map(new_map: Map) -> void:
-	if _map and (self in _map.actor_map.actors):
+	if _map and _map.is_ancestor_of(self):
 		push_error("Actor not removed from map using Map.remove_actor")
-	elif new_map and (self not in new_map.actor_map.actors):
+	elif new_map and not new_map.is_ancestor_of(self):
 		push_error("Actor not added to map using Map.add_actor")
 	else:
 		_map = new_map
@@ -109,6 +95,23 @@ func set_map(new_map: Map) -> void:
 			added_to_new_map.emit()
 		else:
 			removed_from_map.emit()
+
+
+## Sets the actor's controller.
+func set_controller(controller: ActorController) -> void:
+	if _controller:
+		remove_child(_controller)
+		_controller.set_actor(null)
+
+	_controller = controller
+
+	if _controller:
+		# Check whether or not controller is already a child due to being added
+		# in the scene editor.
+		if _controller.get_parent() != self:
+			assert(_controller.controlled_actor != self)
+			add_child(_controller)
+		_controller.set_actor(self)
 
 
 ## Returns true if [param other_actor] is hostile to this actor, false
@@ -151,3 +154,14 @@ func _origin_cell_changed(old_cell: Vector2i) -> void:
 
 func _cell_size_changed(_old_size: int) -> void:
 	sprite.cell_size = cell_size
+
+
+func _on_turn_taker_turn_started() -> void:
+	await sprite.wait_for_animation()
+
+	var action: TurnAction = null
+	if _controller:
+		@warning_ignore("redundant_await")
+		action = await _controller.get_turn_action()
+
+	turn_taker.end_turn(action)
