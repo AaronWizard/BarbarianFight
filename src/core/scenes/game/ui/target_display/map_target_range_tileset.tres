@@ -168,14 +168,10 @@ texture = ExtResource("2_k1khm")
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_0ekqe"]
 texture = ExtResource("2_ui5dg")
-0:0/animation_frame_0/duration = 0.1
-0:0/animation_frame_1/duration = 0.1
-0:0/animation_frame_2/duration = 0.1
-0:0/animation_frame_3/duration = 0.1
-0:0/animation_frame_4/duration = 0.1
-0:0/animation_frame_5/duration = 0.1
-0:0/animation_frame_6/duration = 0.1
-0:0/animation_frame_7/duration = 0.1
+0:0/animation_frame_0/duration = 0.2
+0:0/animation_frame_1/duration = 0.2
+0:0/animation_frame_2/duration = 0.2
+0:0/animation_frame_3/duration = 0.2
 0:0/0 = 0
 
 [resource]
