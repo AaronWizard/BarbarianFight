@@ -1,3 +1,4 @@
+@icon("res://assets/editor/icons/scene.png")
 class_name Scene
 extends Node
 
