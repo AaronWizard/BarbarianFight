@@ -70,6 +70,12 @@ var turn_taker: TurnTaker:
 		return $TurnTaker as TurnTaker
 
 
+## The actor's current [ActorController].
+var controller: ActorController:
+	get:
+		return _controller
+
+
 var _map: Map
 
 var _controller: ActorController
@@ -98,12 +104,12 @@ func set_map(new_map: Map) -> void:
 
 
 ## Sets the actor's controller.
-func set_controller(controller: ActorController) -> void:
+func set_controller(new_controller: ActorController) -> void:
 	if _controller:
 		remove_child(_controller)
 		_controller.set_actor(null)
 
-	_controller = controller
+	_controller = new_controller
 
 	if _controller:
 		# Check whether or not controller is already a child due to being added

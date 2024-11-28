@@ -37,6 +37,12 @@ var markers: MapMarkers:
 		return $MapMarkers as MapMarkers
 
 
+## The [CombatPhysics] handler.
+var combat_physics: CombatPhysics:
+	get:
+		return _combat_physics
+
+
 ## True if any animations are playing on the map, false otherwise.
 var animations_playing: bool:
 	get:
@@ -54,8 +60,11 @@ var pixel_rect: Rect2i:
 
 
 var _terrain: Terrain
-var _anim_tracker: MapAnimTracker
 var _pathfinder: Pathfinder
+
+var _combat_physics: CombatPhysics
+
+var _anim_tracker: MapAnimTracker
 
 @onready var _terrain_tilemap := $Terrain as TileMapLayer
 
@@ -69,6 +78,8 @@ func _ready() -> void:
 	_pathfinder = Pathfinder.new(_terrain_tilemap.get_used_rect())
 	for wall in _terrain.all_blocking_cells():
 		_pathfinder.set_cell_solid(wall, true)
+
+	_combat_physics = CombatPhysics.new(self)
 
 	for a in actor_map.actors:
 		_init_actor(a)

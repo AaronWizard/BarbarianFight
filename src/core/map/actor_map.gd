@@ -35,6 +35,20 @@ func get_actor_on_cell(cell: Vector2i) -> Actor:
 	return result
 
 
+func get_actors_on_cells(cells: Array[Vector2i]) -> Array[Actor]:
+	var found_actors := {}
+
+	for cell in cells:
+		var actor := get_actor_on_cell(cell)
+		if actor:
+			found_actors[actor] = true
+
+	var result: Array[Actor] = []
+	result.assign(found_actors.keys())
+
+	return result
+
+
 ## True if [param rect] does not overlap with any actors in the actor map other
 ## than the ones in [param actors_to_ignore], false otherwise.
 func rect_is_clear(rect: Rect2i, actors_to_ignore: Array[Actor]) -> bool:

@@ -198,6 +198,12 @@ static func cardinal_dir_from_rect_to_cell(rect: Rect2i, target: Vector2i) \
 	return result
 
 
+## Get the closest cardinal direction vector (up, down, left, or right) between
+## two [Rect2i]s.
+static func cardinal_dir_between_rects(a: Rect2i, b: Rect2i) -> Vector2i:
+	return cardinal_dir_between_cells(a.position, b.position)
+
+
 ## Get the cells adjacent to one side of [param rect] at the given direction.
 ## [br]
 ## [param direction] must be one of the four cardinal directions.

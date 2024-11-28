@@ -35,3 +35,11 @@ var _controlled_actor: Actor
 func get_turn_action() -> TurnAction:
 	push_warning("ActorController._get_turn_action not implemented")
 	return null
+
+
+## Gets the actor's response action to attacks.[br]
+## Can be overriden.
+func get_attack_reaction(_aoe: Array[Vector2i], _attack_power: int,
+		_source_rect: Rect2i) -> void:
+	push_warning("ActorController.get_attack_response not implemented")
+	pass
