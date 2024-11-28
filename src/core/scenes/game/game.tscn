@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=3 uid="uid://cvi0bb84c7308"]
+[gd_scene load_steps=19 format=3 uid="uid://cvi0bb84c7308"]
 
 [ext_resource type="Script" path="res://src/core/scenes/game/game.gd" id="1_soc31"]
 [ext_resource type="PackedScene" uid="uid://c0c5o4j30lwif" path="res://src/data/maps/arena.tscn" id="2_4vijj"]
@@ -11,6 +11,7 @@
 [ext_resource type="Script" path="res://src/core/scenes/game/states/player_select_ability_state.gd" id="10_6ap2n"]
 [ext_resource type="Script" path="res://src/core/scenes/game/states/player_target_state.gd" id="11_nrae6"]
 [ext_resource type="Script" path="res://src/core/scenes/game/states/player_action_state.gd" id="12_0vv7w"]
+[ext_resource type="Script" path="res://src/core/scenes/game/states/player_attack_reaction_state.gd" id="12_6cab4"]
 [ext_resource type="Script" path="res://src/core/statemachine/state.gd" id="12_awymb"]
 [ext_resource type="Script" path="res://src/core/scenes/game/ui/ability_menu.gd" id="12_cpqtk"]
 [ext_resource type="PackedScene" uid="uid://cn0u6gdopw7sw" path="res://src/core/scenes/game/ui/player_stamina.tscn" id="13_7vvkx"]
@@ -63,6 +64,10 @@ wait_button = NodePath("../../UI/WaitButton")
 [node name="PlayerActionState" type="Node" parent="PlayerStateMachine" node_paths=PackedStringArray("wait_state")]
 script = ExtResource("12_0vv7w")
 wait_state = NodePath("../Wait")
+
+[node name="PlayerAttackReactionState" type="Node" parent="PlayerStateMachine" node_paths=PackedStringArray("target_display")]
+script = ExtResource("12_6cab4")
+target_display = NodePath("../../TargetDisplay")
 
 [node name="AbilityMenu" type="Node2D" parent="."]
 script = ExtResource("12_cpqtk")
@@ -120,3 +125,4 @@ icon = ExtResource("15_rsmhe")
 [node name="ScreenFade" parent="." instance=ExtResource("9_gd7wy")]
 
 [connection signal="player_action_chosen" from="PlayerStateMachine/PlayerActionState" to="." method="_on_player_action_state_player_action_chosen"]
+[connection signal="attack_reaction_chosen" from="PlayerStateMachine/PlayerAttackReactionState" to="." method="_on_player_attack_reaction_state_attack_reaction_chosen"]

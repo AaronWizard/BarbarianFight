@@ -31,8 +31,12 @@ var _current_map: Map:
 @onready var _boss_stamina := $UI/BossStamina as BossStamina
 
 @onready var _state_machine := $PlayerStateMachine as StateMachine
-@onready var _player_movement_state := $PlayerStateMachine/PlayerMovementState \
-		as PlayerMovementState
+@onready var _wait_state := $PlayerStateMachine/Wait as State
+@onready var _player_movement_state \
+		:= $PlayerStateMachine/PlayerMovementState as State
+@onready var _player_attack_reaction_state \
+		:= $PlayerStateMachine/PlayerAttackReactionState as State
+
 
 @onready var _screen_fade := $ScreenFade as ScreenFade
 
@@ -66,6 +70,11 @@ func _init_player_controller() -> void:
 	@warning_ignore("return_value_discarded")
 	_player_controller.player_turn_started.connect(
 			_on_player_actor_turn_started)
+
+	@warning_ignore("return_value_discarded")
+	_player_controller.player_attack_reaction_started.connect(
+		_on_player_attack_reaction_started
+	)
 
 
 func _load_initial_map() -> void:
@@ -110,8 +119,26 @@ func _on_player_actor_turn_started() -> void:
 			_player_movement_state, {player = _player_actor})
 
 
+func _on_player_attack_reaction_started(
+		aoe: Array[Vector2i], attack_power: int, source_rect: Rect2i) -> void:
+	_state_machine.change_state(
+		_player_attack_reaction_state,
+		{
+			player = _player_actor,
+			aoe = aoe,
+			attack_power = attack_power,
+			source_rect = source_rect
+		}
+	)
+
+
 func _on_player_action_state_player_action_chosen(action: TurnAction) -> void:
 	_player_controller.do_player_action(action)
+
+
+func _on_player_attack_reaction_state_attack_reaction_chosen() -> void:
+	_player_controller.do_player_attack_reaction()
+	_state_machine.change_state(_wait_state)
 
 
 func _on_player_died() -> void:
