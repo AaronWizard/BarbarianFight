@@ -24,6 +24,10 @@ func get_target_data(source_actor: Actor) -> TargetingData:
 	return target_range.get_target_data(source_actor)
 
 
+func get_aoe(target: Vector2i) -> Array[Vector2i]:
+	return [target]
+
+
 ## Performs the ability at [param target] for [param source_actor].[br]
 ## Assumes [param target] is a valid target.
 func perform(target: Vector2i, source_actor: Actor) -> void:

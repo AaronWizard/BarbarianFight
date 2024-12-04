@@ -15,3 +15,7 @@ extends Resource
 ## If this is true and the camera is following the actor sprite, the camera
 ## follows the sprite itself instead of the actor sprite's cell.
 @export var camera_follow_sprite := false
+
+## If true, resets the sprite's position to the center of the actor at the end
+## of the animation.
+@export var reset_sprite_pos_at_end := true

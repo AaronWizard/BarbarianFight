@@ -15,4 +15,10 @@ func _init(actor: Actor, target: Vector2i, ability: Ability) -> void:
 
 
 func run() -> void:
+	var direction := TileGeometry.cardinal_dir_from_rect_to_cell(
+			_actor.rect, _target)
+	await _actor.sprite.attack_windup(direction)
+
+	await _actor.map.combat_physics.warn_of_attack(_ability.get_aoe(_target), AttackData.new())
 	await _ability.perform(_target, _actor)
+	await _actor.get_tree().create_timer(0.3).timeout

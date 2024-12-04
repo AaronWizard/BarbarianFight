@@ -38,8 +38,11 @@ const _DEATH_DURATION := 0.2
 ## The animation for movement.
 @export var anim_move: ActorSpriteAnimation
 
+## The animation for the initial windup before an attack.
+@export var anim_attack_windup: ActorSpriteAnimation
 ## The animation for attacks.
 @export var anim_attack: ActorSpriteAnimation
+
 ## The name of the attack hit step in the attack animation.
 @export var anim_attack_hit_step_name := ""
 
@@ -96,13 +99,24 @@ func wait_for_animation() -> void:
 		await animation_finished
 
 
+## Resets the sprite position to the center of the actor sprite's rectangle.
+func reset_sprite_pos() -> void:
+	_sprite.position = Vector2i.ZERO
+
+
 ## Animates an actor moving to an adjacent cell. [param target_vector] is
 ## relative to the actor's initial origin cell before moving to the new cell.
 func move_step(target_vector: Vector2) -> void:
 	await anim_player.animate(anim_move, target_vector)
 
 
-## Animates an actor attacking the given target_cell.[br]
+## Animates the windup before the attack against the given target cell.[br]
+## [param target_cell] is relative to the actor's cell.
+func attack_windup(target_cell: Vector2) -> void:
+	await anim_player.animate(anim_attack_windup, target_cell)
+
+
+## Animates an actor attacking the given target cell.[br]
 ## [param target_cell] is relative to the actor's cell.
 func attack(target_cell: Vector2) -> void:
 	await anim_player.animate(anim_attack, target_cell)
