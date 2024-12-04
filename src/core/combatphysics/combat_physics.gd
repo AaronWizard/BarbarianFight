@@ -12,16 +12,15 @@ func _init(map: Map) -> void:
 	_map = map
 
 
-func do_attack(aoe: Array[Vector2i], attack_power: int, source_rect: Rect2i) \
-		-> void:
+func warn_of_attack(aoe: Array[Vector2i], attack_data: AttackData) -> void:
 	var actors := _map.actor_map.get_actors_on_cells(aoe)
 	for actor in actors:
 		@warning_ignore("redundant_await")
-		await actor.controller.get_attack_reaction(
-				aoe, attack_power, source_rect)
+		await actor.controller.get_attack_reaction(aoe, attack_data)
 
+
+func do_attack(aoe: Array[Vector2i], attack_data: AttackData) -> void:
+	var actors := _map.actor_map.get_actors_on_cells(aoe)
 	actors = _map.actor_map.get_actors_on_cells(aoe)
 	for actor in actors:
-		var direction := TileGeometry.cardinal_dir_between_rects(
-				source_rect, actor.rect)
-		await actor.take_damage(attack_power, direction)
+		await actor.take_damage(attack_data)

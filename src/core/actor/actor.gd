@@ -137,11 +137,11 @@ func move_step(target_cell: Vector2i) -> void:
 ## Makes the actor take damage from the given direction. If
 ## [param process_hit_or_death] is true, default hit animations are played and
 ## the actor is removed from its map if it's dead.
-func take_damage(damage: int, direction := Vector2.ZERO,
-		process_hit_or_death := true) -> void:
-	stamina.current_stamina -= damage
+func take_damage(attack_data: AttackData, process_hit_or_death := true) -> void:
+	stamina.current_stamina -= attack_data.attack_power
 
 	if process_hit_or_death:
+		var direction := attack_data.get_direction(rect)
 		if stamina.is_alive:
 			await sprite.hit(direction)
 		else:

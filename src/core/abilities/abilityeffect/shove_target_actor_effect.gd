@@ -36,11 +36,14 @@ func apply(target: Vector2i, _source: Rect2i, source_actor: Actor) -> void:
 		push_error("Actor '%s' can't push itself" % source_actor)
 		return
 
+	var attack_data := AttackData.new()
+	attack_data.attack_power = source_actor.definition.attack
+	attack_data.has_source_rect = false
+
 	var direction := TileGeometry.cardinal_dir_from_rect_to_cell(
 			source_actor.rect, target)
-	var damage := source_actor.definition.attack
 
-	target_actor.take_damage(damage, Vector2.ZERO, false)
+	target_actor.take_damage(attack_data, false)
 
 	var shove_cell := _shove_destination(target_actor, direction)
 	var travel_diff := shove_cell - target_actor.origin_cell
@@ -50,7 +53,8 @@ func apply(target: Vector2i, _source: Rect2i, source_actor: Actor) -> void:
 	var is_collision \
 			:= travel_diff.length_squared() < (max_distance * max_distance)
 	if is_collision:
-		await _shove_into_obstacle(target_actor, damage, travel_diff, direction)
+		await _shove_into_obstacle(
+				target_actor, attack_data, travel_diff, direction)
 	else:
 		await target_actor.sprite.anim_player.animate(
 				anim_shove_no_collision, travel_diff)
@@ -75,17 +79,17 @@ func _shove_destination(actor: Actor, direction: Vector2i) -> Vector2i:
 	return result
 
 
-func _shove_into_obstacle(target_actor: Actor, damage: int,
+func _shove_into_obstacle(target_actor: Actor, attack_data: AttackData,
 		travel_diff: Vector2i, direction: Vector2i) -> void:
 	if travel_diff.length_squared() == 0:
-		target_actor.take_damage(damage, Vector2.ZERO, false)
+		target_actor.take_damage(attack_data, false)
 		await target_actor.sprite.hit(direction)
 	else:
 		var on_named_step_finished := func (
 				animation: ActorSpriteAnimation, step_name: String) -> void:
 			if (animation == anim_shove_collision) \
 					and (step_name == collision_frame_name):
-				target_actor.take_damage(damage, Vector2.ZERO, false)
+				target_actor.take_damage(attack_data, false)
 
 		@warning_ignore("return_value_discarded")
 		target_actor.sprite.anim_player.named_step_finished.connect(
@@ -99,4 +103,4 @@ func _shove_into_obstacle(target_actor: Actor, damage: int,
 
 		# on_named_step_finished was not called
 		if collision_frame_name.is_empty():
-			target_actor.take_damage(damage, Vector2.ZERO, false)
+			target_actor.take_damage(attack_data, false)

@@ -7,8 +7,7 @@ extends ActorController
 ## input.
 
 ## The player actor's turn has started and is waiting for input.
-signal player_turn_started(
-		aoe: Array[Vector2i], attack_power: int, source_rect: Rect2i)
+signal player_turn_started(aoe: Array[Vector2i], attack_data: AttackData)
 
 signal player_attack_reaction_started
 
@@ -26,9 +25,8 @@ func get_turn_action() -> TurnAction:
 	return action
 
 
-func get_attack_reaction(
-		aoe: Array[Vector2i], attack_power: int, source_rect: Rect2i) -> void:
-	player_attack_reaction_started.emit(aoe, attack_power, source_rect)
+func get_attack_reaction(aoe: Array[Vector2i], attack_data: AttackData) -> void:
+	player_attack_reaction_started.emit(aoe, attack_data)
 	await _attack_reaction_chosen
 
 

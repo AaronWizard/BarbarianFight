@@ -12,6 +12,12 @@ func apply(target: Vector2i, source: Rect2i, source_actor: Actor) -> void:
 		push_error("Actor '%s' can't attack itself" % source_actor)
 		return
 
+	var attack_data := AttackData.new()
+	attack_data.attack_power = source_actor.definition.attack
+	attack_data.has_source_rect = true
+	attack_data.source_rect = source
+	attack_data.source_actor = source_actor
+
 	await source_actor.map.combat_physics.do_attack(
-		[target], source_actor.definition.attack, source
+		[target], attack_data
 	)
