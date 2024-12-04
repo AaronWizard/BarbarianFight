@@ -120,14 +120,13 @@ func _on_player_actor_turn_started() -> void:
 
 
 func _on_player_attack_reaction_started(
-		aoe: Array[Vector2i], attack_power: int, source_rect: Rect2i) -> void:
+		aoe: Array[Vector2i], attack_data: AttackData) -> void:
 	_state_machine.change_state(
 		_player_attack_reaction_state,
 		{
 			player = _player_actor,
 			aoe = aoe,
-			attack_power = attack_power,
-			source_rect = source_rect
+			attack_data = attack_data
 		}
 	)
 
