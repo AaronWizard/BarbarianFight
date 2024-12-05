@@ -27,3 +27,4 @@ ease_type = 2
 script = ExtResource("1_kejjc")
 steps = Array[ExtResource("2_rpdwc")]([SubResource("Resource_rlfwr"), SubResource("Resource_wyc7w")])
 camera_follow_sprite = false
+fallback_for_zero_vector = Vector2(1, 0)

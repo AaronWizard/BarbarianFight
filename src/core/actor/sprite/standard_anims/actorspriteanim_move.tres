@@ -27,3 +27,4 @@ ease_type = 1
 script = ExtResource("1_vcegg")
 steps = Array[ExtResource("2_kitdl")]([SubResource("Resource_a8o7k"), SubResource("Resource_d3sek")])
 camera_follow_sprite = true
+fallback_for_zero_vector = Vector2(1, 0)
