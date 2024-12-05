@@ -56,7 +56,9 @@ func animate(animation: ActorSpriteAnimation, target_vector: Vector2) -> void:
 		await step.animate(sprite, vector_to_use, tile_size)
 		if step.step_name and not step.step_name.is_empty():
 			named_step_finished.emit(animation, step.step_name)
-	sprite.position = Vector2.ZERO
+
+	if animation.reset_sprite_origin:
+		sprite.position = Vector2.ZERO
 
 	if sprite_transform:
 		sprite_transform.remote_path = ""

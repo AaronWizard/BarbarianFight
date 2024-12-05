@@ -18,3 +18,5 @@ extends Resource
 
 ## The vector that will be used if the target vector is zero.
 @export var fallback_for_zero_vector := Vector2.RIGHT
+
+@export var reset_sprite_origin := true

@@ -44,6 +44,11 @@ var animation_playing: bool:
 		return _animations_remaining > 0
 
 
+var sprite_at_origin: bool:
+	get:
+		return _sprite.position == Vector2.ZERO
+
+
 var _camera_transform: RemoteTransform2D:
 	get:
 		return $SpriteOrigin/CameraTransform as RemoteTransform2D
