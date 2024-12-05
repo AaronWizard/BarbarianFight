@@ -1,40 +1,14 @@
-[gd_resource type="Resource" script_class="Ability" load_steps=12 format=3 uid="uid://daoqfsm7y6lck"]
+[gd_resource type="Resource" script_class="Ability" load_steps=8 format=3 uid="uid://daoqfsm7y6lck"]
 
 [ext_resource type="Script" path="res://src/core/abilities/abilityeffect/move_source_actor_to_target_effect.gd" id="1_8sbro"]
-[ext_resource type="Script" path="res://src/core/actor/sprite/actor_sprite_animation.gd" id="1_fgmxa"]
 [ext_resource type="Script" path="res://src/core/abilities/ability.gd" id="1_gomvm"]
-[ext_resource type="Script" path="res://src/core/actor/sprite/actor_sprite_animation_step.gd" id="2_dhy46"]
+[ext_resource type="Resource" uid="uid://c0xt017l5reel" path="res://src/data/animations/actorspriteanim_dash.tres" id="1_i4w68"]
 [ext_resource type="Script" path="res://src/core/abilities/targetrange/area_target_range.gd" id="2_ffjsm"]
 [ext_resource type="Texture2D" uid="uid://rljm4rcv1g3g" path="res://assets/graphics/ui/abilities/dash.png" id="4_ycr6l"]
 
-[sub_resource type="Resource" id="Resource_egx4j"]
-script = ExtResource("2_dhy46")
-interpolated_distance = -1.0
-cell_distance = 0.0
-speed_or_duration = 0.0
-time_type = 1
-trans_type = 0
-ease_type = 2
-
-[sub_resource type="Resource" id="Resource_1p75n"]
-script = ExtResource("2_dhy46")
-interpolated_distance = 0.0
-cell_distance = 0.0
-speed_or_duration = 8.0
-time_type = 0
-trans_type = 4
-ease_type = 1
-
-[sub_resource type="Resource" id="Resource_8bd5n"]
-script = ExtResource("1_fgmxa")
-steps = Array[ExtResource("2_dhy46")]([SubResource("Resource_egx4j"), SubResource("Resource_1p75n")])
-camera_follow_sprite = true
-fallback_for_zero_vector = Vector2(1, 0)
-reset_sprite_origin = true
-
 [sub_resource type="Resource" id="Resource_hma5d"]
 script = ExtResource("1_8sbro")
-move_animation = SubResource("Resource_8bd5n")
+move_animation = ExtResource("1_i4w68")
 
 [sub_resource type="Resource" id="Resource_08u2x"]
 script = ExtResource("2_ffjsm")
