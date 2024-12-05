@@ -5,7 +5,6 @@
 
 [sub_resource type="Resource" id="Resource_vtgfw"]
 script = ExtResource("2_6as2n")
-step_name = ""
 interpolated_distance = 0.0
 cell_distance = -0.25
 speed_or_duration = 0.05
@@ -15,7 +14,6 @@ ease_type = 2
 
 [sub_resource type="Resource" id="Resource_sjd7h"]
 script = ExtResource("2_6as2n")
-step_name = ""
 interpolated_distance = 0.0
 cell_distance = 0.25
 speed_or_duration = 0.1
@@ -25,7 +23,6 @@ ease_type = 2
 
 [sub_resource type="Resource" id="Resource_oodwa"]
 script = ExtResource("2_6as2n")
-step_name = ""
 interpolated_distance = 0.0
 cell_distance = 0.0
 speed_or_duration = 0.05

@@ -9,7 +9,6 @@
 
 [sub_resource type="Resource" id="Resource_fr586"]
 script = ExtResource("2_hk5wb")
-step_name = ""
 interpolated_distance = -1.0
 cell_distance = 0.0
 speed_or_duration = 0.0
@@ -19,7 +18,6 @@ ease_type = 2
 
 [sub_resource type="Resource" id="Resource_yku2x"]
 script = ExtResource("2_hk5wb")
-step_name = "collide"
 interpolated_distance = 0.0
 cell_distance = 0.5
 speed_or_duration = 8.0
@@ -29,7 +27,6 @@ ease_type = 0
 
 [sub_resource type="Resource" id="Resource_c3o1m"]
 script = ExtResource("2_hk5wb")
-step_name = ""
 interpolated_distance = 0.0
 cell_distance = 0.0
 speed_or_duration = 0.1
@@ -41,10 +38,11 @@ ease_type = 1
 script = ExtResource("1_ka5mg")
 steps = Array[ExtResource("2_hk5wb")]([SubResource("Resource_fr586"), SubResource("Resource_yku2x"), SubResource("Resource_c3o1m")])
 camera_follow_sprite = false
+fallback_for_zero_vector = Vector2(1, 0)
+reset_sprite_origin = true
 
 [sub_resource type="Resource" id="Resource_05otb"]
 script = ExtResource("2_hk5wb")
-step_name = ""
 interpolated_distance = -1.0
 cell_distance = 0.0
 speed_or_duration = 0.0
@@ -54,7 +52,6 @@ ease_type = 2
 
 [sub_resource type="Resource" id="Resource_hx13t"]
 script = ExtResource("2_hk5wb")
-step_name = ""
 interpolated_distance = 0.0
 cell_distance = 0.0
 speed_or_duration = 8.0
@@ -66,6 +63,8 @@ ease_type = 1
 script = ExtResource("1_ka5mg")
 steps = Array[ExtResource("2_hk5wb")]([SubResource("Resource_05otb"), SubResource("Resource_hx13t")])
 camera_follow_sprite = false
+fallback_for_zero_vector = Vector2(1, 0)
+reset_sprite_origin = true
 
 [sub_resource type="Resource" id="Resource_0ntoq"]
 script = ExtResource("1_pjawo")

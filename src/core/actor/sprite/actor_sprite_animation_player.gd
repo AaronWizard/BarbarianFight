@@ -3,17 +3,11 @@ extends Node
 
 ## Plays a [ActorSpriteAnimation] for an actor's sprite with a given target
 ## vector.
-##
-## Plays a [ActorSpriteAnimation] for an actor's sprite with a given target
-## vector. Notifies when named animation steps have passed.
 
 ## The animation player has started playing an animation.
 signal started
 ## The animation player has finished an animation.
 signal finished
-
-## Emmited when an animation step with a non-empty name has finished.
-signal named_step_finished(animation: ActorSpriteAnimation, step_name: String)
 
 ## The sprite that gets animated.
 @export var sprite: Sprite2D
@@ -54,8 +48,6 @@ func animate(animation: ActorSpriteAnimation, target_vector: Vector2) -> void:
 
 	for step in animation.steps:
 		await step.animate(sprite, vector_to_use, tile_size)
-		if step.step_name and not step.step_name.is_empty():
-			named_step_finished.emit(animation, step.step_name)
 
 	if animation.reset_sprite_origin:
 		sprite.position = Vector2.ZERO

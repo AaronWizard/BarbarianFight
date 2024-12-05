@@ -18,12 +18,13 @@ const _END_TIME := 0.2
 @export var anim_shove_no_collision: ActorSpriteAnimation
 
 ## The animation the shoved actor's sprite plays when the actor is shoved
-## into an obstacle.[br]
+## into an obstacle, before it recovers from the collision.[br]
 ## The animation is run [i]after[/i] the actor's origin cell is updated.
 @export var anim_shove_collision: ActorSpriteAnimation
-
-## The name of the frame for collision in [member anim_shove_collision].
-@export var collision_frame_name := ""
+## The animation the shoved actor's sprite plays when it recovers from being
+## shoved into an obstacle.[br]
+## The animation is run [i]after[/i] the actor's origin cell is updated.
+@export var anim_shove_collision_reccover: ActorSpriteAnimation
 
 
 func apply(target: Vector2i, _source: Rect2i, source_actor: Actor) -> void:
@@ -82,22 +83,8 @@ func _shove_into_obstacle(target_actor: Actor, damage: int,
 		await target_actor.sprite.anim_player.animate(
 				StandardActorSpriteAnims.HIT, direction)
 	else:
-		var on_named_step_finished := func (
-				animation: ActorSpriteAnimation, step_name: String) -> void:
-			if (animation == anim_shove_collision) \
-					and (step_name == collision_frame_name):
-				target_actor.take_damage(damage, Vector2.ZERO, false)
-
-		@warning_ignore("return_value_discarded")
-		target_actor.sprite.anim_player.named_step_finished.connect(
-				on_named_step_finished)
-
 		await target_actor.sprite.anim_player.animate(
 				anim_shove_collision, travel_diff)
-
-		target_actor.sprite.anim_player.named_step_finished.disconnect(
-				on_named_step_finished)
-
-		# on_named_step_finished was not called
-		if collision_frame_name.is_empty():
-			target_actor.take_damage(damage, Vector2.ZERO, false)
+		target_actor.take_damage(damage, Vector2.ZERO, false)
+		await target_actor.sprite.anim_player.animate(
+				anim_shove_collision_reccover, travel_diff)
