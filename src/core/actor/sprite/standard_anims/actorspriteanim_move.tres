@@ -1,0 +1,29 @@
+[gd_resource type="Resource" script_class="ActorSpriteAnimation" load_steps=5 format=3 uid="uid://cu5a4ybksp576"]
+
+[ext_resource type="Script" path="res://src/core/actor/sprite/actor_sprite_animation.gd" id="1_vcegg"]
+[ext_resource type="Script" path="res://src/core/actor/sprite/actor_sprite_animation_step.gd" id="2_kitdl"]
+
+[sub_resource type="Resource" id="Resource_a8o7k"]
+script = ExtResource("2_kitdl")
+step_name = ""
+interpolated_distance = -1.0
+cell_distance = 0.0
+speed_or_duration = 0.0
+time_type = 1
+trans_type = 0
+ease_type = 2
+
+[sub_resource type="Resource" id="Resource_d3sek"]
+script = ExtResource("2_kitdl")
+step_name = ""
+interpolated_distance = 0.0
+cell_distance = 0.0
+speed_or_duration = 0.2
+time_type = 1
+trans_type = 3
+ease_type = 1
+
+[resource]
+script = ExtResource("1_vcegg")
+steps = Array[ExtResource("2_kitdl")]([SubResource("Resource_a8o7k"), SubResource("Resource_d3sek")])
+camera_follow_sprite = true
