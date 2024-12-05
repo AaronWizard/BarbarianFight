@@ -1,23 +1,12 @@
-[gd_scene load_steps=10 format=3 uid="uid://c5r8su0ki15l8"]
+[gd_scene load_steps=5 format=3 uid="uid://c5r8su0ki15l8"]
 
 [ext_resource type="Script" path="res://src/core/actor/sprite/actor_sprite.gd" id="1_yow33"]
 [ext_resource type="Material" uid="uid://cw10xhc1nbh0" path="res://src/core/shaders/material_actor_sprite.tres" id="2_aphjf"]
-[ext_resource type="Resource" uid="uid://cu5a4ybksp576" path="res://src/core/actor/sprite/standard_anims/actorspriteanim_move.tres" id="2_ed1uy"]
 [ext_resource type="Texture2D" uid="uid://cmfwm1033edy1" path="res://assets/graphics/actors/villain.png" id="2_m070q"]
-[ext_resource type="Resource" uid="uid://cgw6j1e1r5xci" path="res://src/core/actor/sprite/standard_anims/actorspriteanim_attack.tres" id="3_db2lu"]
-[ext_resource type="Resource" uid="uid://gjxqsww6e6l6" path="res://src/core/actor/sprite/standard_anims/actorspriteanim_hit.tres" id="4_soyt4"]
-[ext_resource type="Resource" uid="uid://bh36lticjpgph" path="res://src/core/actor/sprite/standard_anims/actorspriteanim_hit_no_direction.tres" id="5_djq7h"]
-[ext_resource type="Resource" uid="uid://bi3fu381lyv1n" path="res://src/core/actor/sprite/standard_anims/actorspriteanim_death.tres" id="6_42syb"]
 [ext_resource type="Script" path="res://src/core/actor/sprite/actor_sprite_animation_player.gd" id="8_6tdw4"]
 
 [node name="ActorSprite" type="Node2D"]
 script = ExtResource("1_yow33")
-anim_move = ExtResource("2_ed1uy")
-anim_attack = ExtResource("3_db2lu")
-anim_attack_hit_step_name = "attack_hit"
-anim_hit = ExtResource("4_soyt4")
-anim_hit_no_direction = ExtResource("5_djq7h")
-anim_death = ExtResource("6_42syb")
 metadata/_edit_lock_ = true
 
 [node name="SpriteOrigin" type="Node2D" parent="."]
@@ -41,5 +30,4 @@ sprite_transform = NodePath("../SpriteOrigin/Sprite/SpriteTransform")
 camera_transform = NodePath("../SpriteOrigin/CameraTransform")
 
 [connection signal="finished" from="ActorSpriteAnimationPlayer" to="." method="_on_actor_sprite_animation_player_finished"]
-[connection signal="named_step_finished" from="ActorSpriteAnimationPlayer" to="." method="_on_actor_sprite_animation_player_named_step_finished"]
 [connection signal="started" from="ActorSpriteAnimationPlayer" to="." method="_on_actor_sprite_animation_player_started"]

@@ -125,7 +125,8 @@ func is_hostile(other_actor: Actor) -> bool:
 func move_step(target_cell: Vector2i) -> void:
 	var target_vector := target_cell - origin_cell
 	origin_cell = target_cell
-	await sprite.move_step(target_vector)
+	await sprite.anim_player.animate(
+			StandardActorSpriteAnims.MOVE, target_vector)
 
 
 ## Makes the actor take damage from the given direction. If
@@ -136,10 +137,15 @@ func take_damage(damage: int, direction := Vector2.ZERO,
 	stamina.current_stamina -= damage
 
 	if process_hit_or_death:
-		if stamina.is_alive:
-			await sprite.hit(direction)
+		if direction != Vector2.ZERO:
+			await sprite.anim_player.animate(
+					StandardActorSpriteAnims.HIT, direction)
 		else:
-			await sprite.die(direction)
+			await sprite.anim_player.animate(
+					StandardActorSpriteAnims.HIT_NO_DIRECTION, direction)
+
+		if not stamina.is_alive:
+			await sprite.dissolve()
 			if map:
 				map.remove_actor(self)
 

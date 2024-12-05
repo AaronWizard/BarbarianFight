@@ -57,7 +57,7 @@ func apply(target: Vector2i, _source: Rect2i, source_actor: Actor) -> void:
 
 
 	if not target_actor.stamina.is_alive:
-		await target_actor.sprite.die()
+		await target_actor.sprite.dissolve()
 		target_actor.map.remove_actor(target_actor)
 	else:
 		target_actor.origin_cell = shove_cell
@@ -79,7 +79,8 @@ func _shove_into_obstacle(target_actor: Actor, damage: int,
 		travel_diff: Vector2i, direction: Vector2i) -> void:
 	if travel_diff.length_squared() == 0:
 		target_actor.take_damage(damage, Vector2.ZERO, false)
-		await target_actor.sprite.hit(direction)
+		await target_actor.sprite.anim_player.animate(
+				StandardActorSpriteAnims.HIT, direction)
 	else:
 		var on_named_step_finished := func (
 				animation: ActorSpriteAnimation, step_name: String) -> void:

@@ -14,10 +14,7 @@ signal animation_started
 ## The sprite has finished animating.
 signal animation_finished
 
-## The sprite's attack animation has reached its hit frame.
-signal attack_anim_hit
-
-const _DEATH_DURATION := 0.2
+const _DISSOLVE_DURATION := 0.2
 
 
 ## The size in pixels of the grid cells the tile object aligns itself with.
@@ -33,25 +30,6 @@ const _DEATH_DURATION := 0.2
 	set(value):
 		cell_size = value
 		_update_sprite_origin()
-
-
-## The animation for movement.
-@export var anim_move: ActorSpriteAnimation
-
-## The animation for attacks.
-@export var anim_attack: ActorSpriteAnimation
-## The name of the attack hit step in the attack animation.
-@export var anim_attack_hit_step_name := ""
-
-## The animation for getting hit from a direction.
-@export var anim_hit: ActorSpriteAnimation
-
-## The animation for getting hit without a source direction.[br]a
-## Uses Vector2i.RIGHT for the target vector.
-@export var anim_hit_no_direction: ActorSpriteAnimation
-
-## The animation for dying.
-@export var anim_death: ActorSpriteAnimation
 
 
 ## The sprite's animation player.
@@ -96,38 +74,6 @@ func wait_for_animation() -> void:
 		await animation_finished
 
 
-## Animates an actor moving to an adjacent cell. [param target_vector] is
-## relative to the actor's initial origin cell before moving to the new cell.
-func move_step(target_vector: Vector2) -> void:
-	await anim_player.animate(anim_move, target_vector)
-
-
-## Animates an actor attacking the given target_cell.[br]
-## [param target_cell] is relative to the actor's cell.
-func attack(target_cell: Vector2) -> void:
-	await anim_player.animate(anim_attack, target_cell)
-
-
-## Animates an actor getting hit from [param direction].
-func hit(direction := Vector2.ZERO) -> void:
-	if direction.length_squared() > 0.01:
-		await anim_player.animate(anim_hit, direction)
-	else:
-		await anim_player.animate(anim_hit_no_direction, Vector2i.RIGHT)
-
-
-## Animates the actor dying after being hit from the given direction.[br]
-## [param direction] is normalized.
-func die(direction := Vector2.ZERO) -> void:
-	var dissolve_tween := _start_dissolving()
-
-	if direction.length_squared() > 0.01:
-		await anim_player.animate(anim_death, direction)
-
-	if dissolve_tween.is_running():
-		await dissolve_tween.finished
-
-
 func _tile_size_changed(_old_size: Vector2i) -> void:
 	_update_sprite_origin()
 
@@ -143,17 +89,17 @@ func _update_sprite_origin() -> void:
 		_sprite_origin.position = center
 
 
-func _start_dissolving() -> Tween:
+func dissolve() -> void:
 	_start_animation()
 
-	var result := create_tween()
+	var tween := create_tween()
 	@warning_ignore("return_value_discarded")
-	result.tween_property(
-			_sprite.material, "shader_parameter/dissolve", 1, _DEATH_DURATION)
+	tween.tween_property(_sprite.material, "shader_parameter/dissolve", 1,
+			_DISSOLVE_DURATION)
 	@warning_ignore("return_value_discarded")
-	result.tween_callback(_finish_animation).set_delay(_DEATH_DURATION)
+	tween.tween_callback(_finish_animation).set_delay(_DISSOLVE_DURATION)
 
-	return result
+	await tween.finished
 
 
 func _on_actor_sprite_animation_player_started() -> void:
@@ -162,12 +108,6 @@ func _on_actor_sprite_animation_player_started() -> void:
 
 func _on_actor_sprite_animation_player_finished() -> void:
 	_finish_animation()
-
-
-func _on_actor_sprite_animation_player_named_step_finished(
-		animation: ActorSpriteAnimation, step_name: String) -> void:
-	if (animation == anim_attack) and (step_name == anim_attack_hit_step_name):
-		attack_anim_hit.emit()
 
 
 func _start_animation() -> void:

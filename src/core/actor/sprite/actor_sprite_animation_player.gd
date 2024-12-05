@@ -48,8 +48,12 @@ func animate(animation: ActorSpriteAnimation, target_vector: Vector2) -> void:
 	if animation.camera_follow_sprite and sprite_transform and camera_transform:
 		sprite_transform.remote_path = camera_transform.get_path()
 
+	var vector_to_use := target_vector
+	if vector_to_use == Vector2.ZERO:
+		vector_to_use = animation.fallback_for_zero_vector
+
 	for step in animation.steps:
-		await step.animate(sprite, target_vector, tile_size)
+		await step.animate(sprite, vector_to_use, tile_size)
 		if step.step_name and not step.step_name.is_empty():
 			named_step_finished.emit(animation, step.step_name)
 	sprite.position = Vector2.ZERO

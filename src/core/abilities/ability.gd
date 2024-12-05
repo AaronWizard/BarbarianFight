@@ -30,10 +30,10 @@ func perform(target: Vector2i, source_actor: Actor) -> void:
 	if use_attack_anim:
 		var direction := TileGeometry.cardinal_dir_from_rect_to_cell(
 				source_actor.rect, target)
-		source_actor.sprite.attack(direction)
-		if source_actor.sprite.animation_playing:
-			await source_actor.sprite.attack_anim_hit
-
+		await source_actor.sprite.anim_player.animate(
+				StandardActorSpriteAnims.ATTACK, direction)
+		# TODO: Only play attack windup here; play rest of attack anim after
+		# starting effect.
 	@warning_ignore("redundant_await")
 	await effect.apply(target, source_actor.rect, source_actor)
 

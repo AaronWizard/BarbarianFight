@@ -15,3 +15,6 @@ extends Resource
 ## If this is true and the camera is following the actor sprite, the camera
 ## follows the sprite itself instead of the actor sprite's cell.
 @export var camera_follow_sprite := false
+
+## The vector that will be used if the target vector is zero.
+@export var fallback_for_zero_vector := Vector2.RIGHT
