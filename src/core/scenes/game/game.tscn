@@ -54,13 +54,28 @@ movement_state = NodePath("../PlayerMovementState")
 [node name="AbilityMenu" type="Node2D" parent="PlayerStateMachine/PlayerSelectAbilityState"]
 script = ExtResource("12_cpqtk")
 
-[node name="PlayerTargetState" type="Node" parent="PlayerStateMachine" node_paths=PackedStringArray("action_state", "movement_state", "target_display", "ability_display", "wait_button")]
+[node name="PlayerTargetState" type="Node" parent="PlayerStateMachine" node_paths=PackedStringArray("action_state", "movement_state", "target_display", "wait_button")]
 script = ExtResource("11_nrae6")
 action_state = NodePath("../PlayerActionState")
 movement_state = NodePath("../PlayerMovementState")
 target_display = NodePath("../../TargetDisplay")
-ability_display = NodePath("../../UI/AbilityDisplay")
 wait_button = NodePath("../../UI/WaitButton")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="PlayerStateMachine/PlayerTargetState"]
+
+[node name="AbilityDisplay" parent="PlayerStateMachine/PlayerTargetState/CanvasLayer" instance=ExtResource("14_fdce5")]
+visible = false
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -38.0
+offset_top = -19.0
+offset_right = -1.0
+offset_bottom = -1.0
+grow_horizontal = 0
+grow_vertical = 0
 
 [node name="PlayerActionState" type="Node" parent="PlayerStateMachine" node_paths=PackedStringArray("wait_state")]
 script = ExtResource("12_0vv7w")
@@ -76,20 +91,6 @@ offset_left = 1.0
 offset_top = -17.0
 offset_right = 62.0
 offset_bottom = -1.0
-grow_vertical = 0
-
-[node name="AbilityDisplay" parent="UI" instance=ExtResource("14_fdce5")]
-visible = false
-anchors_preset = 3
-anchor_left = 1.0
-anchor_top = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = -38.0
-offset_top = -19.0
-offset_right = -1.0
-offset_bottom = -1.0
-grow_horizontal = 0
 grow_vertical = 0
 
 [node name="BossStamina" parent="UI" instance=ExtResource("15_r5gp6")]

@@ -11,7 +11,6 @@ extends State
 ## Displays the target range and current target.
 @export var target_display: TargetDisplay
 
-@export var ability_display: AbilityDisplay
 ## The button to make the player actor wait a turn. Will hide this button when
 ## targeting.
 @export var wait_button: CanvasItem
@@ -25,10 +24,13 @@ var _targetting_data: TargetingData
 
 var _input_code: String
 
+@onready var _ability_display := $CanvasLayer/AbilityDisplay as AbilityDisplay
+
 
 func _ready() -> void:
 	@warning_ignore("return_value_discarded")
-	ability_display.cancelled.connect(_on_ability_cancelled)
+	_ability_display.cancelled.connect(_on_ability_cancelled)
+	_ability_display.visible = false
 
 
 func enter(data := {}) -> void:
@@ -50,9 +52,9 @@ func enter(data := {}) -> void:
 	@warning_ignore("return_value_discarded")
 	_player.map.mouse_clicked.connect(_map_clicked)
 
-	ability_display.set_ability_name(_ability.name)
+	_ability_display.set_ability_name(_ability.name)
 
-	ability_display.visible = true
+	_ability_display.visible = true
 	wait_button.visible = false
 
 
@@ -67,7 +69,7 @@ func exit() -> void:
 	_targetting_data = null
 	_input_code = ""
 
-	ability_display.visible = false
+	_ability_display.visible = false
 
 
 func handle_input(_event: InputEvent) -> void:
