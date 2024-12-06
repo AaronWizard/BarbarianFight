@@ -111,15 +111,13 @@ func _get_direction_input() -> Vector2i:
 
 
 func _start_ability_targeting(ability: Ability, targeting_data: TargetingData,
-		initial_target: Vector2i, input_code := "") -> void:
+		initial_target: Vector2i) -> void:
 	var data := {
 		player = _player,
 		ability = ability,
 		targeting_data = targeting_data,
 		initial_target = initial_target
 	}
-	if not input_code.is_empty():
-		data.input_code = input_code
 
 	request_state_change(target_state, data)
 

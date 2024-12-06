@@ -22,8 +22,6 @@ var _player: Actor
 var _ability: Ability
 var _targetting_data: TargetingData
 
-var _input_code: String
-
 @onready var _ability_display := $CanvasLayer/AbilityDisplay as AbilityDisplay
 
 
@@ -37,11 +35,6 @@ func enter(data := {}) -> void:
 	_player = data.player
 	_ability = data.ability
 	_targetting_data = data.targeting_data
-
-	if data.has("input_code"):
-		_input_code = data.input_code
-	else:
-		_input_code = ""
 
 	@warning_ignore("unsafe_cast")
 	var initial_target := data.initial_target as Vector2i
@@ -62,7 +55,6 @@ func exit() -> void:
 	_player = null
 	_ability = null
 	_targetting_data = null
-	_input_code = ""
 
 	_ability_display.visible = false
 
@@ -70,10 +62,7 @@ func exit() -> void:
 func handle_input(_event: InputEvent) -> void:
 	if Input.is_action_just_pressed("click"):
 		_try_click()
-	elif Input.is_action_just_released("targeting_cancel") or (
-		not _input_code.is_empty()
-		and Input.is_action_just_released(_input_code)
-	):
+	elif Input.is_action_just_released("targeting_cancel"):
 		_cancel_targeting()
 	elif _targetting_data.has_targets:
 		if Input.is_action_just_released("wait"):
