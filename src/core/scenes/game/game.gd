@@ -106,8 +106,7 @@ func _on_player_actor_turn_started() -> void:
 	if _current_map.animations_playing:
 		await _current_map.animations_finished
 
-	_state_machine.change_state(
-			_player_movement_state, {player = _player_actor})
+	_state_machine.change_state(_player_movement_state)
 
 
 func _on_player_action_state_player_action_chosen(action: TurnAction) -> void:
