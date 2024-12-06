@@ -10,7 +10,7 @@ extends State
 
 var _player: Actor
 
-@onready var _ability_menu: AbilityMenu = $AbilityMenu
+@onready var _ability_menu := $AbilityMenu as AbilityMenu
 
 
 func enter(data := {}) -> void:
