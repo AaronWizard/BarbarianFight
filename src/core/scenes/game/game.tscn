@@ -46,11 +46,13 @@ select_ability_state = NodePath("../PlayerSelectAbilityState")
 target_state = NodePath("../PlayerTargetState")
 wait_button = NodePath("../../UI/WaitButton")
 
-[node name="PlayerSelectAbilityState" type="Node" parent="PlayerStateMachine" node_paths=PackedStringArray("target_state", "movement_state", "ability_menu")]
+[node name="PlayerSelectAbilityState" type="Node" parent="PlayerStateMachine" node_paths=PackedStringArray("target_state", "movement_state")]
 script = ExtResource("10_6ap2n")
 target_state = NodePath("../PlayerTargetState")
 movement_state = NodePath("../PlayerMovementState")
-ability_menu = NodePath("../../AbilityMenu")
+
+[node name="AbilityMenu" type="Node2D" parent="PlayerStateMachine/PlayerSelectAbilityState"]
+script = ExtResource("12_cpqtk")
 
 [node name="PlayerTargetState" type="Node" parent="PlayerStateMachine" node_paths=PackedStringArray("action_state", "movement_state", "target_display", "ability_display", "wait_button")]
 script = ExtResource("11_nrae6")
@@ -63,9 +65,6 @@ wait_button = NodePath("../../UI/WaitButton")
 [node name="PlayerActionState" type="Node" parent="PlayerStateMachine" node_paths=PackedStringArray("wait_state")]
 script = ExtResource("12_0vv7w")
 wait_state = NodePath("../Wait")
-
-[node name="AbilityMenu" type="Node2D" parent="."]
-script = ExtResource("12_cpqtk")
 
 [node name="UI" type="CanvasLayer" parent="."]
 
