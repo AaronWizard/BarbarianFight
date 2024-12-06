@@ -18,22 +18,29 @@ var _player: Actor
 var _attack_targeting_data: TargetingData
 
 
+func _ready() -> void:
+	@warning_ignore("return_value_discarded")
+	wait_button.pressed.connect(_wait)
+
+	wait_button.disabled = true
+	wait_button.visible = false
+
+
 func enter(data := {}) -> void:
 	_player = data.player
 
 	if _player.attack_ability:
 		_attack_targeting_data = _player.attack_ability.get_target_data(_player)
 
+	wait_button.disabled = false
 	wait_button.visible = true
-	@warning_ignore("return_value_discarded")
-	wait_button.pressed.connect(_wait)
 
 
 func exit() -> void:
 	_player = null
 	_attack_targeting_data = null
 
-	wait_button.pressed.disconnect(_wait)
+	wait_button.disabled = true
 
 
 func handle_input(_event: InputEvent) -> void:

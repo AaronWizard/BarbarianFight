@@ -52,6 +52,7 @@ target_state = NodePath("../PlayerTargetState")
 movement_state = NodePath("../PlayerMovementState")
 
 [node name="AbilityMenu" type="Node2D" parent="PlayerStateMachine/PlayerSelectAbilityState"]
+visible = false
 script = ExtResource("12_cpqtk")
 
 [node name="PlayerTargetState" type="Node" parent="PlayerStateMachine" node_paths=PackedStringArray("action_state", "movement_state", "target_display", "wait_button")]
@@ -115,6 +116,7 @@ offset_right = -1.0
 offset_bottom = -1.0
 grow_horizontal = 0
 grow_vertical = 0
+theme_type_variation = &"DisabledButtonNoChange"
 icon = ExtResource("15_rsmhe")
 
 [node name="ScreenFade" parent="." instance=ExtResource("9_gd7wy")]

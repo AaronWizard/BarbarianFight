@@ -13,6 +13,12 @@ var _player: Actor
 @onready var _ability_menu := $AbilityMenu as AbilityMenu
 
 
+func _ready() -> void:
+	@warning_ignore("return_value_discarded")
+	_ability_menu.ability_clicked.connect(_ability_selected)
+	_ability_menu.visible = false
+
+
 func enter(data := {}) -> void:
 	_player = data.player
 
@@ -25,13 +31,8 @@ func enter(data := {}) -> void:
 		* Vector2(0.5, -0.5)
 	)
 	_ability_menu.set_icons(icons)
-	@warning_ignore("return_value_discarded")
-	_ability_menu.ability_clicked.connect(_ability_selected)
+
 	_ability_menu.open()
-
-
-func exit() -> void:
-	_ability_menu.ability_clicked.disconnect(_ability_selected)
 
 
 func _ability_selected(index: int) -> void:
