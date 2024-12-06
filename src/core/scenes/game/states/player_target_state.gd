@@ -31,7 +31,7 @@ func _ready() -> void:
 	_ability_display.visible = false
 
 
-func enter(data := {}) -> void:
+func enter() -> void:
 	_player = data.player
 	_ability = data.ability
 	_targetting_data = data.targeting_data

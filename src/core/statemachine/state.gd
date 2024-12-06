@@ -12,9 +12,8 @@ signal state_change_requested(new_state: State, data: Dictionary)
 
 
 ## Called by the state machine when changing to this state.[br]
-## [param data] contains arbitrary data.[br]
 ## Can be overriden.
-func enter(_data := {}) -> void:
+func enter() -> void:
 	pass
 
 

@@ -26,7 +26,7 @@ func _ready() -> void:
 	wait_button.visible = false
 
 
-func enter(data := {}) -> void:
+func enter() -> void:
 	_player = data.player
 
 	if _player.attack_ability:

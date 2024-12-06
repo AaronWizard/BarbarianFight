@@ -22,7 +22,7 @@ func _process(delta: float) -> void:
 	_current_state.process(delta)
 
 
-func change_state(new_state: State, data := {}) -> void:
+func change_state(new_state: State) -> void:
 	if _current_state:
 		_current_state.state_change_requested.disconnect(change_state)
 		_current_state.exit()
@@ -30,4 +30,4 @@ func change_state(new_state: State, data := {}) -> void:
 	_current_state = new_state
 	@warning_ignore("return_value_discarded")
 	_current_state.state_change_requested.connect(change_state)
-	_current_state.enter(data)
+	_current_state.enter()
