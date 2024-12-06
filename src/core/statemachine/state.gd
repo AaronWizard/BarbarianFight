@@ -24,7 +24,8 @@ func exit() -> void:
 	pass
 
 
-## Called by the state machine when receiving unhandled input events.[br]
+## Called by the state machine when receiving unhandled input events. Called
+## during [method Node._unhandled_input].[br]
 ## Can be overriden.
 func handle_input(_event: InputEvent) -> void:
 	pass
