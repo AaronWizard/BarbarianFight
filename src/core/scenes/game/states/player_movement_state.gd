@@ -20,8 +20,6 @@ var _attack_targeting_data: TargetingData
 
 func enter(data := {}) -> void:
 	_player = data.player
-	@warning_ignore("return_value_discarded")
-	_player.map.mouse_clicked.connect(_map_clicked)
 
 	if _player.attack_ability:
 		_attack_targeting_data = _player.attack_ability.get_target_data(_player)
@@ -32,7 +30,6 @@ func enter(data := {}) -> void:
 
 
 func exit() -> void:
-	_player.map.mouse_clicked.disconnect(_map_clicked)
 	_player = null
 	_attack_targeting_data = null
 
@@ -40,13 +37,17 @@ func exit() -> void:
 
 
 func handle_input(_event: InputEvent) -> void:
-	if Input.is_action_just_released("wait"):
+	if Input.is_action_just_pressed("click"):
+		_try_click()
+	elif Input.is_action_just_released("wait"):
 		_end_turn(null)
 	else:
 		_try_bump()
 
 
-func _map_clicked(cell: Vector2i) -> void:
+func _try_click() -> void:
+	var cell := _player.map.mouse_cell
+
 	if cell in _player.covered_cells:
 		request_state_change(select_ability_state, {player = _player})
 	elif cell in _attack_targeting_data.targets:

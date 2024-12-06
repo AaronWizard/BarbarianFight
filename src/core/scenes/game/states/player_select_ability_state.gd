@@ -16,9 +16,6 @@ var _player: Actor
 func enter(data := {}) -> void:
 	_player = data.player
 
-	@warning_ignore("return_value_discarded")
-	_player.map.mouse_clicked.connect(_map_clicked)
-
 	var icons: Array[Texture2D] = []
 	for a in _player.abilities:
 		icons.append(a.icon)
@@ -34,7 +31,6 @@ func enter(data := {}) -> void:
 
 
 func exit() -> void:
-	_player.map.mouse_clicked.disconnect(_map_clicked)
 	_ability_menu.ability_clicked.disconnect(_ability_selected)
 
 
@@ -56,7 +52,9 @@ func _ability_selected(index: int) -> void:
 	request_state_change(target_state, data)
 
 
-func _map_clicked(cell: Vector2i) -> void:
-	if cell in _player.covered_cells:
-		await _ability_menu.close()
-		request_state_change(movement_state, { player = _player })
+func handle_input(_event: InputEvent) -> void:
+	if Input.is_action_just_pressed("click"):
+		var cell := _player.map.mouse_cell
+		if cell in _player.covered_cells:
+			await _ability_menu.close()
+			request_state_change(movement_state, { player = _player })

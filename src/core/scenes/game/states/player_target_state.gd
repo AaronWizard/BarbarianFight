@@ -49,9 +49,6 @@ func enter(data := {}) -> void:
 	_target_keyboard_mover.set_targets(_targetting_data.targets, initial_target)
 	target_display.show_range(_targetting_data, initial_target)
 
-	@warning_ignore("return_value_discarded")
-	_player.map.mouse_clicked.connect(_map_clicked)
-
 	_ability_display.set_ability_name(_ability.name)
 
 	_ability_display.visible = true
@@ -62,8 +59,6 @@ func exit() -> void:
 	target_display.clear()
 	_target_keyboard_mover.clear()
 
-	_player.map.mouse_clicked.disconnect(_map_clicked)
-
 	_player = null
 	_ability = null
 	_targetting_data = null
@@ -73,7 +68,9 @@ func exit() -> void:
 
 
 func handle_input(_event: InputEvent) -> void:
-	if Input.is_action_just_released("targeting_cancel") or (
+	if Input.is_action_just_pressed("click"):
+		_try_click()
+	elif Input.is_action_just_released("targeting_cancel") or (
 		not _input_code.is_empty()
 		and Input.is_action_just_released(_input_code)
 	):
@@ -89,7 +86,8 @@ func _on_ability_cancelled() -> void:
 	_cancel_targeting()
 
 
-func _map_clicked(cell: Vector2i) -> void:
+func _try_click() -> void:
+	var cell := _player.map.mouse_cell
 	if _targetting_data.has_target_for_cell(cell):
 		var target := _targetting_data.target_at_selected_cell(cell)
 		if target == _target_keyboard_mover.target:

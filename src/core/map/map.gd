@@ -15,9 +15,6 @@ signal actor_removed(actor: Actor)
 ## Emitted when all running animations are finished.
 signal animations_finished
 
-## Emitted when the map is clicked by the mouse. Gets the cell that was clicked.
-signal mouse_clicked(cell: Vector2i)
-
 
 ## The map's terrain.
 var terrain: Terrain:
@@ -53,6 +50,14 @@ var pixel_rect: Rect2i:
 		return Rect2i(rectpos, rectsize)
 
 
+## The cell the mouse is currently over.
+var mouse_cell: Vector2i:
+	get:
+		var mouse_pos := _terrain_tilemap.get_local_mouse_position()
+		var result := _terrain_tilemap.local_to_map(mouse_pos)
+		return result
+
+
 var _terrain: Terrain
 var _anim_tracker: MapAnimTracker
 var _pathfinder: Pathfinder
@@ -72,14 +77,6 @@ func _ready() -> void:
 
 	for a in actor_map.actors:
 		_init_actor(a)
-
-
-func _unhandled_input(_event: InputEvent) -> void:
-	if Input.is_action_just_pressed("click"):
-		var mouse_pos := _terrain_tilemap.get_local_mouse_position()
-		var cell := _terrain_tilemap.local_to_map(mouse_pos)
-		if _terrain_tilemap.get_used_rect().has_point(cell):
-			mouse_clicked.emit(cell)
 
 
 ## Adds [param actor] to the map at [param cell].
