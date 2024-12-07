@@ -35,7 +35,8 @@ func perform(target: Vector2i, source_actor: Actor) -> void:
 		source_actor.sprite.anim_player.animate(
 				StandardActorSpriteAnims.ATTACK_RECOVER, direction)
 
+	var data := AbilityData.new(target, source_actor.rect, source_actor)
 	@warning_ignore("redundant_await")
-	await effect.apply(target, source_actor.rect, source_actor)
+	await effect.apply(data)
 
 	await source_actor.sprite.wait_for_animation()
