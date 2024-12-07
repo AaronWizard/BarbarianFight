@@ -27,23 +27,24 @@ const _END_TIME := 0.2
 @export var anim_shove_collision_reccover: ActorSpriteAnimation
 
 
-func apply(target: Vector2i, _source: Rect2i, source_actor: Actor) -> void:
-	var target_actor := source_actor.map.actor_map.get_actor_on_cell(target)
+func apply(data: AbilityData) -> void:
+	var target_actor := data.map.actor_map.get_actor_on_cell(
+			data.target)
 
 	if not target_actor:
 		push_error("No actor to push")
 		return
-	if target_actor == source_actor:
-		push_error("Actor '%s' can't push itself" % source_actor)
+	if target_actor == data.source_actor:
+		push_error("Actor '%s' can't push itself" % data.source_actor)
 		return
 
 	var direction := TileGeometry.cardinal_dir_from_rect_to_cell(
-			source_actor.rect, target)
-	var damage := source_actor.definition.attack
+			data.source_actor.rect, data.target)
+	var damage := data.source_actor.definition.attack
 
 	target_actor.take_damage(damage, Vector2.ZERO, false)
 
-	var shove_cell := _shove_destination(target_actor, direction)
+	var shove_cell := _shove_destination(target_actor, data.map, direction)
 	var travel_diff := shove_cell - target_actor.origin_cell
 
 	target_actor.origin_cell = shove_cell
@@ -59,17 +60,18 @@ func apply(target: Vector2i, _source: Rect2i, source_actor: Actor) -> void:
 
 	if not target_actor.stamina.is_alive:
 		await target_actor.sprite.dissolve()
-		target_actor.map.remove_actor(target_actor)
+		data.map.remove_actor(target_actor)
 	else:
 		target_actor.origin_cell = shove_cell
-		await source_actor.get_tree().create_timer(_END_TIME).timeout
+		await data.source_actor.get_tree().create_timer(_END_TIME).timeout
 
 
-func _shove_destination(actor: Actor, direction: Vector2i) -> Vector2i:
+func _shove_destination(actor: Actor, map: Map, direction: Vector2i) \
+		-> Vector2i:
 	var result := actor.origin_cell
 	for i in range(1, max_distance + 1):
 		var cell := actor.origin_cell + (direction * i)
-		if actor.map.actor_can_enter_cell(actor, cell):
+		if map.actor_can_enter_cell(actor, cell):
 			result = cell
 		else:
 			break

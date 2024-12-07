@@ -6,5 +6,5 @@ class_name _CLASS_
 extends AbilityEffect
 
 
-func apply(_target: Vector2i, _source: Rect2i, _source_actor: Actor) -> void:
+func apply(data: AbilityData) -> void:
 	pass
