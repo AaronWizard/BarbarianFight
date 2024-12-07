@@ -32,7 +32,8 @@ func enter() -> void:
 			player_actor)
 
 	var initial_target := game_control.initial_ability_target
-	if initial_target not in _targetting_data.targets:
+	if not _targetting_data.targets.is_empty() \
+			and (initial_target not in _targetting_data.targets):
 		initial_target = _targetting_data.targets[0]
 
 	_target_keyboard_mover.set_targets(_targetting_data.targets, initial_target)
