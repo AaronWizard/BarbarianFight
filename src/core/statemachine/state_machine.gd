@@ -3,15 +3,16 @@ class_name StateMachine
 extends Node
 
 ## A state machine with [State] objects as children.
-
-
-@export var start_state: State
+##
+## A state machine with [State] objects as children. The first child is the
+## initial state.
 
 var _current_state: State
 
 
 func _ready() -> void:
-	change_state(start_state)
+	await owner.ready
+	change_state(get_child(0) as State)
 
 
 func _unhandled_input(event: InputEvent) -> void:

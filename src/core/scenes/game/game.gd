@@ -23,19 +23,16 @@ var _current_map: Map:
 
 
 @onready var _map_container := $MapContainer
-
 @onready var _player_camera := $PlayerCamera as PlayerCamera
+@onready var _game_control := $GameControl as GameControl
 
 @onready var _player_stamina := $UI/PlayerStamina as PlayerStamina
-
 @onready var _boss_stamina := $UI/BossStamina as BossStamina
-
-@onready var _state_machine := $PlayerStateMachine as StateMachine
-@onready var _player_movement_state := $PlayerStateMachine/PlayerMovementState \
-		as PlayerMovementState
 
 @onready var _screen_fade := $ScreenFade as ScreenFade
 
+
+#region Initialization
 
 func _ready() -> void:
 	_turn_clock = TurnClock.new()
@@ -58,14 +55,14 @@ func _init_player_actor() -> void:
 	@warning_ignore("return_value_discarded")
 	_player_actor.stamina.died.connect(_on_player_died)
 
+	_game_control.player_actor = _player_actor
+
 
 func _init_player_controller() -> void:
 	_player_controller = PlayerController.new()
 	_player_actor.set_controller(_player_controller)
 
-	@warning_ignore("return_value_discarded")
-	_player_controller.player_turn_started.connect(
-			_on_player_actor_turn_started)
+	_game_control.player_controller = _player_controller
 
 
 func _load_initial_map() -> void:
@@ -78,6 +75,9 @@ func _load_initial_map() -> void:
 	# the player is added to the map in _load_map.
 	_player_stamina.set_player(_player_actor)
 
+#endregion Initialization
+
+#region Map loading
 
 func _load_map(map: Map, start_cell: Vector2i) -> void:
 	_unload_map()
@@ -99,18 +99,7 @@ func _unload_map() -> void:
 		_map_container.remove_child(_current_map)
 		old_map.free()
 
-
-func _on_player_actor_turn_started() -> void:
-	_boss_stamina.check_for_visible_boss()
-
-	if _current_map.animations_playing:
-		await _current_map.animations_finished
-
-	_state_machine.change_state(_player_movement_state)
-
-
-func _on_player_action_state_player_action_chosen(action: TurnAction) -> void:
-	_player_controller.do_player_action(action)
+#endregion Map loading
 
 
 func _on_player_died() -> void:

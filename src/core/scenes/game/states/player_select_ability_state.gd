@@ -1,5 +1,5 @@
 class_name PlayerSelectAbilityState
-extends State
+extends PlayerState
 
 ## Player control state where the player is selecting an ability.
 
@@ -7,8 +7,6 @@ extends State
 @export var target_state: PlayerTargetState
 ## The state for standard player movement and attacks.
 @export var movement_state: PlayerMovementState
-
-var _player: Actor
 
 @onready var _ability_menu := $AbilityMenu as AbilityMenu
 
@@ -20,14 +18,12 @@ func _ready() -> void:
 
 
 func enter() -> void:
-	_player = data.player
-
 	var icons: Array[Texture2D] = []
-	for a in _player.abilities:
+	for a in player_actor.abilities:
 		icons.append(a.icon)
 
-	_ability_menu.position = _player.position + (
-		Vector2(_player.tile_size * _player.cell_size)
+	_ability_menu.position = player_actor.position + (
+		Vector2(player_actor.tile_size * player_actor.cell_size)
 		* Vector2(0.5, -0.5)
 	)
 	_ability_menu.set_icons(icons)
@@ -38,24 +34,15 @@ func enter() -> void:
 func _ability_selected(index: int) -> void:
 	await _ability_menu.close()
 
-	var ability := _player.abilities[index]
-	var targeting_data := ability.get_target_data(_player)
-	var initial_target := Vector2i.ZERO
-	if targeting_data.has_targets:
-		initial_target = targeting_data.targets[0]
+	var ability := player_actor.abilities[index]
 
-	var data := {
-		player = _player,
-		ability = ability,
-		targeting_data = targeting_data,
-		initial_target = initial_target
-	}
-	request_state_change(target_state, data)
+	game_control.set_ability_data(ability, player_actor.origin_cell)
+	request_state_change(target_state)
 
 
 func handle_input(_event: InputEvent) -> void:
 	if Input.is_action_just_pressed("click"):
-		var cell := _player.map.mouse_cell
-		if cell in _player.covered_cells:
+		var cell := player_actor.map.mouse_cell
+		if cell in player_actor.covered_cells:
 			await _ability_menu.close()
-			request_state_change(movement_state, { player = _player })
+			request_state_change(movement_state)

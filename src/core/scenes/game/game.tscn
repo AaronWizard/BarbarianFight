@@ -5,13 +5,13 @@
 [ext_resource type="PackedScene" uid="uid://doaykluv6j0vh" path="res://src/data/actors/hero.tscn" id="3_mn6pd"]
 [ext_resource type="Script" path="res://src/core/scenes/game/ui/player_camera.gd" id="4_0bcur"]
 [ext_resource type="PackedScene" uid="uid://ctkvdtlq3eakq" path="res://src/core/scenes/game/ui/target_display/target_display.tscn" id="4_l1y87"]
+[ext_resource type="Script" path="res://src/core/scenes/game/game_control.gd" id="6_oj1yk"]
+[ext_resource type="Script" path="res://src/core/scenes/game/states/player_wait_state.gd" id="8_0oxl2"]
 [ext_resource type="Script" path="res://src/core/statemachine/state_machine.gd" id="8_42v0b"]
 [ext_resource type="PackedScene" uid="uid://dkntd5g7ap0xd" path="res://src/core/ui/screen_fade.tscn" id="9_gd7wy"]
 [ext_resource type="Script" path="res://src/core/scenes/game/states/player_movement_state.gd" id="10_2nvou"]
 [ext_resource type="Script" path="res://src/core/scenes/game/states/player_select_ability_state.gd" id="10_6ap2n"]
 [ext_resource type="Script" path="res://src/core/scenes/game/states/player_target_state.gd" id="11_nrae6"]
-[ext_resource type="Script" path="res://src/core/scenes/game/states/player_action_state.gd" id="12_0vv7w"]
-[ext_resource type="Script" path="res://src/core/statemachine/state.gd" id="12_awymb"]
 [ext_resource type="Script" path="res://src/core/scenes/game/ui/ability_menu.gd" id="12_cpqtk"]
 [ext_resource type="PackedScene" uid="uid://cn0u6gdopw7sw" path="res://src/core/scenes/game/ui/player_stamina.tscn" id="13_7vvkx"]
 [ext_resource type="PackedScene" uid="uid://dceanwqn4fxa7" path="res://src/core/scenes/game/ui/ability_display.tscn" id="14_fdce5"]
@@ -32,35 +32,43 @@ game_over_scene_path = "res://src/core/scenes/gameover/game_over.tscn"
 [node name="PlayerCamera" type="Camera2D" parent="."]
 script = ExtResource("4_0bcur")
 
-[node name="PlayerStateMachine" type="Node" parent="." node_paths=PackedStringArray("start_state")]
+[node name="GameControl" type="Node" parent="."]
+script = ExtResource("6_oj1yk")
+
+[node name="PlayerStateMachine" type="Node" parent="."]
 script = ExtResource("8_42v0b")
-start_state = NodePath("Wait")
 
-[node name="Wait" type="Node" parent="PlayerStateMachine"]
-script = ExtResource("12_awymb")
+[node name="PlayerWaitState" type="Node" parent="PlayerStateMachine" node_paths=PackedStringArray("boss_stamina", "player_movement_state", "game_control")]
+script = ExtResource("8_0oxl2")
+boss_stamina = NodePath("../../UI/BossStamina")
+player_movement_state = NodePath("../PlayerMovementState")
+game_control = NodePath("../../GameControl")
 
-[node name="PlayerMovementState" type="Node" parent="PlayerStateMachine" node_paths=PackedStringArray("action_state", "select_ability_state", "target_state", "wait_button")]
+[node name="PlayerMovementState" type="Node" parent="PlayerStateMachine" node_paths=PackedStringArray("select_ability_state", "target_state", "wait_button", "wait_state", "game_control")]
 script = ExtResource("10_2nvou")
-action_state = NodePath("../PlayerActionState")
 select_ability_state = NodePath("../PlayerSelectAbilityState")
 target_state = NodePath("../PlayerTargetState")
 wait_button = NodePath("../../UI/WaitButton")
+wait_state = NodePath("../PlayerWaitState")
+game_control = NodePath("../../GameControl")
 
-[node name="PlayerSelectAbilityState" type="Node" parent="PlayerStateMachine" node_paths=PackedStringArray("target_state", "movement_state")]
+[node name="PlayerSelectAbilityState" type="Node" parent="PlayerStateMachine" node_paths=PackedStringArray("target_state", "movement_state", "game_control")]
 script = ExtResource("10_6ap2n")
 target_state = NodePath("../PlayerTargetState")
 movement_state = NodePath("../PlayerMovementState")
+game_control = NodePath("../../GameControl")
 
 [node name="AbilityMenu" type="Node2D" parent="PlayerStateMachine/PlayerSelectAbilityState"]
 visible = false
 script = ExtResource("12_cpqtk")
 
-[node name="PlayerTargetState" type="Node" parent="PlayerStateMachine" node_paths=PackedStringArray("action_state", "movement_state", "target_display", "wait_button")]
+[node name="PlayerTargetState" type="Node" parent="PlayerStateMachine" node_paths=PackedStringArray("movement_state", "target_display", "wait_button", "wait_state", "game_control")]
 script = ExtResource("11_nrae6")
-action_state = NodePath("../PlayerActionState")
 movement_state = NodePath("../PlayerMovementState")
 target_display = NodePath("../../TargetDisplay")
 wait_button = NodePath("../../UI/WaitButton")
+wait_state = NodePath("../PlayerWaitState")
+game_control = NodePath("../../GameControl")
 
 [node name="CanvasLayer" type="CanvasLayer" parent="PlayerStateMachine/PlayerTargetState"]
 
@@ -77,10 +85,6 @@ offset_right = -1.0
 offset_bottom = -1.0
 grow_horizontal = 0
 grow_vertical = 0
-
-[node name="PlayerActionState" type="Node" parent="PlayerStateMachine" node_paths=PackedStringArray("wait_state")]
-script = ExtResource("12_0vv7w")
-wait_state = NodePath("../Wait")
 
 [node name="UI" type="CanvasLayer" parent="."]
 
@@ -120,5 +124,3 @@ theme_type_variation = &"DisabledButtonNoChange"
 icon = ExtResource("15_rsmhe")
 
 [node name="ScreenFade" parent="." instance=ExtResource("9_gd7wy")]
-
-[connection signal="player_action_chosen" from="PlayerStateMachine/PlayerActionState" to="." method="_on_player_action_state_player_action_chosen"]

@@ -8,7 +8,7 @@ extends Node
 ## Emitted when the state wants to transition to a different state.[br]
 ## [param data] contains arbitrary data accessed in [param new_state]'s
 ## [method State.enter] method.
-signal state_change_requested(new_state: State, data: Dictionary)
+signal state_change_requested(new_state: State)
 
 
 ## Called by the state machine when changing to this state.[br]
@@ -36,5 +36,5 @@ func process(_delta: float) -> void:
 
 
 ## Emits [signal state_change_requested].
-func request_state_change(new_state: State, data := {}) -> void:
-	state_change_requested.emit(new_state, data)
+func request_state_change(new_state: State) -> void:
+	state_change_requested.emit(new_state)
