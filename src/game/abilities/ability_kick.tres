@@ -10,7 +10,7 @@
 
 [sub_resource type="Resource" id="Resource_0ntoq"]
 script = ExtResource("1_pjawo")
-max_distance = 2
+max_distance = 1
 anim_shove_no_collision = ExtResource("3_kxnq3")
 anim_shove_collision = ExtResource("1_feel4")
 anim_shove_collision_reccover = ExtResource("2_58h2v")
