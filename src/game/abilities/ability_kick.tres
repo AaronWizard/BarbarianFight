@@ -1,11 +1,11 @@
 [gd_resource type="Resource" script_class="Ability" load_steps=10 format=3 uid="uid://c88rjluqia4f8"]
 
-[ext_resource type="Resource" uid="uid://dm8lnsinmdt3q" path="res://src/data/animations/actorspriteanim_shove_collision.tres" id="1_feel4"]
+[ext_resource type="Resource" uid="uid://dm8lnsinmdt3q" path="res://src/game/animations/actorspriteanim_shove_collision.tres" id="1_feel4"]
 [ext_resource type="Script" path="res://src/core/abilities/abilityeffect/shove_target_actor_effect.gd" id="1_pjawo"]
 [ext_resource type="Script" path="res://src/core/abilities/ability.gd" id="1_robij"]
 [ext_resource type="Script" path="res://src/core/abilities/targetrange/area_target_range.gd" id="2_4tele"]
-[ext_resource type="Resource" uid="uid://hr4iwxkfl86e" path="res://src/data/animations/actorspriteanim_shove_collision_recover.tres" id="2_58h2v"]
-[ext_resource type="Resource" uid="uid://d4iuitijcaiy6" path="res://src/data/animations/actorspriteanim_shove_no_collision.tres" id="3_kxnq3"]
+[ext_resource type="Resource" uid="uid://hr4iwxkfl86e" path="res://src/game/animations/actorspriteanim_shove_collision_recover.tres" id="2_58h2v"]
+[ext_resource type="Resource" uid="uid://d4iuitijcaiy6" path="res://src/game/animations/actorspriteanim_shove_no_collision.tres" id="3_kxnq3"]
 [ext_resource type="Texture2D" uid="uid://w03msrtyvxpo" path="res://assets/graphics/ui/abilities/kick.png" id="4_tjm6u"]
 
 [sub_resource type="Resource" id="Resource_0ntoq"]

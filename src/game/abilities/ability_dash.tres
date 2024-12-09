@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" path="res://src/core/abilities/abilityeffect/move_source_actor_to_target_effect.gd" id="1_8sbro"]
 [ext_resource type="Script" path="res://src/core/abilities/ability.gd" id="1_gomvm"]
-[ext_resource type="Resource" uid="uid://c0xt017l5reel" path="res://src/data/animations/actorspriteanim_dash.tres" id="1_i4w68"]
+[ext_resource type="Resource" uid="uid://c0xt017l5reel" path="res://src/game/animations/actorspriteanim_dash.tres" id="1_i4w68"]
 [ext_resource type="Script" path="res://src/core/abilities/targetrange/area_target_range.gd" id="2_ffjsm"]
 [ext_resource type="Texture2D" uid="uid://rljm4rcv1g3g" path="res://assets/graphics/ui/abilities/dash.png" id="4_ycr6l"]
 

@@ -1,8 +1,8 @@
 [gd_scene load_steps=18 format=3 uid="uid://cvi0bb84c7308"]
 
 [ext_resource type="Script" path="res://src/core/scenes/game/game.gd" id="1_soc31"]
-[ext_resource type="PackedScene" uid="uid://c0c5o4j30lwif" path="res://src/data/maps/arena.tscn" id="2_4vijj"]
-[ext_resource type="PackedScene" uid="uid://doaykluv6j0vh" path="res://src/data/actors/hero.tscn" id="3_mn6pd"]
+[ext_resource type="PackedScene" uid="uid://c0c5o4j30lwif" path="res://src/game/maps/arena.tscn" id="2_4vijj"]
+[ext_resource type="PackedScene" uid="uid://doaykluv6j0vh" path="res://src/game/actors/hero.tscn" id="3_mn6pd"]
 [ext_resource type="Script" path="res://src/core/scenes/game/ui/player_camera.gd" id="4_0bcur"]
 [ext_resource type="PackedScene" uid="uid://ctkvdtlq3eakq" path="res://src/core/scenes/game/ui/target_display/target_display.tscn" id="4_l1y87"]
 [ext_resource type="Script" path="res://src/core/scenes/game/game_control.gd" id="6_oj1yk"]
