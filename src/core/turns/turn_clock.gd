@@ -46,14 +46,8 @@ func run() -> void:
 	_running = true
 
 	while _running:
-		var next_turn := _turn_takers[_turn_index]
-		# Use call_deferred to make sure the turn_finished signal is caught.
-		next_turn.start_turn.call_deferred()
-
-		@warning_ignore("unsafe_cast")
-		var action := await next_turn.turn_finished as TurnAction
-		await _run_action(action)
-
+		await _take_turn()
+		await _current_map.cleanup_dead_actors()
 		_turn_index = (_turn_index + 1) % _turn_takers.size()
 
 
@@ -62,7 +56,14 @@ func stop() -> void:
 	_running = false
 
 
-func _run_action(action: TurnAction) -> void:
+func _take_turn() -> void:
+	var next_turn := _turn_takers[_turn_index]
+	# Use call_deferred to make sure the turn_finished signal is caught.
+	next_turn.start_turn.call_deferred()
+
+	@warning_ignore("unsafe_cast")
+	var action := await next_turn.turn_finished as TurnAction
+
 	if action:
 		if action.wait_for_map_anims() and _current_map.animations_playing:
 			await _current_map.animations_finished

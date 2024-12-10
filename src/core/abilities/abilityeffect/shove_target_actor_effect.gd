@@ -58,14 +58,6 @@ func apply(data: AbilityData) -> void:
 				anim_shove_no_collision, travel_diff)
 
 
-	if not target_actor.stamina.is_alive:
-		await target_actor.sprite.dissolve()
-		data.map.remove_actor(target_actor)
-	else:
-		target_actor.origin_cell = shove_cell
-		await data.source_actor.get_tree().create_timer(_END_TIME).timeout
-
-
 func _shove_destination(actor: Actor, map: Map, direction: Vector2i) \
 		-> Vector2i:
 	var result := actor.origin_cell

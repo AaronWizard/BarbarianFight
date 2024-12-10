@@ -102,6 +102,20 @@ func remove_actor(actor: Actor) -> void:
 	actor_removed.emit(actor)
 
 
+func cleanup_dead_actors() -> void:
+	var dead_actors: Array[Actor] = []
+	for actor in actor_map.actors:
+		if not actor.stamina.is_alive:
+			actor.sprite.dissolve()
+			dead_actors.append(actor)
+
+	if not dead_actors.is_empty() and animations_playing:
+		await animations_finished
+
+	for actor in dead_actors:
+		remove_actor(actor)
+
+
 ## True if [param actor] can have its origin_cell property set to [param cell],
 ## false otherwise. Checks both terrain and other actors.
 func actor_can_enter_cell(actor: Actor, cell: Vector2i) -> bool:
