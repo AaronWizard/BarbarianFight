@@ -3,6 +3,15 @@ class_name TileGeometry
 ## A set of geometry methods related to tiles/cells.
 
 
+## The cardinal directions.
+const CARDINALS: Array[Vector2i] = [
+	Vector2i.UP,
+	Vector2i.RIGHT,
+	Vector2i.DOWN,
+	Vector2i.LEFT
+]
+
+
 ## Get the [url=https://en.wikipedia.org/wiki/Taxicab_geometry]manhattan
 ## distance[/url] between two tile cells (number of cells needed to move from
 ## [param start] to [param end] while only moving in four cardinal directions).
@@ -155,21 +164,30 @@ static func adjacent_rect_cells(center_rect: Rect2i,
 	return result
 
 
-## Get the closest cardinal direction vector (up, down, left, or right) from
-## [param start] to [param target].[br]
-## If [param start] and [param target] are equal, the direction is zero.
-static func cardinal_dir_between_cells(start: Vector2i, end: Vector2i) \
-		-> Vector2i:
-	var result := end - start
+## Get the closest cardinal direction vector ([constant Vector2i.UP],
+## [constant Vector2i.DOWN], [constant Vector2i.LEFT],
+## [constant Vector2i.RIGHT]) that goes between two rectangles.[br]
+## If [param start] and [param target] are equal, the result is
+## [constant Vector2i.ZERO].
+static func cardinal_dir_between_rects(start: Rect2i, end: Rect2i) -> Vector2i:
+	if start == end:
+		return Vector2i.ZERO
 
-	if absi(result.x) > absi(result.y):
-		result.x /= absi(result.x)
-		result.y = 0
-	else:
-		result.y /= absi(result.y)
-		result.x = 0
+	# Compare their centers
+	var center_start := Vector2(start.position) + (Vector2(start.size) / 2.0)
+	var center_end := Vector2(end.position) + (Vector2(end.size) / 2.0)
+	var diff := center_end - center_start
 
-	assert((result.length_squared() == 1) || (result.length_squared() == 0))
+	var result := Vector2i.UP
+	var max_dotprod := diff.dot(result)
+
+	for i in range(1, CARDINALS.size()):
+		var direction := CARDINALS[i]
+		var dotprod := diff.dot(direction)
+		if dotprod > max_dotprod:
+			result = direction
+			max_dotprod = dotprod
+
 	return result
 
 
@@ -177,30 +195,14 @@ static func cardinal_dir_between_cells(start: Vector2i, end: Vector2i) \
 ## [param rect] to [param target].
 static func cardinal_dir_from_rect_to_cell(rect: Rect2i, target: Vector2i) \
 		-> Vector2i:
-	var result := Vector2i.ZERO
-
-	var dir_from_center := func () -> Vector2i:
-		var center_cell := TileGeometry.rect_center_cell_closest_to_target(
-				rect, target)
-		return TileGeometry.cardinal_dir_between_cells(center_cell, target)
-
-	if rect.has_point(target):
-		result = dir_from_center.call()
-	else:
-		if (target.x >= rect.position.x) and (target.x < rect.end.x):
-			result.y = signi(target.y - rect.position.y)
-		elif (target.y >= rect.position.y) and (target.y < rect.end.y):
-			result.x = signi(target.x - rect.position.x)
-		else:
-			result = dir_from_center.call()
-
-	assert((result.length_squared() == 1) || (result.length_squared() == 0))
-	return result
+	return cardinal_dir_between_rects(rect, Rect2i(target, Vector2i.ONE))
 
 
 ## Get the cells adjacent to one side of [param rect] at the given direction.
 ## [br]
-## [param direction] must be one of the four cardinal directions.
+## [param direction] must be one of the four cardinal directions
+## ([constant Vector2i.UP], [constant Vector2i.DOWN], [constant Vector2i.LEFT],
+## [constant Vector2i.RIGHT]).
 static func adjacent_edge_cells(rect: Rect2i, direction: Vector2i) \
 		-> Array[Vector2i]:
 	var edge_rect := Rect2i(rect.position, Vector2i.ONE)

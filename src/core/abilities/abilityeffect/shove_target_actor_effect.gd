@@ -38,8 +38,8 @@ func apply(data: AbilityData) -> void:
 		push_error("Actor '%s' can't push itself" % data.source_actor)
 		return
 
-	var direction := TileGeometry.cardinal_dir_from_rect_to_cell(
-			data.source_actor.rect, data.target)
+	var direction := TileGeometry.cardinal_dir_between_rects(
+			data.source_rect, target_actor.rect)
 	var damage := data.source_actor.definition.attack
 
 	target_actor.take_damage(damage, Vector2.ZERO, false)
