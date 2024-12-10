@@ -198,6 +198,32 @@ static func cardinal_dir_from_rect_to_cell(rect: Rect2i, target: Vector2i) \
 	return cardinal_dir_between_rects(rect, Rect2i(target, Vector2i.ONE))
 
 
+## Get the adjacent [Rect2i] covering the cells to one side of [param rect] at
+## the given direction. [br]
+## [param direction] must be one of the four cardinal directions
+## ([constant Vector2i.UP], [constant Vector2i.DOWN], [constant Vector2i.LEFT],
+## [constant Vector2i.RIGHT]).
+static func adjacent_edge_rect(rect: Rect2i, direction: Vector2i) -> Rect2i:
+	var result := Rect2i(rect.position, Vector2i.ONE)
+	match direction:
+		Vector2i.UP:
+			result.position.y -= 1
+			result.size.x = rect.size.x
+		Vector2i.RIGHT:
+			result.position.x += rect.size.x
+			result.size.y = rect.size.y
+		Vector2i.DOWN:
+			result.position.y += rect.size.y
+			result.size.x = rect.size.x
+		Vector2i.LEFT:
+			result.position.x -= 1
+			result.size.y = rect.size.y
+		_:
+			push_error("%v is not a cardinal direction" % direction)
+			result = Rect2i()
+	return result
+
+
 ## Get the cells adjacent to one side of [param rect] at the given direction.
 ## [br]
 ## [param direction] must be one of the four cardinal directions
@@ -205,24 +231,7 @@ static func cardinal_dir_from_rect_to_cell(rect: Rect2i, target: Vector2i) \
 ## [constant Vector2i.RIGHT]).
 static func adjacent_edge_cells(rect: Rect2i, direction: Vector2i) \
 		-> Array[Vector2i]:
-	var edge_rect := Rect2i(rect.position, Vector2i.ONE)
-	match direction:
-		Vector2i.UP:
-			edge_rect.position.y -= 1
-			edge_rect.size.x = rect.size.x
-		Vector2i.RIGHT:
-			edge_rect.position.x += rect.size.x
-			edge_rect.size.y = rect.size.y
-		Vector2i.DOWN:
-			edge_rect.position.y += rect.size.y
-			edge_rect.size.x = rect.size.x
-		Vector2i.LEFT:
-			edge_rect.position.x -= 1
-			edge_rect.size.y = rect.size.y
-		_:
-			push_error("%v is not a cardinal direction" % direction)
-			return []
-
+	var edge_rect := adjacent_edge_rect(rect, direction)
 	return cells_in_rect(edge_rect)
 
 

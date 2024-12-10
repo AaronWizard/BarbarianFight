@@ -129,21 +129,6 @@ func move_step(target_cell: Vector2i) -> void:
 			StandardActorSpriteAnims.MOVE, target_vector)
 
 
-## Makes the actor take damage from the given direction. If
-## [param process_hit_or_death] is true, default hit animations are played.
-func take_damage(damage: int, direction := Vector2.ZERO,
-		play_hit_anim := true) -> void:
-	stamina.current_stamina -= damage
-
-	if play_hit_anim:
-		if direction != Vector2.ZERO:
-			await sprite.anim_player.animate(
-					StandardActorSpriteAnims.HIT, direction)
-		else:
-			await sprite.anim_player.animate(
-					StandardActorSpriteAnims.HIT_NO_DIRECTION, direction)
-
-
 func _tile_size_changed(_old_size: Vector2i) -> void:
 	sprite.tile_size = tile_size
 

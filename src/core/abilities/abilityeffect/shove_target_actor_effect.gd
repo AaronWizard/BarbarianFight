@@ -40,19 +40,27 @@ func apply(data: AbilityData) -> void:
 
 	var direction := TileGeometry.cardinal_dir_between_rects(
 			data.source_rect, target_actor.rect)
-	var damage := data.source_actor.definition.attack
 
-	target_actor.take_damage(damage, Vector2.ZERO, false)
+	# Damage from initial kick
+
+	var attack := Attack.new(data.source_actor.definition.attack)
+	attack.set_source_rect(data.source_rect)
+	Combat.attack_single_actor(target_actor, attack, false)
+
+	# Target sent to new cell
 
 	var shove_cell := _shove_destination(target_actor, data.map, direction)
 	var travel_diff := shove_cell - target_actor.origin_cell
 
 	target_actor.origin_cell = shove_cell
 
+	# Animate and resolve collisions
+
 	var is_collision \
 			:= travel_diff.length_squared() < (max_distance * max_distance)
+
 	if is_collision:
-		await _shove_into_obstacle(target_actor, damage, travel_diff, direction)
+		await _shove_into_obstacle(target_actor, attack, travel_diff, direction)
 	else:
 		await target_actor.sprite.anim_player.animate(
 				anim_shove_no_collision, travel_diff)
@@ -70,15 +78,21 @@ func _shove_destination(actor: Actor, map: Map, direction: Vector2i) \
 	return result
 
 
-func _shove_into_obstacle(target_actor: Actor, damage: int,
+func _shove_into_obstacle(target_actor: Actor, attack: Attack,
 		travel_diff: Vector2i, direction: Vector2i) -> void:
+	var new_source_rect := TileGeometry.adjacent_edge_rect(
+			target_actor.rect, direction)
+	attack.set_source_rect(new_source_rect)
+
 	if travel_diff.length_squared() == 0:
-		target_actor.take_damage(damage, Vector2.ZERO, false)
+		# Target actor did not leave its current tile.
+		Combat.attack_single_actor(target_actor, attack, false)
 		await target_actor.sprite.anim_player.animate(
 				StandardActorSpriteAnims.HIT, direction)
 	else:
+		# Target was sent flying.
 		await target_actor.sprite.anim_player.animate(
 				anim_shove_collision, travel_diff)
-		target_actor.take_damage(damage, Vector2.ZERO, false)
+		Combat.attack_single_actor(target_actor, attack, false)
 		await target_actor.sprite.anim_player.animate(
 				anim_shove_collision_reccover, travel_diff)

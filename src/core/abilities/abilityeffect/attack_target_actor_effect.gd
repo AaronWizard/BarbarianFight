@@ -15,8 +15,7 @@ func apply(data: AbilityData) -> void:
 		push_error("Actor '%s' can't attack itself" % data.source_actor)
 		return
 
-	var direction := TileGeometry.cardinal_dir_between_rects(
-			data.source_rect, target_actor.rect)
-	var damage := data.source_actor.definition.attack
+	var attack := Attack.new(data.source_actor.definition.attack)
+	attack.set_source_rect(data.source_rect)
 
-	await target_actor.take_damage(damage, direction)
+	Combat.attack_single_actor(target_actor, attack, true)
