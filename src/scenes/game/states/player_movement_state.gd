@@ -52,10 +52,10 @@ func _try_click() -> void:
 
 	if cell in player_actor.covered_cells:
 		request_state_change(select_ability_state)
-	elif cell in _attack_targeting_data.targets:
-		assert(player_actor.attack_ability)
+	elif cell in _attack_targeting_data.selectable_cells:
+		var target := _attack_targeting_data.target_at_selected_cell(cell)
 		var action := AbilityAction.new(
-			player_actor, cell, player_actor.attack_ability
+			player_actor, target, player_actor.attack_ability
 		)
 		_end_turn(action)
 	elif TileGeometry.cell_is_adjacent_to_rect(player_actor.rect, cell):
