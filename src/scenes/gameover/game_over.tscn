@@ -5,7 +5,7 @@
 
 [node name="GameOver" type="Node"]
 script = ExtResource("1_hyjwi")
-main_menu_scene_path = "res://src/core/scenes/mainmenu/main_menu.tscn"
+main_menu_scene_path = "res://src/scenes/mainmenu/main_menu.tscn"
 
 [node name="CenterContainer" type="CenterContainer" parent="."]
 anchors_preset = 15

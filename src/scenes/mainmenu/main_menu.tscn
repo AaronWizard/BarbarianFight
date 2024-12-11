@@ -5,7 +5,7 @@
 
 [node name="MainMenu" type="Node"]
 script = ExtResource("1_klmlv")
-game_scene_path = "res://src/core/scenes/game/game.tscn"
+game_scene_path = "res://src/scenes/game/game.tscn"
 
 [node name="MarginContainer" type="MarginContainer" parent="."]
 anchors_preset = 15
