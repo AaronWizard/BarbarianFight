@@ -113,8 +113,9 @@ static func get_targets_in_range(target_range: Array[Vector2i],
 	for cell in target_range:
 		if _cell_is_target(cell, target_type, source_actor):
 			var target := _target_rectangle(cell, target_type, source_actor)
-			if not targets.has(cell) or (target.size > targets[cell].size):
-				targets[cell] = target
+			if not targets.has(target.position) \
+					or (target.size > targets[target.position].size):
+				targets[target.position] = target
 	var result: Array[Rect2i] = []
 	result.assign(targets.values())
 
