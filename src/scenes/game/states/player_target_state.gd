@@ -59,7 +59,7 @@ func handle_input(_event: InputEvent) -> void:
 		_try_click()
 	elif Input.is_action_just_released("targeting_cancel"):
 		_cancel_targeting()
-	elif _targetting_data.has_targets:
+	elif not _targetting_data.targets.is_empty():
 		if Input.is_action_just_released("wait"):
 			_use_ability(_target_keyboard_mover.target)
 		else:
@@ -72,7 +72,7 @@ func _on_ability_cancelled() -> void:
 
 func _try_click() -> void:
 	var cell := player_actor.map.mouse_cell
-	if _targetting_data.has_target_for_cell(cell):
+	if cell in _targetting_data.selectable_cells:
 		var target := _targetting_data.target_at_selected_cell(cell)
 		if target == _target_keyboard_mover.target:
 			_use_ability(target)

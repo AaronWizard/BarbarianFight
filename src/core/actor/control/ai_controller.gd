@@ -22,7 +22,7 @@ func _try_ability() -> TurnAction:
 
 	for ability in controlled_actor.all_abilities:
 		var target_data := ability.get_target_data(controlled_actor)
-		if target_data.has_targets:
+		if not target_data.targets.is_empty():
 			possible_abilities[ability] = target_data
 
 	if not possible_abilities.is_empty():

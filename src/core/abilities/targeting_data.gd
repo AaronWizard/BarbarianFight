@@ -12,12 +12,6 @@ class_name TargetingData
 ## range shown to the player.
 
 
-## True if valid targets exist.
-var has_targets: bool:
-	get:
-		return not _targets.is_empty()
-
-
 ## The target cells within the target/AOE range.
 var targets: Array[Vector2i]:
 	get:
@@ -83,11 +77,6 @@ func _init(new_visible_range: Array[Vector2i],
 			if (cell != t_pos) and (cell in _visible_range) \
 					and not _targets_by_selectable_cell.has(cell):
 				_targets_by_selectable_cell[cell] = i
-
-
-## Returns true if [param selected_cell] has a corresponding target.
-func has_target_for_cell(selected_cell: Vector2i) -> bool:
-	return _targets_by_selectable_cell.has(selected_cell)
 
 
 ## The target at the selected cell.
