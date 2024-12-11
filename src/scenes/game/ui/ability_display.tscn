@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3 uid="uid://dceanwqn4fxa7"]
 
 [ext_resource type="Texture2D" uid="uid://54tixjul4308" path="res://assets/graphics/ui/cancel.png" id="1_4qdgj"]
-[ext_resource type="Script" path="res://src/core/scenes/game/ui/ability_display.gd" id="1_yoh3i"]
+[ext_resource type="Script" path="res://src/scenes/game/ui/ability_display.gd" id="1_yoh3i"]
 
 [node name="AbilityDisplay" type="HBoxContainer"]
 offset_right = 37.0
